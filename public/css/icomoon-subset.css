@@ -1,0 +1,33 @@
+/* Subset of icomoon: only the 9 glyphs this site actually uses.
+   The full font is 300 KB for 1014 glyphs; this is the same artwork at a
+   fraction of the weight. Regenerate with scripts/subset-icons.js. */
+@font-face {
+  font-family: 'icomoon';
+  src: url('../fonts/icomoon/icomoon-subset.woff2') format('woff2'),
+       url('../fonts/icomoon/icomoon-subset.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-envelope:before { content: "\f0e0"; }
+.icon-facebook:before { content: "\f09a"; }
+.icon-globe:before { content: "\f0ac"; }
+.icon-instagram:before { content: "\f16d"; }
+.icon-linkedin:before { content: "\f0e1"; }
+.icon-map-marker:before { content: "\f041"; }
+.icon-phone:before { content: "\f095"; }
+.icon-twitter:before { content: "\f099"; }
+.icon-youtube:before { content: "\f167"; }

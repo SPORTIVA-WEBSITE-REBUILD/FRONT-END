@@ -1,0 +1,27 @@
+// Bootstrap 4, trimmed to the components this site renders.
+//
+// The template imported all of Bootstrap. The React build uses the grid, type,
+// forms, buttons, nav/navbar and utilities; it renders no modal, carousel,
+// dropdown, table, card, alert, badge, popover, tooltip, toast, spinner,
+// jumbotron, list-group, pagination or breadcrumb markup. Those partials were
+// pure download weight on every page.
+//
+// `src/test/bootstrap-coverage.test.js` fails if markup starts using a class
+// that is no longer compiled in.
+
+@import "functions";
+@import "variables";
+@import "mixins";
+
+@import "root";
+@import "reboot";
+@import "type";
+@import "images";
+@import "grid";
+@import "forms";
+@import "buttons";
+@import "transitions";   // provides .fade and .collapse, used by the mobile nav
+@import "nav";
+@import "navbar";
+@import "utilities";
+@import "print";
