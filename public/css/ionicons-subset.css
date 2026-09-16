@@ -1,0 +1,26 @@
+/* Subset of ionicons: only the 2 glyphs this site uses. */
+@font-face {
+  font-family: "Ionicons";
+  src: url("../fonts/ionicons/fonts/ionicons-subset.woff2") format("woff2"),
+       url("../fonts/ionicons/fonts/ionicons-subset.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ion, .ionicons, [class^="ion-"], [class*=" ion-"] {
+  display: inline-block;
+  font-family: "Ionicons";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ion-ios-arrow-forward:before { content: "\f3d1"; }
+.ion-ios-arrow-round-forward:before { content: "\f119"; }

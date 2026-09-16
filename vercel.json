@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "comment": "Served live by the API so a newly published article appears without a frontend redeploy. Change the host to match the deployed API.",
+      "source": "/sitemap.xml",
+      "destination": "https://api.pcnsportivalp.com/api/public/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://api.pcnsportivalp.com/api/public/robots.txt"
+    },
+    {
+      "source": "/((?!assets/|css/|fonts/|images/|favicon).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/(css|fonts|images)/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+    }
+  ]
+}
