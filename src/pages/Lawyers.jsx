@@ -1,6 +1,6 @@
 import Seo from '../components/Seo.jsx';
 import PageBanner from '../components/template/PageBanner.jsx';
-import { FlipCard } from '../components/template/cards.jsx';
+import { TeamCard } from '../components/template/cards.jsx';
 import { LoadingCards, ErrorState } from '../components/states.jsx';
 import { usePage, useLawyers, section } from '../hooks/useContent.js';
 import { graph, breadcrumbs } from '../lib/structuredData.js';
@@ -26,7 +26,7 @@ export default function Lawyers() {
           {isLoading && <LoadingCards count={4} col="col-lg-3 col-sm-6" />}
           <div className="row">
             {(lawyers || []).map((l) => (
-              <div className="col-lg-3 col-sm-6" key={l.slug}><FlipCard lawyer={l} /></div>
+              <div className="col-lg-3 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
             ))}
           </div>
         </div>

@@ -9,7 +9,7 @@
 /** Crops that discard part of the image, and so need to know what to keep. */
 const CROPPING = new Set(['fill', 'thumb', 'lfill', 'fill_pad']);
 
-export function mediaUrl(media, { width, height, crop = 'fill', gravity } = {}) {
+export function mediaUrl(media, { width, height, crop = 'fill', gravity, background } = {}) {
   const src = typeof media === 'string' ? media : media?.secureUrl;
   if (!src) return '';
   if (!src.includes('/upload/')) return src;
@@ -23,6 +23,8 @@ export function mediaUrl(media, { width, height, crop = 'fill', gravity } = {}) 
     // anyone in a portrait photo shown in a landscape tile. `g_auto` picks the
     // subject, and prefers faces when it finds them.
     if (CROPPING.has(crop)) parts.push(`g_${gravity || 'auto'}`);
+    // Padding modes fill the spare space, e.g. `auto` for the image's edge colour.
+    if (crop.includes('pad') && background) parts.push(`b_${background}`);
   }
 
   return src.replace('/upload/', `/upload/${parts.join(',')}/`);

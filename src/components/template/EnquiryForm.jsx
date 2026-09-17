@@ -78,12 +78,9 @@ export default function EnquiryForm({ labels = {}, submitLabel, source, classNam
       </div>
 
       <div className="form-group">
-        <input
-          type="submit"
-          value={(mutation.isPending ? labels.sending : submitLabel) ?? ''}
-          className={buttonClass}
-          disabled={mutation.isPending}
-        />
+        <button type="submit" className={buttonClass} disabled={mutation.isPending}>
+          {mutation.isPending ? labels.sending : submitLabel}
+        </button>
       </div>
     </form>
   );

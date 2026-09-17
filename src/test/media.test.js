@@ -83,3 +83,12 @@ describe('cropping keeps the subject in frame', () => {
     expect(srcset).not.toContain('h_');
   });
 });
+
+describe('fitted images', () => {
+  it('pads to the requested shape instead of cropping', async () => {
+    const { mediaUrl } = await import('../lib/media.js');
+    const url = mediaUrl({ secureUrl: 'https://res.cloudinary.com/x/image/upload/v1/a.jpg' }, { width: 800, height: 600, crop: 'pad', background: 'auto' });
+    expect(url).toContain('w_800,h_600,c_pad,b_auto');
+    expect(url).not.toContain('g_auto');
+  });
+});

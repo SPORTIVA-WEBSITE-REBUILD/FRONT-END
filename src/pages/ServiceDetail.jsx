@@ -6,7 +6,7 @@ import RichText from '../components/RichText.jsx';
 import PageBanner from '../components/template/PageBanner.jsx';
 import Sidebar from '../components/template/Sidebar.jsx';
 import SmartLink from '../components/template/SmartLink.jsx';
-import { FlipCard } from '../components/template/cards.jsx';
+import { CaseCard, FlipCard } from '../components/template/cards.jsx';
 import { LoadingSection, ErrorState } from '../components/states.jsx';
 import { usePage, useService, section } from '../hooks/useContent.js';
 import { graph, service as serviceSchema, breadcrumbs } from '../lib/structuredData.js';
@@ -72,6 +72,17 @@ export default function ServiceDetail() {
                   </div>
                   {service.advisors.map((l) => (
                     <div className="col-lg-6" key={l.slug}><FlipCard lawyer={l} compact /></div>
+                  ))}
+                </div>
+              )}
+
+              {service.cases?.length > 0 && (
+                <div className="row mt-5">
+                  <div className="col-md-12">
+                    <h2 className="mb-4 font-weight-bold">{section(page, 'relatedCases').heading}</h2>
+                  </div>
+                  {service.cases.map((c) => (
+                    <div className="col-md-6" key={c.slug}><CaseCard item={c} /></div>
                   ))}
                 </div>
               )}

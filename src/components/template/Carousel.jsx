@@ -20,7 +20,7 @@ function itemsFor(width) {
  * forever. Without it the first item starts centred with space to its left —
  * which is how the template's testimonial carousel looks.
  */
-export default function Carousel({ className = '', loop = false, label, children }) {
+export default function Carousel({ className = '', loop = false, label, interval = 5000, children }) {
   const slides = Children.toArray(children);
   const count = slides.length;
   const outer = useRef(null);
@@ -32,6 +32,7 @@ export default function Carousel({ className = '', loop = false, label, children
   const suppressClick = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   const clones = loop && count > 1 ? count : 0;
   const rendered = clones ? [...slides, ...slides, ...slides] : slides;
@@ -54,13 +55,24 @@ export default function Carousel({ className = '', loop = false, label, children
   const step = itemWidth + MARGIN;
   const translate = -(index * step) + (width - itemWidth) / 2 + dragOffset;
 
-  const current = count ? ((index - clones) % count + count) % count : 0;
 
   const go = useCallback((next) => {
     setAnimate(true);
     if (clones) setIndex(next);
     else setIndex(Math.max(0, Math.min(count - 1, next)));
   }, [clones, count]);
+
+  // No dots: the carousel moves on by itself, pausing while the visitor
+  // hovers, focuses or drags it, and never for reduced motion.
+  useEffect(() => {
+    if (count < 2 || paused || dragging || !interval) return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setInterval(() => {
+      setAnimate(true);
+      setIndex((i) => (clones ? i + 1 : (i + 1) % count));
+    }, interval);
+    return () => window.clearInterval(id);
+  }, [count, paused, dragging, interval, clones]);
 
   // After sliding onto a clone, jump without animation to its real twin.
   useEffect(() => {
@@ -105,6 +117,15 @@ export default function Carousel({ className = '', loop = false, label, children
       role="region"
       aria-roledescription="carousel"
       aria-label={label}
+      tabIndex={0}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(index - 1); }
+      }}
     >
       <div
         className="owl-stage-outer"
@@ -143,24 +164,6 @@ export default function Carousel({ className = '', loop = false, label, children
         </div>
       </div>
       <div className="owl-nav disabled" />
-      {count > 1 && (
-        <div className="owl-dots">
-          {slides.map((_, i) => (
-            <button
-              // eslint-disable-next-line react/no-array-index-key
-              key={i}
-              type="button"
-              role="button"
-              className={`owl-dot${i === current ? ' active' : ''}`}
-              aria-label={`${i + 1} / ${count}`}
-              aria-current={i === current || undefined}
-              onClick={() => go(clones + i)}
-            >
-              <span />
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

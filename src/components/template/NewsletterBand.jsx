@@ -52,7 +52,7 @@ export default function NewsletterBand({ light = false }) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    <input type="submit" value={labels.submit ?? ''} className="submit px-3" disabled={mutation.isPending} />
+                    <button type="submit" className="submit px-3" disabled={mutation.isPending}>{labels.submit}</button>
                   </div>
                   <div className="pcn-honeypot" aria-hidden="true">
                     <input type="text" name="company" tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} />

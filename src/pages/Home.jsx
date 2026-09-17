@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Seo from '../components/Seo.jsx';
 import { backgroundStyle } from '../components/SmartImage.jsx';
 import { ErrorState } from '../components/states.jsx';
@@ -6,8 +7,9 @@ import Carousel from '../components/template/Carousel.jsx';
 import SmartLink from '../components/template/SmartLink.jsx';
 import AboutBlock from '../components/template/AboutBlock.jsx';
 import Consultation from '../components/template/Consultation.jsx';
+import HiringStrip from '../components/template/HiringStrip.jsx';
 import {
-  BlogCard, CaseTile, FlipCard, SectionHeading, ServiceCard, TestimonyCard,
+  BlogCard, CaseCard, SectionHeading, ServiceCard, TeamCard, TestimonyCard,
 } from '../components/template/cards.jsx';
 import { TxtRotate, useParallax } from '../hooks/useAnimations.jsx';
 import {
@@ -27,6 +29,7 @@ export default function Home() {
   const { data: siteData } = useSiteSettings();
   const common = useCommon();
   const heroRef = useParallax(0.5);
+  const [wordIndex, setWordIndex] = useState(0);
 
   if (isError) return <div className="container py-5"><ErrorState error={error} onRetry={refetch} /></div>;
 
@@ -36,7 +39,10 @@ export default function Home() {
   const teamSection = section(page, 'team');
   const insightsSection = section(page, 'insights');
   const gallerySection = section(page, 'gallery');
-  const words = (hero.items || []).map((i) => i.title).filter(Boolean);
+  const wordItems = (hero.items || []).filter((i) => i.title);
+  const words = wordItems.map((i) => i.title);
+  // A background per rotating word, cross-faded as each word starts typing.
+  const wordBackgrounds = wordItems.map((i) => i.image).filter(Boolean);
   const cases = casesResult?.data || [];
   const articles = articlesResult?.data || [];
 
@@ -54,6 +60,15 @@ export default function Home() {
         style={backgroundStyle(hero.image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
         data-stellar-background-ratio="0.5"
       >
+        {wordBackgrounds.length > 0 && wordItems.map((item, i) => item.image && (
+          <div
+            // eslint-disable-next-line react/no-array-index-key
+            key={i}
+            className={`pcn-hero-scene${i === wordIndex ? ' is-active' : ''}`}
+            style={backgroundStyle(item.image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
+            aria-hidden="true"
+          />
+        ))}
         <div className="overlay" />
         <div className="container">
           <div className="row no-gutters slider-text js-fullheight align-items-center justify-content-start">
@@ -61,13 +76,13 @@ export default function Home() {
               {hero.subheading && <h2 className="subheading">{hero.subheading}</h2>}
               <h1>
                 {hero.heading}{' '}
-                {words.length > 0 && <TxtRotate words={words} period={hero.value} />}
+                {words.length > 0 && <TxtRotate words={words} period={hero.value} onWordChange={setWordIndex} />}
               </h1>
               {hero.body && <p className="mb-4">{hero.body}</p>}
               {hero.cta?.label && (
                 <p>
                   <SmartLink href={hero.cta.href} className="btn btn-primary mr-md-4 py-2 px-4">
-                    {hero.cta.label} <span className="ion-ios-arrow-forward" />
+                    {hero.cta.label}
                   </SmartLink>
                 </p>
               )}
@@ -107,7 +122,7 @@ export default function Home() {
             <div className="row">
               <div className="col-md-12">
                 <Carousel className="carousel-case" loop label={recordSection.heading}>
-                  {cases.map((c) => <div className="item" key={c.slug}><CaseTile item={c} /></div>)}
+                  {cases.map((c) => <div className="item" key={c.slug}><CaseCard item={c} /></div>)}
                 </Carousel>
               </div>
               {recordSection.cta?.label && (
@@ -126,12 +141,14 @@ export default function Home() {
             <SectionHeading section={teamSection} rowClass="mb-5 pb-3" />
             <div className="row">
               {lawyers.slice(0, 4).map((l) => (
-                <div className="col-lg-3 col-sm-6" key={l.slug}><FlipCard lawyer={l} /></div>
+                <div className="col-lg-3 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
               ))}
             </div>
           </div>
         </section>
       )}
+
+      <HiringStrip section={section(page, 'careers')} />
 
       <Consultation section={section(page, 'consultation')} />
 
