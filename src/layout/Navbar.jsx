@@ -1,82 +1,72 @@
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useSiteSettings } from '../hooks/useContent.js';
+import { Link, useLocation } from 'react-router-dom';
+import { useLayout, useSiteSettings } from '../hooks/useContent.js';
+import { useNavbarScroll } from '../hooks/useAnimations.jsx';
 import { safeHref, isExternal } from '../lib/links.js';
+import SmartLink from '../components/template/SmartLink.jsx';
+
+function isActive(href, pathname) {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 /**
- * Replaces the nav that was copy-pasted into all nine template pages. The
- * classnames are unchanged, so style.scss styles it exactly as before; only the
- * content source and the scroll behaviour have moved into React.
+ * The template's navbar. Menu items come from Navigation; the brand from
+ * Settings; the highlighted button and the mobile "Menu" word from the layout
+ * page. Scroll classes follow main.js exactly.
  */
 export default function Navbar() {
   const { data } = useSiteSettings();
+  const layout = useLayout();
+  const scrollClasses = useNavbarScroll();
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  // A link that cannot be vetted is dropped rather than rendered.
   const items = (data?.navigation?.header || [])
     .map((item) => ({ ...item, href: safeHref(item.href) }))
     .filter((item) => item.href);
-  const siteName = data?.settings?.siteName || 'PCN Sportiva';
-  const tagline = data?.settings?.tagline || '';
+  const { siteName, tagline } = layout.settings;
+  const navCta = layout.section('navCta');
 
-  // The original template toggled these classes from main.js on scroll.
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 150);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Close the mobile menu whenever the route changes.
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => setOpen(false), [pathname]);
 
   return (
     <nav
-      className={`navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light${
-        scrolled ? ' scrolled awake' : ''
-      }`}
+      className={`navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light${scrollClasses ? ` ${scrollClasses}` : ''}`}
       id="ftco-navbar"
     >
       <div className="container">
         <Link className="navbar-brand" to="/">
           {siteName} {tagline && <span>{tagline}</span>}
         </Link>
-
         <button
           className="navbar-toggler"
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-controls="ftco-nav"
           aria-expanded={open}
-          aria-label="Toggle navigation"
+          aria-label={navCta.labels?.menuToggle}
         >
-          <span className="oi oi-menu" /> Menu
+          <span className="oi oi-menu" /> {navCta.labels?.menuToggle}
         </button>
 
         <div className={`collapse navbar-collapse${open ? ' show' : ''}`} id="ftco-nav">
           <ul className="navbar-nav ml-auto">
             {items.map((item) => (
-              <li className="nav-item" key={`${item.href}-${item.label}`}>
-                {item.external || isExternal(item.href) ? (
-                  <a href={item.href} className="nav-link" target="_blank" rel="noopener noreferrer">
-                    {item.label}
-                  </a>
-                ) : (
-                  <NavLink
-                    to={item.href}
-                    end={item.href === '/'}
-                    className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
-                  >
-                    {item.label}
-                  </NavLink>
-                )}
+              <li
+                className={`nav-item${!isExternal(item.href) && isActive(item.href, pathname) ? ' active' : ''}`}
+                key={`${item.href}-${item.label}`}
+              >
+                {item.external || isExternal(item.href)
+                  ? <a href={item.href} className="nav-link" target="_blank" rel="noopener noreferrer">{item.label}</a>
+                  : <Link to={item.href} className="nav-link">{item.label}</Link>}
               </li>
             ))}
-            <li className="nav-item cta">
-              <Link to="/contact" className="nav-link">Make an Enquiry</Link>
-            </li>
+            {navCta.cta?.label && (
+              <li className="nav-item cta">
+                <SmartLink href={navCta.cta.href} className="nav-link">{navCta.cta.label}</SmartLink>
+              </li>
+            )}
           </ul>
         </div>
       </div>

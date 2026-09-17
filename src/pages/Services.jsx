@@ -1,58 +1,31 @@
-import { Link } from 'react-router-dom';
 import Seo from '../components/Seo.jsx';
-import PageHero from '../components/PageHero.jsx';
-import { LoadingCards, ErrorState, EmptyState } from '../components/states.jsx';
-import { useServices, usePage, section } from '../hooks/useContent.js';
+import PageBanner from '../components/template/PageBanner.jsx';
+import { PracticeCard } from '../components/template/cards.jsx';
+import { LoadingCards, ErrorState } from '../components/states.jsx';
+import { usePage, useServices, section } from '../hooks/useContent.js';
+import { graph, breadcrumbs } from '../lib/structuredData.js';
 
+/** practice-areas.html */
 export default function Services() {
   const { data: page } = usePage('services');
   const { data: services, isLoading, isError, error, refetch } = useServices();
-  const intro = section(page, 'intro');
+  const hero = section(page, 'hero');
 
   return (
     <>
-      <Seo seo={page?.seo} title={page?.title || 'Services'} path="/services" />
-      <PageHero
-        title={intro.heading || 'Services'}
-        image={intro.image}
-        crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+      <Seo
+        seo={page?.seo}
+        title={page?.title}
+        path="/services"
+        jsonLd={graph(breadcrumbs([{ label: 'Home', href: '/' }, { label: hero.heading || page?.title }]))}
       />
-
+      <PageBanner title={hero.heading} crumb={hero.subheading} image={hero.image} />
       <section className="ftco-section">
         <div className="container">
-          {intro.body && (
-            <div className="row justify-content-center mb-5">
-              <div className="col-md-8 text-center"><p>{intro.body}</p></div>
-            </div>
-          )}
-
           {isError && <ErrorState error={error} onRetry={refetch} />}
-          {isLoading && <LoadingCards count={6} />}
-          {services?.length === 0 && (
-            <EmptyState title="No services listed yet" message="Please check back shortly." />
-          )}
-
-          <div className="row">
-            {(services || []).map((s) => (
-              <div className="col-md-4 d-flex align-items-stretch mb-4" key={s.slug}>
-                <div className="services text-center">
-                  <div className="icon d-flex justify-content-center align-items-center">
-                    <span className={s.icon || 'flaticon-lawyer'} />
-                  </div>
-                  <div className="text">
-                    <h3>{s.title}</h3>
-                    <p>{s.summary}</p>
-                  </div>
-                  <Link
-                    to={`/services/${s.slug}`}
-                    className="btn-custom d-flex align-items-center justify-content-center"
-                    aria-label={`Read about ${s.title}`}
-                  >
-                    <span className="ion-ios-arrow-round-forward" />
-                  </Link>
-                </div>
-              </div>
-            ))}
+          {isLoading && <LoadingCards count={4} col="col-md-3" />}
+          <div className="row d-flex justify-content-center">
+            {(services || []).map((s) => <PracticeCard service={s} key={s.slug} />)}
           </div>
         </div>
       </section>

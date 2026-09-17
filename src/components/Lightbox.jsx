@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import SmartImage from './SmartImage.jsx';
+import { useCommon } from '../hooks/useContent.js';
 
 /**
  * Opens a gallery image with its title and description.
@@ -10,6 +11,7 @@ import SmartImage from './SmartImage.jsx';
  * are handled here so it does not become a mouse-only feature.
  */
 export default function Lightbox({ items = [], index, onClose, onNavigate }) {
+  const common = useCommon();
   const open = index !== null && index !== undefined && items[index];
 
   const goPrevious = useCallback(() => {
@@ -52,12 +54,12 @@ export default function Lightbox({ items = [], index, onClose, onNavigate }) {
       aria-label={item.title}
       onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <button type="button" className="pcn-lightbox__close" onClick={onClose} aria-label="Close">
+      <button type="button" className="pcn-lightbox__close" onClick={onClose} aria-label={common.close}>
         &times;
       </button>
 
       {items.length > 1 && (
-        <button type="button" className="pcn-lightbox__nav pcn-lightbox__nav--prev" onClick={goPrevious} aria-label="Previous image">
+        <button type="button" className="pcn-lightbox__nav pcn-lightbox__nav--prev" onClick={goPrevious} aria-label={common.previous}>
           <span className="ion-ios-arrow-forward" style={{ transform: 'rotate(180deg)', display: 'inline-block' }} />
         </button>
       )}
@@ -84,13 +86,13 @@ export default function Lightbox({ items = [], index, onClose, onNavigate }) {
             </p>
           )}
           {items.length > 1 && (
-            <p className="pcn-lightbox__meta">{index + 1} of {items.length}</p>
+            <p className="pcn-lightbox__meta">{index + 1} {common.of} {items.length}</p>
           )}
         </figcaption>
       </figure>
 
       {items.length > 1 && (
-        <button type="button" className="pcn-lightbox__nav pcn-lightbox__nav--next" onClick={goNext} aria-label="Next image">
+        <button type="button" className="pcn-lightbox__nav pcn-lightbox__nav--next" onClick={goNext} aria-label={common.next}>
           <span className="ion-ios-arrow-forward" />
         </button>
       )}

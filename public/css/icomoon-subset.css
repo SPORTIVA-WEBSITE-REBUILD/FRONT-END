@@ -22,12 +22,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-calendar:before { content: "\f073"; }
+.icon-chat:before { content: "\e0b7"; }
 .icon-envelope:before { content: "\f0e0"; }
-.icon-facebook:before { content: "\f09a"; }
-.icon-globe:before { content: "\f0ac"; }
-.icon-instagram:before { content: "\f16d"; }
-.icon-linkedin:before { content: "\f0e1"; }
+.icon-heart:before { content: "\f004"; }
 .icon-map-marker:before { content: "\f041"; }
+.icon-person:before { content: "\e7fd"; }
 .icon-phone:before { content: "\f095"; }
-.icon-twitter:before { content: "\f099"; }
-.icon-youtube:before { content: "\f167"; }
+.icon-play:before { content: "\f04b"; }
+.icon-search:before { content: "\f002"; }

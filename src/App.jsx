@@ -11,6 +11,7 @@ const Record = lazy(() => import('./pages/Record.jsx'));
 const CaseDetail = lazy(() => import('./pages/CaseDetail.jsx'));
 const Insights = lazy(() => import('./pages/Insights.jsx'));
 const ArticleDetail = lazy(() => import('./pages/ArticleDetail.jsx'));
+const Lawyers = lazy(() => import('./pages/Lawyers.jsx'));
 const LawyerDetail = lazy(() => import('./pages/LawyerDetail.jsx'));
 const Careers = lazy(() => import('./pages/Careers.jsx'));
 const VacancyDetail = lazy(() => import('./pages/VacancyDetail.jsx'));
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="record/:slug" element={<CaseDetail />} />
         <Route path="insights" element={<Insights />} />
         <Route path="insights/:slug" element={<ArticleDetail />} />
+        <Route path="lawyers" element={<Lawyers />} />
         <Route path="lawyers/:slug" element={<LawyerDetail />} />
         <Route path="careers" element={<Careers />} />
         <Route path="careers/:slug" element={<VacancyDetail />} />

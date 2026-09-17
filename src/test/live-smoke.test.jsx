@@ -60,7 +60,8 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     expect(text).toMatch(/boutique Sports Law practice/);      // firm copy
     expect(text).toMatch(/Sports Dispute Resolution/);          // services
     expect(text).toMatch(/Secures FIFA DRC Ruling/);            // case record
-    expect(text).toMatch(/Discuss a matter/);                   // call to action
+    expect(text).toMatch(/Pius Ndubuokwu/);                     // team flip cards
+    expect(text).toMatch(/Free Consultation/);                  // consultation block
     expect(text.length).toBeGreaterThan(3000);
   }, 20000);
 
@@ -77,8 +78,9 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     const { text } = await renderSettled(<Insights />, '/insights');
     console.log(`  INSIGHTS ${text.length} chars`);
 
-    expect(text).toMatch(/PCN Sportiva LP/);
-    expect(text).toMatch(/min read/);
+    // Blog cards: title, date block and the Read more button.
+    expect(text).toMatch(/Read more/);
+    expect(text).toMatch(/20\d\d/);
   }, 20000);
 
   it('careers lists the open role', async () => {
@@ -89,11 +91,11 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     expect(text).toMatch(/Lagos, Nigeria/);
   }, 20000);
 
-  it('about shows the firm and its team', async () => {
+  it('about shows the firm and the consultation form', async () => {
     const { text } = await renderSettled(<About />, '/about');
     console.log(`  ABOUT    ${text.length} chars`);
 
-    expect(text).toMatch(/Pius Ndubuokwu/);
-    expect(text).toMatch(/Managing Partner/);
+    expect(text).toMatch(/boutique Sports Law practice/);
+    expect(text).toMatch(/Free Consultation/);
   }, 20000);
 });

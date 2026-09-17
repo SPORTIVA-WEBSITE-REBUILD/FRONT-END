@@ -81,7 +81,7 @@ describe('icon font subsets cover everything the site renders', () => {
   it('offers only flaticon glyphs the font really contains', () => {
     // The dashboard lets an administrator pick a service icon; offering a name
     // the font lacks renders a blank square on the public site.
-    const dash = fs.readFileSync(path.join(ROOT, '../dashboard/src/pages/ServiceEdit.jsx'), 'utf8');
+    const dash = fs.readFileSync(path.join(ROOT, '../dashboard/src/lib/icons.js'), 'utf8');
     const offered = [...dash.matchAll(/'(flaticon-[a-z-]+)'/g)].map((m) => m[1]);
     const defined = definedIn('flaticon.css', 'flaticon-');
 
@@ -104,10 +104,11 @@ describe('icon font subsets cover everything the site renders', () => {
     expect(html).not.toMatch(/href="\/css\/ionicons\.min\.css"/);
   });
 
-  it('does not link stylesheets for libraries the React build never renders', () => {
+  it('links the carousel and popup stylesheets the template markup needs, and not AOS', () => {
     const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-    for (const dead of ['owl.carousel', 'owl.theme', 'magnific-popup', 'aos.css']) {
-      expect(html, `${dead} is still linked`).not.toContain(dead);
+    for (const needed of ['owl.carousel.min.css', 'owl.theme.default.min.css', 'magnific-popup.css']) {
+      expect(html, `${needed} is not linked`).toContain(needed);
     }
+    expect(html).not.toContain('aos.css');
   });
 });

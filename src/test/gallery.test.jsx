@@ -106,16 +106,16 @@ describe('lightbox', () => {
   it('moves to the next and previous image', async () => {
     await openFirst();
 
-    fireEvent.click(screen.getByLabelText('Next image'));
+    fireEvent.click(screen.getByLabelText('Next'));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'CAS hearing' })).toBeInTheDocument());
 
-    fireEvent.click(screen.getByLabelText('Previous image'));
+    fireEvent.click(screen.getByLabelText('Previous'));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Signing ceremony' })).toBeInTheDocument());
   });
 
   it('wraps around at both ends', async () => {
     await openFirst();
-    fireEvent.click(screen.getByLabelText('Previous image'));
+    fireEvent.click(screen.getByLabelText('Previous'));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Team photograph' })).toBeInTheDocument());
   });
 

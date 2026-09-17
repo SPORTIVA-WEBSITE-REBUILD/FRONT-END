@@ -137,6 +137,62 @@ export function useLawyer(slug) {
   });
 }
 
+export function useTestimonials() {
+  return useQuery({
+    queryKey: ['testimonials'],
+    queryFn: ({ signal }) => apiGet('/testimonials', { signal }).then((r) => r.data),
+    ...CONTENT_OPTIONS,
+  });
+}
+
+export function useCategories() {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: ({ signal }) => apiGet('/categories', { signal }).then((r) => r.data),
+    ...CONTENT_OPTIONS,
+  });
+}
+
+export function useTags() {
+  return useQuery({
+    queryKey: ['tags'],
+    queryFn: ({ signal }) => apiGet('/articles/tags', { signal }).then((r) => r.data),
+    ...CONTENT_OPTIONS,
+  });
+}
+
+export function useComments(slug) {
+  return useQuery({
+    queryKey: ['comments', slug],
+    queryFn: ({ signal }) => apiGet(`/articles/${slug}/comments`, { signal }),
+    enabled: Boolean(slug),
+    ...CONTENT_OPTIONS,
+    // Newly approved comments should appear without a long wait.
+    staleTime: 60 * 1000,
+  });
+}
+
+/**
+ * The site-wide chrome from the `layout` page, which arrives with the settings.
+ * `labels(key)` returns a section's named interface text; the API has already
+ * filled every empty one with the template's wording.
+ */
+export function useLayout() {
+  const { data } = useSiteSettings();
+  const layout = data?.layout;
+  return {
+    section: (key) => section(layout, key),
+    labels: (key) => section(layout, key).labels || {},
+    settings: data?.settings || {},
+    ready: Boolean(data),
+  };
+}
+
+/** Shared interface words: "Read more", breadcrumb "Home", error text… */
+export function useCommon() {
+  return useLayout().labels('common');
+}
+
 /** Looks a section up by its stable key, so ordering changes cannot break a page. */
 export function section(page, key) {
   return page?.sections?.find((s) => s.key === key) || {};

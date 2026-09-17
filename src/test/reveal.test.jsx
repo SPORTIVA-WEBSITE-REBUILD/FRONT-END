@@ -96,3 +96,79 @@ describe('global scroll reveal', () => {
     await waitFor(() => expect(observed.length).toBe(3), { timeout: 2000 });
   });
 });
+
+describe('scroll reveal survives a remount', () => {
+  it('still reveals elements after the effect is torn down and run again (StrictMode)', async () => {
+    const { StrictMode } = await import('react');
+    const { render } = await import('@testing-library/react');
+    const { useRevealAll } = await import('../hooks/useAnimations.jsx');
+    const observed = [];
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(cb) { this.cb = cb; }
+      observe(el) { observed.push([this, el]); }
+      unobserve() {}
+      disconnect() { this.dead = true; }
+    });
+    function Page() { useRevealAll(); return <div className="ftco-animate" data-testid="block">x</div>; }
+    const { getByTestId } = render(<StrictMode><Page /></StrictMode>);
+    const el = getByTestId('block');
+    const live = observed.filter(([o, node]) => !o.dead && node === el);
+    expect(live.length).toBeGreaterThan(0);
+    vi.useFakeTimers();
+    live[0][0].cb([{ isIntersecting: true, target: el }]);
+    vi.advanceTimersByTime(200);
+    expect(el.classList.contains('ftco-animated')).toBe(true);
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+});
+
+describe('the reveal stylesheet', () => {
+  // The template hides .ftco-animate and relies on animate.css to bring it
+  // back. Without `.ftco-animated { animation-fill-mode: both }` the entrance
+  // animation plays and every revealed block snaps back to invisible.
+  it('keeps revealed blocks visible once their animation ends', async () => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const css = fs.readFileSync(path.resolve(__dirname, '../../public/css/animate-subset.css'), 'utf8');
+    expect(css).toMatch(/\.ftco-animated\s*\{[^}]*animation-fill-mode:\s*both/);
+    for (const effect of ['fadeIn', 'fadeInUp', 'fadeInLeft', 'fadeInRight']) {
+      expect(css, effect).toMatch(new RegExp(`@keyframes ${effect} \\{`));
+    }
+  });
+});
+
+describe('scroll reveal and React re-renders', () => {
+  it('puts the reveal classes back when a re-render replaces the className', async () => {
+    const { useState } = await import('react');
+    const { render, act } = await import('@testing-library/react');
+    const { useRevealAll } = await import('../hooks/useAnimations.jsx');
+    let callback;
+    vi.stubGlobal('IntersectionObserver', class {
+      constructor(cb) { callback = cb; }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    });
+    let setExtra;
+    function Page() {
+      useRevealAll();
+      const [extra, set] = useState('');
+      setExtra = set;
+      return <div className={`block-2 ftco-animate${extra}`} data-testid="card">x</div>;
+    }
+    vi.useFakeTimers();
+    const { getByTestId } = render(<Page />);
+    const el = getByTestId('card');
+    callback([{ isIntersecting: true, target: el }]);
+    vi.advanceTimersByTime(200);
+    expect(el).toHaveClass('ftco-animated');
+
+    act(() => setExtra(' pcn-no-flip'));
+    await vi.runAllTimersAsync();
+    expect(el).toHaveClass('pcn-no-flip');
+    expect(el).toHaveClass('ftco-animated');
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+});

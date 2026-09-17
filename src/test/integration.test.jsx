@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
-import { renderWithProviders, mockApi } from './utils.jsx';
+import { renderWithProviders, mockApi, LAYOUT } from './utils.jsx';
 import Navbar from '../layout/Navbar.jsx';
 import Footer from '../layout/Footer.jsx';
 import Record from '../pages/Record.jsx';
@@ -23,6 +23,26 @@ const SETTINGS = {
       ],
       footer: [{ label: 'Privacy Policy', href: '/privacy-policy' }],
     },
+    layout: LAYOUT,
+  },
+};
+
+const RECORD_PAGE = {
+  data: {
+    slug: 'record',
+    sections: [
+      { key: 'hero', heading: 'Case Studies' },
+      {
+        key: 'filters',
+        labels: {
+          forum: 'Forum', allForums: 'All forums', year: 'Year', allYears: 'All years', party: 'Party represented',
+          anyParty: 'Any party', search: 'Search', searchPlaceholder: 'Search the record', clearAll: 'Clear all',
+          resultOne: 'matter', resultMany: 'matters', emptyTitle: 'No matters match those filters',
+          emptyText: 'Try widening your search.', clearFilters: 'Clear filters',
+        },
+      },
+    ],
+    seo: {},
   },
 };
 
@@ -64,7 +84,13 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
       expect(screen.getByText('enquiries@pcnsportivalp.com')).toBeInTheDocument();
     });
     expect(screen.getByText('Lagos, Nigeria')).toBeInTheDocument();
-    expect(screen.getByText('© 2026 PCN Sportiva LP')).toBeInTheDocument();
+    // The copyright line comes from the layout page, with {year} filled in.
+    expect(screen.getByText(new RegExp(`Copyright ©${new Date().getFullYear()} All rights reserved`))).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Have a Questions?' })).toBeInTheDocument();
+    expect(screen.getByText('Opening Days:')).toBeInTheDocument();
+    expect(screen.getByText('Saturday : closed')).toBeInTheDocument();
+    // No template credit in the footer.
+    expect(screen.queryByText(/Colorlib/)).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Disputes/ })).toBeInTheDocument();
   });
 
@@ -73,17 +99,17 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
       '/settings': SETTINGS,
       '/cases/filters': { data: { forums: ['CAS'], years: [2026], parties: ['athlete'], outcomes: ['won'] } },
       '/cases': CASES,
-      '/pages/': { data: { sections: [], seo: {} } },
+      '/pages/': RECORD_PAGE,
     }));
     renderWithProviders(<Record />, { route: '/record' });
 
     await waitFor(() => {
       expect(screen.getByText('Appeal against a sanction')).toBeInTheDocument();
     });
-    expect(screen.getByText('Sanction set aside on appeal.')).toBeInTheDocument();
-    // "CAS" appears both as a filter option and as the badge on the result,
-    // so assert on the badge specifically.
-    expect(screen.getByText('CAS', { selector: '.pcn-badge' })).toBeInTheDocument();
+    // The template's case tile: title linked, category underneath.
+    expect(screen.getByRole('link', { name: 'Appeal against a sanction' })).toHaveAttribute('href', '/record/appeal-against-a-sanction');
+    expect(screen.getByText('CAS', { selector: '.case .text span' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Case Studies', level: 1 })).toBeInTheDocument();
   });
 
   it('populates the archive filters from the API rather than a hardcoded list', async () => {
@@ -91,7 +117,7 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
       '/settings': SETTINGS,
       '/cases/filters': { data: { forums: ['CAS', 'NFF'], years: [2026, 2024], parties: ['athlete', 'club'], outcomes: ['won'] } },
       '/cases': CASES,
-      '/pages/': { data: { sections: [], seo: {} } },
+      '/pages/': RECORD_PAGE,
     }));
     renderWithProviders(<Record />, { route: '/record' });
 
@@ -123,7 +149,7 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
       '/settings': SETTINGS,
       '/cases/filters': { data: { forums: [], years: [], parties: [], outcomes: [] } },
       '/cases': { data: [], meta: { page: 1, limit: 12, total: 0, pages: 1 } },
-      '/pages/': { data: { sections: [], seo: {} } },
+      '/pages/': RECORD_PAGE,
     }));
     renderWithProviders(<Record />, { route: '/record' });
 
@@ -136,7 +162,7 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
     vi.stubGlobal('fetch', mockApi({
       '/settings': SETTINGS,
       '/articles': { data: [], meta: { page: 1, limit: 9, total: 0, pages: 1 } },
-      '/pages/': { data: { sections: [], seo: {} } },
+      '/pages/': { data: { sections: [{ key: 'list', labels: { emptyTitle: 'No articles yet', emptyText: 'Check back soon.' } }], seo: {} } },
     }));
     renderWithProviders(<Insights />, { route: '/insights' });
 

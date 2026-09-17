@@ -1,27 +1,31 @@
-import { Link } from 'react-router-dom';
 import Seo from '../components/Seo.jsx';
-import PageHero from '../components/PageHero.jsx';
+import PageBanner from '../components/template/PageBanner.jsx';
+import SmartLink from '../components/template/SmartLink.jsx';
+import { usePage, section } from '../hooks/useContent.js';
 
 export default function NotFound() {
+  const { data: page } = usePage('not-found');
+  const hero = section(page, 'hero');
+  const body = section(page, 'body');
+  const links = (body.items || []).filter((i) => i.title && i.href);
+
   return (
     <>
-      <Seo title="Page not found" seo={{ noIndex: true }} />
-      <PageHero title="Page not found" crumbs={[{ label: 'Home', href: '/' }, { label: '404' }]} />
-
+      <Seo title={hero.heading || page?.title} seo={{ noIndex: true }} />
+      <PageBanner title={hero.heading || page?.title} crumb={hero.subheading} image={hero.image} />
       <section className="ftco-section">
         <div className="container">
-          <div className="row justify-content-center text-center">
-            <div className="col-md-8">
-              <h2 className="mb-4">We could not find that page</h2>
-              <p className="mb-5">
-                The page may have been moved or removed. These links should help:
-              </p>
-              <p>
-                <Link to="/" className="btn btn-primary py-3 px-4 mr-2">Home</Link>
-                <Link to="/record" className="btn btn-primary py-3 px-4 mr-2">Case record</Link>
-                <Link to="/insights" className="btn btn-primary py-3 px-4 mr-2">Insights</Link>
-                <Link to="/contact" className="btn btn-primary py-3 px-4">Contact</Link>
-              </p>
+          <div className="row justify-content-center">
+            <div className="col-md-8 text-center heading-section ftco-animate">
+              {body.heading && <h2 className="mb-4">{body.heading}</h2>}
+              {body.body && <p className="mb-5">{body.body}</p>}
+              {links.length > 0 && (
+                <p>
+                  {links.map((l) => (
+                    <SmartLink key={`${l.href}-${l.title}`} href={l.href} className="btn btn-primary py-3 px-4 mr-2 mb-2">{l.title}</SmartLink>
+                  ))}
+                </p>
+              )}
             </div>
           </div>
         </div>

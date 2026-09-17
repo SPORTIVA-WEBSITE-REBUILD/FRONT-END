@@ -69,10 +69,10 @@ describe('the footer hides social links that have no URL', () => {
     ]);
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/on Facebook$/)).toBeInTheDocument();
+      expect(screen.getByLabelText(/ Facebook$/)).toBeInTheDocument();
     });
     for (const name of ['Facebook', 'Instagram', 'TikTok', 'LinkedIn', 'Twitter']) {
-      expect(screen.getByLabelText(new RegExp(`on ${name}$`)), name).toBeInTheDocument();
+      expect(screen.getByLabelText(new RegExp(` ${name}$`)), name).toBeInTheDocument();
     }
   });
 
@@ -83,9 +83,9 @@ describe('the footer hides social links that have no URL', () => {
       { platform: 'instagram', url: '   ' },
     ]);
 
-    await waitFor(() => expect(screen.getByLabelText(/on Facebook$/)).toBeInTheDocument());
-    expect(screen.queryByLabelText(/on TikTok$/)).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/on Instagram$/)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByLabelText(/ Facebook$/)).toBeInTheDocument());
+    expect(screen.queryByLabelText(/ TikTok$/)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/ Instagram$/)).not.toBeInTheDocument();
   });
 
   it('renders no social list at all when every URL is empty', async () => {
@@ -110,14 +110,14 @@ describe('the footer hides social links that have no URL', () => {
       { platform: 'tiktok', url: 'javascript:alert(1)' },
     ]);
 
-    await waitFor(() => expect(screen.getByLabelText(/on Facebook$/)).toBeInTheDocument());
-    expect(screen.queryByLabelText(/on TikTok$/)).not.toBeInTheDocument();
+    await waitFor(() => expect(screen.getByLabelText(/ Facebook$/)).toBeInTheDocument());
+    expect(screen.queryByLabelText(/ TikTok$/)).not.toBeInTheDocument();
   });
 
   it('opens social links safely in a new tab', async () => {
     renderFooter([{ platform: 'linkedin', url: 'https://linkedin.com/company/pcn' }]);
 
-    const link = await screen.findByLabelText(/on LinkedIn$/);
+    const link = await screen.findByLabelText(/ LinkedIn$/);
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     expect(link).toHaveAttribute('href', 'https://linkedin.com/company/pcn');
