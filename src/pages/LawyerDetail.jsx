@@ -5,6 +5,7 @@ import RichText from '../components/RichText.jsx';
 import SmartImage from '../components/SmartImage.jsx';
 import SocialIcon, { hasIcon, platformLabel } from '../components/SocialIcon.jsx';
 import PageBanner from '../components/template/PageBanner.jsx';
+import { BlogCard } from '../components/template/cards.jsx';
 import { LoadingSection, ErrorState } from '../components/states.jsx';
 import { useLawyer, usePage, section } from '../hooks/useContent.js';
 import { safeHref } from '../lib/links.js';
@@ -66,6 +67,15 @@ export default function LawyerDetail() {
                 <>
                   <h2 className="mb-3 mt-5">{section(page, 'qualifications').heading}</h2>
                   <ul>{lawyer.qualifications.map((q) => <li key={q}>{q}</li>)}</ul>
+                </>
+              )}
+
+              {lawyer.articles?.length > 0 && (
+                <>
+                  <h2 className="mb-4 mt-5">{section(page, 'insights').heading}</h2>
+                  <div className="row d-flex">
+                    {lawyer.articles.map((a) => <BlogCard article={a} col="col-md-6" key={a.slug} />)}
+                  </div>
                 </>
               )}
             </div>

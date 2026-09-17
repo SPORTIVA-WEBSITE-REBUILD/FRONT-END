@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import Seo from '../components/Seo.jsx';
 import Pagination from '../components/Pagination.jsx';
 import PageBanner from '../components/template/PageBanner.jsx';
-import { CaseTile } from '../components/template/cards.jsx';
+import { CaseCard } from '../components/template/cards.jsx';
 import { LoadingCards, ErrorState, EmptyState } from '../components/states.jsx';
 import { useCases, useCaseFilters, useLayout, usePage, section } from '../hooks/useContent.js';
 import { term } from '../lib/format.js';
@@ -132,7 +132,7 @@ export default function Record() {
 
           <div className="row" style={isPlaceholderData ? { opacity: 0.6 } : undefined}>
             {cases.map((c) => (
-              <div className="col-md-4 ftco-animate" key={c.slug}><CaseTile item={c} /></div>
+              <div className="col-md-4 ftco-animate" key={c.slug}><CaseCard item={c} /></div>
             ))}
           </div>
 

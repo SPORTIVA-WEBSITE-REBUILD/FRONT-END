@@ -127,7 +127,7 @@ export default function Comments({ slug, labels = {} }) {
             <input type="text" name="phone" tabIndex={-1} autoComplete="off" value={values.phone} onChange={set('phone')} />
           </div>
           <div className="form-group">
-            <input type="submit" value={(mutation.isPending ? labels.sending : labels.submit) ?? ''} className="btn py-3 px-4 btn-primary" disabled={mutation.isPending} />
+            <button type="submit" className="btn py-3 px-4 btn-primary" disabled={mutation.isPending}>{mutation.isPending ? labels.sending : labels.submit}</button>
           </div>
         </form>
       </div>

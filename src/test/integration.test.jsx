@@ -104,11 +104,18 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
     renderWithProviders(<Record />, { route: '/record' });
 
     await waitFor(() => {
-      expect(screen.getByText('Appeal against a sanction')).toBeInTheDocument();
+      expect(screen.getAllByText('Appeal against a sanction').length).toBeGreaterThan(0);
     });
-    // The template's case tile: title linked, category underneath.
-    expect(screen.getByRole('link', { name: 'Appeal against a sanction' })).toHaveAttribute('href', '/record/appeal-against-a-sanction');
+    // The template's tile (title on hover, category underneath) plus the
+    // preview caption: forum · year, outcome, two lines of summary, Read more.
+    for (const link of screen.getAllByRole('link', { name: 'Appeal against a sanction' })) {
+      expect(link).toHaveAttribute('href', '/record/appeal-against-a-sanction');
+    }
     expect(screen.getByText('CAS', { selector: '.case .text span' })).toBeInTheDocument();
+    expect(screen.getByText('CAS · 2026', { exact: false, selector: '.pcn-case__meta' })).toBeInTheDocument();
+    expect(screen.getByText('Won', { selector: '.pcn-outcome--won' })).toBeInTheDocument();
+    expect(screen.getByText('Sanction set aside on appeal.', { selector: '.pcn-clamp' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Read more' })).toHaveAttribute('href', '/record/appeal-against-a-sanction');
     expect(screen.getByRole('heading', { name: 'Case Studies', level: 1 })).toBeInTheDocument();
   });
 

@@ -49,7 +49,7 @@
 .pcn-richtext th,
 .pcn-richtext td { padding: .5rem .75rem; border: 1px solid #e6e6e6; }
 .pcn-richtext blockquote {
-  border-left: 3px solid #afa939;
+  border-left: 3px solid #047dd6;
   padding-left: 1.25rem;
   font-style: italic;
   color: #666;
@@ -63,7 +63,7 @@
   background: #2c2f3a; color: #fff; border: 0; border-radius: 2rem;
   padding: .25rem .9rem; font-size: 13px;
 }
-.pcn-chip:hover { background: #afa939; }
+.pcn-chip:hover { background: #047dd6; }
 
 /* Case metadata badges. */
 .pcn-meta { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
@@ -153,7 +153,7 @@
 }
 
 .pcn-gallery-item__button:focus-visible {
-  outline: 3px solid #afa939;
+  outline: 3px solid #047dd6;
   outline-offset: 2px;
 }
 
@@ -233,7 +233,7 @@
 .pcn-lightbox__nav:hover { background: rgba(255, 255, 255, .22); }
 
 .pcn-lightbox__close:focus-visible,
-.pcn-lightbox__nav:focus-visible { outline: 3px solid #afa939; outline-offset: 2px; }
+.pcn-lightbox__nav:focus-visible { outline: 3px solid #047dd6; outline-offset: 2px; }
 
 @media (max-width: 576px) {
   .pcn-lightbox { padding: 3.5rem .5rem 1rem; }
@@ -267,7 +267,7 @@
 .pcn-banner-fallback {
   background-color: #2c2f3a;
   background-image:
-    radial-gradient(circle at 18% 22%, rgba(175, 169, 57, .20) 0%, transparent 46%),
+    radial-gradient(circle at 18% 22%, rgba(4, 125, 214, .20) 0%, transparent 46%),
     linear-gradient(135deg, #22252f 0%, #2c2f3a 52%, #1b1e26 100%);
 }
 
@@ -304,4 +304,396 @@
   transform: none;
   -webkit-backface-visibility: visible;
   backface-visibility: visible;
+}
+
+/*
+ * Rounded (pill) buttons across the site, at the firm's request. Overrides the
+ * template's square corners without editing its stylesheet. Buttons that are
+ * already circles (arrows, pagination, social icons, carousel dots) are
+ * untouched.
+ */
+.btn,
+input[type="submit"].btn,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a,
+.comment-list .reply,
+.tagcloud .tag-cloud-link,
+.pcn-chip {
+  border-radius: 999px !important;
+}
+
+/* The newsletter's email box and Subscribe button form one pill together. */
+.subscribe-form .form-group input.form-control {
+  border-radius: 999px 0 0 999px !important;
+  padding-left: 1.25rem;
+}
+.subscribe-form .form-group .submit {
+  border-radius: 0 999px 999px 0 !important;
+  padding-right: 1.25rem !important;
+}
+
+/* ------------------------------ previews -------------------------------- */
+
+/* Short previews of stored content, clamped to a set number of lines so cards
+   in a row stay the same height. The full text is one click away. */
+.pcn-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pcn-clamp--2 { -webkit-line-clamp: 2; line-clamp: 2; }
+.pcn-clamp--3 { -webkit-line-clamp: 3; line-clamp: 3; }
+.pcn-clamp--4 { -webkit-line-clamp: 4; line-clamp: 4; }
+
+/* Case tile with its caption underneath. */
+.pcn-case {
+  background: #fff;
+  margin-bottom: 30px;
+  box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.14);
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 30px);
+}
+.pcn-case .case { margin-bottom: 0; }
+.pcn-case__body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; flex: 1; }
+.pcn-case__body > p:last-child { margin-top: auto; }
+.pcn-case__title { font-size: 17px; line-height: 1.4; margin-bottom: .35rem; }
+.pcn-case__title a { color: #000; }
+.pcn-case__title a:hover { color: #047dd6; }
+.pcn-case__meta {
+  font-size: 13px; color: #999; margin-bottom: .5rem;
+  display: flex; align-items: center; flex-wrap: wrap; gap: .5rem;
+}
+.pcn-outcome {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+  padding: .1rem .6rem; border-radius: 999px; background: #eef1f4; color: #555;
+}
+.pcn-outcome--won { background: #e3f1fb; color: #0365ae; }
+.pcn-outcome--settled { background: #e9eef6; color: #3a5d97; }
+.pcn-outcome--ongoing { background: #fdf3e0; color: #9a6b12; }
+.owl-carousel .pcn-case { height: auto; margin-bottom: 10px; }
+
+/* Blog card meta: author · category · reading time. */
+.pcn-blog-meta { font-size: 13px; color: #999; margin-bottom: .5rem; }
+
+/* Team card: the whole photo links to the profile. */
+.block-2 .front, .block-2 .back { overflow: hidden; }
+.pcn-stretched-link { position: absolute; inset: 0; z-index: 3; }
+.pcn-team { margin-bottom: 30px; }
+.pcn-team .block-2 { margin-bottom: 12px; }
+.pcn-team__bio { font-size: 14px; margin-bottom: .25rem; }
+.pcn-team__more { font-size: 14px; margin-bottom: 0; }
+.pcn-team__more span { font-size: 11px; margin-left: 2px; }
+
+/* Open roles on the home page. */
+.pcn-role {
+  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+  background: #fff; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+  box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.2);
+}
+.pcn-role__title { font-size: 18px; margin-bottom: .25rem; }
+.pcn-role__title a { color: #000; }
+.pcn-role__meta { font-size: 13px; color: #999; margin-bottom: .25rem; }
+.pcn-role__summary { margin-bottom: 0; }
+.pcn-role > .btn { flex-shrink: 0; white-space: nowrap; }
+@media (max-width: 767.98px) {
+  .pcn-role { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------------------------- responsiveness ---------------------------- */
+
+/* Image boxes that keep a 4:3 shape at every width, holding images Cloudinary
+   has already fitted to 4:3, so nothing is cropped differently per screen. */
+.case.pcn-fit,
+.block-20.pcn-fit {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+}
+
+/*
+ * Inner-page banners. The template fixes them at 700px, which a long title
+ * (an article headline, say) overflows on a phone: the white text spills over
+ * the page below. They keep 700px as a minimum and grow when needed.
+ */
+.hero-wrap.hero-wrap-2,
+.hero-wrap.hero-wrap-2 .slider-text {
+  height: auto;
+  min-height: 700px;
+}
+.hero-wrap.hero-wrap-2 .slider-text { padding-top: 120px; }
+
+@media (max-width: 767.98px) {
+  .hero-wrap.hero-wrap-2,
+  .hero-wrap.hero-wrap-2 .slider-text { min-height: 420px; }
+  .hero-wrap.hero-wrap-2 .slider-text { padding-top: 100px; }
+  .hero-wrap.hero-wrap-2 .slider-text h1.bread { font-size: 30px; line-height: 1.25; }
+  .hero-wrap.hero-wrap-2 .slider-text .breadcrumbs { font-size: 14px; }
+}
+
+/* Between the collapsed menu (under 992px) and a full desktop width, seven
+   links and the button do not fit at the template's spacing. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
+    padding-left: 11px;
+    padding-right: 11px;
+    font-size: 14px;
+  }
+  .ftco-navbar-light .navbar-brand { font-size: 18px; }
+}
+
+/* The current page in a breadcrumb trail is one line, however long the title:
+   the full title is already the banner heading above it. */
+.hero-wrap.hero-wrap-2 .breadcrumbs > span:last-child {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+@media (max-width: 767.98px) {
+  /* Headings in the body of detail pages, sized for a phone. */
+  .ftco-degree-bg .col-lg-8 > h2 { font-size: 24px; line-height: 1.3; }
+  .ftco-degree-bg .col-lg-8 > h2.mb-3 { margin-top: 1.5rem; }
+}
+
+/* -------------------------------- type ---------------------------------- */
+
+/*
+ * Headlines in a high-contrast Baskerville-style serif; everything else (body,
+ * small uppercase sub-headlines, buttons, menus, meta) in Montserrat, which the
+ * template's base font setting now uses.
+ */
+:root {
+  --font-display: 'Playfair Display', 'Baskerville', 'Libre Baskerville', Georgia, serif;
+  --font-text: 'Montserrat', Arial, sans-serif;
+}
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.slider-text h1,
+.hero-wrap .slider-text .bread {
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+}
+/* Small uppercase labels and UI stay in the sans. */
+.subheading,
+.heading-section .subheading,
+.slider-text .subheading,
+.navbar-brand,
+.ftco-footer .logo,
+.block-2 .front .box p,
+.topper span,
+.pcn-case__meta,
+.pcn-blog-meta,
+.pcn-outcome,
+.btn,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-text);
+}
+.subheading { letter-spacing: 0.08em; font-weight: 600; }
+
+/* ------------------------- liquid glass buttons ------------------------- */
+
+/*
+ * Translucent blue with a backdrop blur, a 1px edge light running from white
+ * (top left) to translucent blue (bottom right), and on hover a white sheen
+ * sweeping across while the blur deepens and the button lifts on a soft blue
+ * shadow. Text stays pure white.
+ */
+.btn.btn-primary,
+.btn.btn-dark,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a,
+.subscribe-form .form-group .submit {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff !important;
+  font-weight: 600;
+  background: rgba(4, 125, 214, 0.8) !important;
+  border: 1px solid transparent !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform .35s ease, box-shadow .35s ease, background-color .35s ease, backdrop-filter .35s ease;
+}
+/* Deep navy glass for the dark variant (the consultation form on blue). */
+.btn.btn-dark { background: rgba(15, 23, 42, 0.72) !important; }
+
+/* Edge light. */
+.btn.btn-primary::after,
+.btn.btn-dark::after,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a::after,
+.subscribe-form .form-group .submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(4, 125, 214, 0.3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Sheen, parked off the left edge until hover. */
+.btn.btn-primary::before,
+.btn.btn-dark::before,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
+.subscribe-form .form-group .submit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -75%;
+  width: 60%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-15deg);
+  transition: left .7s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.btn.btn-primary:hover, .btn.btn-primary:focus-visible,
+.btn.btn-dark:hover, .btn.btn-dark:focus-visible,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover,
+.subscribe-form .form-group .submit:hover {
+  color: #fff !important;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn.btn-primary:hover { background: rgba(4, 125, 214, 0.9) !important; }
+.btn.btn-dark:hover { background: rgba(15, 23, 42, 0.82) !important; }
+
+.btn.btn-primary:hover::before, .btn.btn-primary:focus-visible::before,
+.btn.btn-dark:hover::before, .btn.btn-dark:focus-visible::before,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover::before,
+.subscribe-form .form-group .submit:hover::before {
+  left: 125%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.btn-primary, .btn.btn-dark,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a,
+  .subscribe-form .form-group .submit { transition: none; }
+  .btn.btn-primary::before, .btn.btn-dark::before,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
+  .subscribe-form .form-group .submit::before { display: none; }
+  .btn.btn-primary:hover, .btn.btn-dark:hover { transform: none; }
+}
+
+/* ---------------------------- service cards ----------------------------- */
+
+.pcn-service {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px -16px rgba(15, 23, 42, 0.35);
+  transition: transform .35s ease, box-shadow .35s ease;
+  isolation: isolate;
+}
+/* Blue-to-white blend that washes over the card on hover. */
+.pcn-service::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(4, 125, 214, 0.16) 0%, rgba(4, 125, 214, 0.06) 45%, #ffffff 100%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  z-index: -1;
+}
+.pcn-service__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+  transition: transform .6s ease;
+}
+/* The photograph picks up the same blue fading to white at its foot. */
+.pcn-service__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(4, 125, 214, 0.45) 0%, rgba(4, 125, 214, 0.15) 60%, rgba(255, 255, 255, 0.85) 100%);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.pcn-service__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.25rem 1.4rem 1.4rem;
+  text-align: left;
+  background: #fff;
+  transition: background-color .35s ease;
+}
+.pcn-service__title { font-size: 20px; line-height: 1.3; margin-bottom: .5rem; }
+.pcn-service__title a { color: #0f172a; }
+.pcn-service__summary { color: #666; font-size: 14px; margin-bottom: 1rem; }
+.pcn-service__more {
+  margin-top: auto;
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #047dd6;
+}
+.pcn-service__more span { font-size: 18px; vertical-align: -3px; margin-left: 4px; transition: margin-left .35s ease; }
+/* The title link covers the whole card. */
+.pcn-stretched-link-after::after { content: ''; position: absolute; inset: 0; z-index: 2; }
+
+.pcn-service:hover,
+.pcn-service:focus-within {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 40px -18px rgba(4, 125, 214, 0.45);
+}
+.pcn-service:hover::before,
+.pcn-service:focus-within::before,
+.pcn-service:hover .pcn-service__media::after,
+.pcn-service:focus-within .pcn-service__media::after { opacity: 1; }
+.pcn-service:hover .pcn-service__body,
+.pcn-service:focus-within .pcn-service__body { background: transparent; }
+.pcn-service:hover .pcn-service__title a { color: #047dd6; }
+.pcn-service:hover .pcn-service__more span { margin-left: 10px; }
+
+/* Home: the template's blue panel behind the cards stays; the old icon card
+   styles no longer apply. */
+.services-wrap .pcn-service { text-align: left; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pcn-service, .pcn-service__media, .pcn-service::before, .pcn-service__media::after { transition: none; }
+  .pcn-service:hover { transform: none; }
+}
+
+/* The newsletter's Subscribe button never clips, whatever the font width. */
+.subscribe-form .form-group .form-control { min-width: 0; }
+.subscribe-form .form-group .submit { flex-shrink: 0; white-space: nowrap; }
+
+/* Hero backgrounds per rotating word: stacked, cross-fading beneath the overlay. */
+.hero-wrap .pcn-hero-scene {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 1.2s ease, transform 6s ease;
+}
+.hero-wrap .pcn-hero-scene.is-active { opacity: 1; transform: scale(1); }
+.hero-wrap .container { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-wrap .pcn-hero-scene { transition: none; transform: none; }
 }

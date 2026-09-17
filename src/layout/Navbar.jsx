@@ -47,7 +47,8 @@ export default function Navbar() {
           aria-expanded={open}
           aria-label={navCta.labels?.menuToggle}
         >
-          <span className="oi oi-menu" /> {navCta.labels?.menuToggle}
+          {/* Icon only; the word stays available to screen readers via aria-label. */}
+          <span className="oi oi-menu" aria-hidden="true" />
         </button>
 
         <div className={`collapse navbar-collapse${open ? ' show' : ''}`} id="ftco-nav">

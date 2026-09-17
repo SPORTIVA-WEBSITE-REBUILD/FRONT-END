@@ -1,68 +1,105 @@
 import { Link } from 'react-router-dom';
 import { backgroundStyle } from '../SmartImage.jsx';
 import { mediaUrl } from '../../lib/media.js';
-import { dateParts } from '../../lib/format.js';
+import { dateParts, term } from '../../lib/format.js';
+import { useCommon, useLayout } from '../../hooks/useContent.js';
 
 const bg = (media, width, height) => backgroundStyle(media, null, width, height
   ? { height, crop: 'fill', gravity: 'auto' }
   : {});
 
-/** Home "Why Select Us" card (`.services`). */
+/**
+ * The whole image fitted into a 4:3 box, the spare space filled with the
+ * image's own edge colour (Cloudinary `b_auto`). Case and
+ * article images are mostly portrait graphics with a headline along the
+ * bottom; cropping them to a wide box cut that headline differently at every
+ * screen width. The box keeps its 4:3 shape as it resizes (see app.css), so the
+ * image always fits exactly.
+ */
+const fitted = (media) => backgroundStyle(media, null, 800, { height: 600, crop: 'pad', background: 'auto' });
+
+/**
+ * A service card: photograph, title, a short summary and a link. The whole card
+ * is clickable. Used on the home page (`wide` false, three across) and on the
+ * services page.
+ */
+function ServiceTile({ service }) {
+  const common = useCommon();
+  const href = `/services/${service.slug}`;
+  return (
+    <div className="pcn-service ftco-animate">
+      <div
+        className={`pcn-service__media${service.image ? '' : ' pcn-banner-fallback'}`}
+        style={bg(service.image, 800, 600)}
+        role="img"
+        aria-label={service.image?.alt || service.title}
+      />
+      <div className="pcn-service__body">
+        <h3 className="pcn-service__title"><Link to={href} className="pcn-stretched-link-after">{service.title}</Link></h3>
+        {service.summary && <p className="pcn-service__summary pcn-clamp pcn-clamp--3">{service.summary}</p>}
+        <span className="pcn-service__more">{common.readMore} <span className="ion-ios-arrow-round-forward" aria-hidden="true" /></span>
+      </div>
+    </div>
+  );
+}
+
+/** Home services block card. */
 export function ServiceCard({ service }) {
   return (
-    <div className="col-md-4 d-flex align-items-stretch">
-      <div className="services text-center">
-        <div className="icon d-flex justify-content-center align-items-center">
-          <span className={service.icon || 'flaticon-lawyer'} />
-        </div>
-        <div className="text">
-          <h3>{service.title}</h3>
-          <p>{service.summary}</p>
-        </div>
-        <Link
-          to={`/services/${service.slug}`}
-          className="btn-custom d-flex align-items-center justify-content-center"
-          aria-label={service.title}
-        >
-          <span className="ion-ios-arrow-round-forward" />
-        </Link>
-      </div>
+    <div className="col-md-4 d-flex align-items-stretch mb-4">
+      <ServiceTile service={service} />
     </div>
   );
 }
 
-/** Practice Areas page card (`.practice-area`). */
+/** Services page card. */
 export function PracticeCard({ service }) {
   return (
-    <div className="col-md-3 text-center">
-      <div className="practice-area ftco-animate">
-        <div className="icon d-flex justify-content-center align-items-center">
-          <span className={service.icon || 'flaticon-lawyer'} />
-        </div>
-        <h3><Link to={`/services/${service.slug}`}>{service.title}</Link></h3>
-        <p>{service.summary}</p>
-        <Link
-          to={`/services/${service.slug}`}
-          className="btn-custom d-flex align-items-center justify-content-center"
-          aria-label={service.title}
-        >
-          <span className="ion-ios-arrow-round-forward" />
-        </Link>
-      </div>
+    <div className="col-lg-4 col-md-6 d-flex align-items-stretch mb-4">
+      <ServiceTile service={service} />
     </div>
   );
 }
 
-/** Case study tile (`.case.img`): background image, title and category. */
+/** Case study tile (`.case.img`): the image, with title and category on hover. */
 export function CaseTile({ item }) {
   return (
     <div
-      className={`case img d-flex align-items-center justify-content-center${item.featuredImage ? '' : ' pcn-banner-fallback'}`}
-      style={bg(item.featuredImage, 800, 800)}
+      className={`case img pcn-fit d-flex align-items-center justify-content-center${item.featuredImage ? '' : ' pcn-banner-fallback'}`}
+      style={fitted(item.featuredImage)}
     >
       <div className="text text-center">
         <h3><Link to={`/record/${item.slug}`}>{item.title}</Link></h3>
         <span>{item.practiceArea?.title || item.forum}</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A case tile with a preview caption: forum, year and outcome, two lines of
+ * summary and a link to the full matter. The tile itself is the template's.
+ */
+export function CaseCard({ item }) {
+  const common = useCommon();
+  const terms = useLayout().labels('caseTerms');
+  return (
+    <div className="pcn-case">
+      <CaseTile item={item} />
+      <div className="pcn-case__body">
+        <h3 className="pcn-case__title pcn-clamp pcn-clamp--2">
+          <Link to={`/record/${item.slug}`}>{item.title}</Link>
+        </h3>
+        <p className="pcn-case__meta">
+          {[item.forum, item.year].filter(Boolean).join(' · ')}
+          {item.outcome && (
+            <span className={`pcn-outcome pcn-outcome--${item.outcome}`}>{term(terms, 'outcome', item.outcome)}</span>
+          )}
+        </p>
+        {item.summary && <p className="pcn-clamp pcn-clamp--2">{item.summary}</p>}
+        <p className="mb-0">
+          <Link to={`/record/${item.slug}`} className="btn btn-primary btn-sm px-3">{common.readMore}</Link>
+        </p>
       </div>
     </div>
   );
@@ -89,6 +126,7 @@ export function FlipCard({ lawyer, compact = false }) {
             <h2>{lawyer.name}</h2>
             <p>{lawyer.role}</p>
           </div>
+          <Link to={`/lawyers/${lawyer.slug}`} className="pcn-stretched-link" aria-label={lawyer.name} />
         </div>
         {quote && (
         <div className="back">
@@ -104,9 +142,24 @@ export function FlipCard({ lawyer, compact = false }) {
               <span className="position">{lawyer.role}</span>
             </div>
           </div>
+          <Link to={`/lawyers/${lawyer.slug}`} className="pcn-stretched-link" aria-label={lawyer.name} tabIndex={-1} />
         </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/** A flip card with a two-line bio preview and a link to the profile underneath. */
+export function TeamCard({ lawyer, compact }) {
+  const common = useCommon();
+  return (
+    <div className="pcn-team">
+      <FlipCard lawyer={lawyer} compact={compact} />
+      {lawyer.bioPreview && <p className="pcn-team__bio pcn-clamp pcn-clamp--2">{lawyer.bioPreview}</p>}
+      <p className="pcn-team__more">
+        <Link to={`/lawyers/${lawyer.slug}`}>{common.viewProfile} <span className="ion-ios-arrow-forward" /></Link>
+      </p>
     </div>
   );
 }
@@ -130,19 +183,25 @@ export function TestimonyCard({ item }) {
 }
 
 /** Blog card (`.blog-entry`): title, image, date block, excerpt, Read more. */
-export function BlogCard({ article, readMore }) {
+export function BlogCard({ article, readMore, col = 'col-md-4' }) {
   const date = dateParts(article.publishedAt);
   const href = `/insights/${article.slug}`;
+  const common = useCommon();
+  const meta = [
+    article.author?.name,
+    article.category?.name,
+    article.readingMinutes ? `${article.readingMinutes} ${common.minRead}` : null,
+  ].filter(Boolean);
   return (
-    <div className="col-md-4 d-flex ftco-animate">
+    <div className={`${col} d-flex ftco-animate`}>
       <div className="blog-entry justify-content-end">
         <div className="text px-4 py-4">
-          <h3 className="heading mb-0"><Link to={href}>{article.title}</Link></h3>
+          <h3 className="heading mb-0 pcn-clamp pcn-clamp--3"><Link to={href}>{article.title}</Link></h3>
         </div>
         <Link
           to={href}
-          className={`block-20${article.featuredImage ? '' : ' pcn-banner-fallback'}`}
-          style={bg(article.featuredImage, 800, 600)}
+          className={`block-20 pcn-fit${article.featuredImage ? '' : ' pcn-banner-fallback'}`}
+          style={fitted(article.featuredImage)}
           aria-label={article.title}
         />
         <div className="text p-4 float-right d-block">
@@ -157,8 +216,9 @@ export function BlogCard({ article, readMore }) {
               </div>
             </div>
           )}
-          <p>{article.excerpt}</p>
-          <p><Link to={href} className="btn btn-primary">{readMore}</Link></p>
+          {meta.length > 0 && <p className="pcn-blog-meta">{meta.join(' · ')}</p>}
+          <p className="pcn-clamp pcn-clamp--3">{article.excerpt}</p>
+          <p><Link to={href} className="btn btn-primary">{readMore || common.readMore}</Link></p>
         </div>
       </div>
     </div>
