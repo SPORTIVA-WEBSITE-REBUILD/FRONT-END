@@ -72,7 +72,9 @@ describe('route resolution', () => {
   it('maps the fixed pages', () => {
     expect(resolveRoute('/').endpoint).toBe('/public/pages/home');
     expect(resolveRoute('/about').endpoint).toBe('/public/pages/about');
-    expect(resolveRoute('/record').endpoint).toBe('/public/pages/record-insights');
+    expect(resolveRoute('/record').endpoint).toBe('/public/pages/record');
+    expect(resolveRoute('/insights').endpoint).toBe('/public/pages/insights');
+    expect(resolveRoute('/lawyers').endpoint).toBe('/public/pages/lawyers');
   });
 
   it('tolerates a trailing slash', () => {

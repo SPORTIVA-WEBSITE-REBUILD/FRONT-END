@@ -26,6 +26,7 @@ const STATIC_ROUTES = [
   ['/services', 0.9, 'monthly'],
   ['/record', 0.9, 'weekly'],
   ['/insights', 0.9, 'weekly'],
+  ['/lawyers', 0.7, 'monthly'],
   ['/careers', 0.6, 'weekly'],
   ['/about', 0.7, 'monthly'],
   ['/contact', 0.7, 'yearly'],

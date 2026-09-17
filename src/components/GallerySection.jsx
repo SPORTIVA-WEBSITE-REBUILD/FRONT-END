@@ -2,7 +2,6 @@ import { useState } from 'react';
 import SmartImage from './SmartImage.jsx';
 import Lightbox from './Lightbox.jsx';
 import { LoadingCards, ErrorState } from './states.jsx';
-import { Reveal } from '../hooks/useAnimations.jsx';
 import { useGallery } from '../hooks/useContent.js';
 
 /**
@@ -24,7 +23,7 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
         <div className="row justify-content-center mb-5 pb-3">
           <div className="col-md-7 heading-section text-center ftco-animate">
             {subheading && <span className="subheading">{subheading}</span>}
-            <h2 className="mb-4">{heading || 'Gallery'}</h2>
+            {heading && <h2 className="mb-4">{heading}</h2>}
             {body && <p>{body}</p>}
           </div>
         </div>
@@ -35,7 +34,7 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
         <div className="row">
           {(items || []).map((item, i) => (
             <div className="col-md-6 col-lg-3 mb-4" key={item._id}>
-              <Reveal className="pcn-gallery-item">
+              <div className="pcn-gallery-item ftco-animate">
                 <button
                   type="button"
                   className="pcn-gallery-item__button"
@@ -55,7 +54,7 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
                     <span className="pcn-gallery-item__title">{item.title}</span>
                   </span>
                 </button>
-              </Reveal>
+              </div>
             </div>
           ))}
         </div>

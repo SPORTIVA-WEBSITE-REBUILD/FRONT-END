@@ -1,111 +1,52 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Seo from '../components/Seo.jsx';
-import PageHero from '../components/PageHero.jsx';
-import SmartImage from '../components/SmartImage.jsx';
 import Pagination from '../components/Pagination.jsx';
+import PageBanner from '../components/template/PageBanner.jsx';
+import { BlogCard } from '../components/template/cards.jsx';
 import { LoadingCards, ErrorState, EmptyState } from '../components/states.jsx';
-import { useArticles, usePage, section } from '../hooks/useContent.js';
+import { useArticles, useCommon, usePage, section } from '../hooks/useContent.js';
+import { graph, breadcrumbs } from '../lib/structuredData.js';
 
+/** blog.html. The sidebar's search, category and tag links land here. */
 export default function Insights() {
-  const [params, setParams] = useSearchParams();
-  const { data: page } = usePage('record-insights');
-
+  const [params] = useSearchParams();
+  const { data: page } = usePage('insights');
+  const common = useCommon();
   const filters = {
-    tag: params.get('tag') || '',
     q: params.get('q') || '',
+    tag: params.get('tag') || '',
+    category: params.get('category') || '',
     page: Number(params.get('page')) || 1,
     limit: 9,
   };
-
   const { data: result, isLoading, isError, error, refetch } = useArticles(filters);
+
+  const hero = section(page, 'hero');
+  const list = section(page, 'list').labels || {};
   const articles = result?.data || [];
-  const intro = section(page, 'insights') ;
+  const meta = result?.meta;
 
   return (
     <>
       <Seo
-        title="Insights"
-        description="Commentary and analysis on sports law, regulation and dispute resolution."
+        seo={page?.seo}
+        title={page?.title}
         path="/insights"
+        jsonLd={graph(breadcrumbs([{ label: 'Home', href: '/' }, { label: hero.heading || page?.title }]))}
       />
-      <PageHero
-        title="Insights"
-        image={intro.image}
-        crumbs={[{ label: 'Home', href: '/' }, { label: 'Insights' }]}
-      />
+      <PageBanner title={hero.heading} crumb={hero.subheading} image={hero.image} />
 
-      <section className="ftco-section">
+      <section className="ftco-section bg-light">
         <div className="container">
-          <div className="row mb-5">
-            <div className="col-md-6 ml-auto">
-              <input
-                type="search"
-                className="form-control"
-                placeholder="Search insights"
-                aria-label="Search insights"
-                defaultValue={filters.q}
-                onChange={(e) => {
-                  const next = new URLSearchParams(params);
-                  if (e.target.value) next.set('q', e.target.value); else next.delete('q');
-                  next.delete('page');
-                  setParams(next, { replace: true });
-                }}
-              />
-            </div>
-          </div>
-
           {isError && <ErrorState error={error} onRetry={refetch} />}
           {isLoading && !result && <LoadingCards count={6} />}
-
-          {result && articles.length === 0 && (
-            <EmptyState
-              title="No articles yet"
-              message="There is nothing published here at the moment. Please check back soon."
-            />
-          )}
+          {result && articles.length === 0 && <EmptyState title={list.emptyTitle} message={list.emptyText} />}
 
           <div className="row d-flex">
-            {articles.map((a) => (
-              <div className="col-md-4 d-flex ftco-animate mb-4" key={a.slug}>
-                <div className="blog-entry justify-content-end">
-                  <Link to={`/insights/${a.slug}`} className="block-20">
-                    {a.featuredImage && (
-                      <SmartImage media={a.featuredImage} width={600} height={400} sizes="(max-width: 768px) 100vw, 33vw" />
-                    )}
-                  </Link>
-                  <div className="text pt-4">
-                    <div className="meta mb-3">
-                      {a.publishedAt && (
-                        <div>
-                          <time dateTime={a.publishedAt}>
-                            {new Date(a.publishedAt).toLocaleDateString('en-GB', {
-                              day: 'numeric', month: 'long', year: 'numeric',
-                            })}
-                          </time>
-                        </div>
-                      )}
-                      {a.author?.name && <div><span>{a.author.name}</span></div>}
-                      {a.readingMinutes && <div><span>{a.readingMinutes} min read</span></div>}
-                    </div>
-                    <h3 className="heading"><Link to={`/insights/${a.slug}`}>{a.title}</Link></h3>
-                    <p>{a.excerpt}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {articles.map((a) => <BlogCard article={a} readMore={common.readMore} key={a.slug} />)}
           </div>
 
-          {result?.meta && (
-            <Pagination
-              page={result.meta.page}
-              pages={result.meta.pages}
-              onChange={(p) => {
-                const next = new URLSearchParams(params);
-                if (p > 1) next.set('page', p); else next.delete('page');
-                setParams(next);
-              }}
-            />
-          )}
+          {meta && <Pagination page={meta.page} pages={meta.pages} />}
         </div>
       </section>
     </>

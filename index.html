@@ -16,15 +16,18 @@
       linked here: it is compiled into style.scss, matching the original build.
 
       The icon fonts are SUBSET to the glyphs this site actually uses — icomoon
-      alone was 307 KB of font and 80 KB of CSS for nine icons. Owl Carousel,
-      Magnific Popup and AOS were dropped entirely: their markup is not rendered
-      by the React build, only overridden in style.scss.
+      alone was 307 KB of font and 80 KB of CSS for nine icons. AOS is unused.
     -->
     <link rel="stylesheet" href="/css/open-iconic-subset.css" />
     <link rel="stylesheet" href="/css/animate-subset.css" />
     <link rel="stylesheet" href="/css/ionicons-subset.css" />
     <link rel="stylesheet" href="/css/flaticon.css" />
     <link rel="stylesheet" href="/css/icomoon-subset.css" />
+    <!-- Owl Carousel and Magnific Popup stylesheets style the carousels and the
+         video popup, which React renders with the plugins' own markup. -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/css/magnific-popup.css" />
 
     <title>PCN Sportiva LP</title>
   </head>

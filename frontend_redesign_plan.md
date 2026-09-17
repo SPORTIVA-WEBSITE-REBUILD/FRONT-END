@@ -34,15 +34,31 @@ a section up by key and decides how to draw it. **The keys are the contract.**
 Rename a key in the design and the content disappears; keep the key and you can
 render it as anything.
 
-| Route | Page slug | Section keys available |
+> **Superseded for page structure by `template_parity_plan.md`.** The site now
+> renders the Colorlib template's markup, and the authoritative list of pages,
+> sections and fields is `backend/src/config/pageBlueprints.js` (served at
+> `GET /api/pages/blueprints`; the dashboard builds its editor from it).
+
+| Route | Page slug | Section keys |
 |---|---|---|
-| `/` | `home` | `hero`, `intro`, `services`, `record`, `gallery`, `insights`, `cta` |
-| `/about` | `about` | `intro`, `team` |
-| `/services` | `services` | `intro` |
-| `/contact` | `contact` | `intro` |
-| `/careers` | `careers` | `intro` |
-| `/record` and `/insights` | `record-insights` | `intro` |
-| `/privacy-policy` | `privacy-policy` | `body` |
+| every page | `layout` | `navCta`, `newsletter`, `footer`, `hours`, `common`, `caseTerms`, `jobTerms` |
+| `/` | `home` | `hero`, `services`, `intro`, `experience`, `record`, `team`, `consultation`, `testimonials`, `gallery`, `insights` |
+| `/about` | `about` | `hero`, `intro`, `experience`, `consultation`, `testimonials` |
+| `/lawyers` | `lawyers` | `hero` |
+| `/lawyers/:slug` | `lawyer-detail` | `hero`, `contact`, `qualifications`, `practiceAreas` |
+| `/services` | `services` | `hero` |
+| `/services/:slug` | `service-detail` | `hero`, `overview`, `help`, `advisors`, `sidebar`, `widgets` |
+| `/record` | `record` | `hero`, `filters` |
+| `/record/:slug` | `case-detail` | `hero`, `overview`, `details`, `sidebar` |
+| `/insights` | `insights` | `hero`, `list` |
+| `/insights/:slug` | `article-detail` | `hero`, `sidebar`, `widgets`, `comments` |
+| `/careers`, `/careers/:slug` | `careers`, `vacancy-detail` | see blueprints |
+| `/contact` | `contact` | `hero`, `intro`, `form` |
+| `/privacy-policy`, 404 | `privacy-policy`, `not-found` | `hero`, `body` |
+
+Sections also carry `labels`: named interface strings (placeholders, button
+names, widget titles). The API fills any empty field or label with the
+template's wording, so the frontend hardcodes no text.
 
 ### What every section can hold
 

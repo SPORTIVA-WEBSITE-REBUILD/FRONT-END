@@ -1,30 +1,36 @@
 import { useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Seo from '../components/Seo.jsx';
-import PageHero from '../components/PageHero.jsx';
-import RichText from '../components/RichText.jsx';
 import SmartImage from '../components/SmartImage.jsx';
+import RichText from '../components/RichText.jsx';
+import PageBanner from '../components/template/PageBanner.jsx';
+import Sidebar from '../components/template/Sidebar.jsx';
+import SmartLink from '../components/template/SmartLink.jsx';
+import { FlipCard } from '../components/template/cards.jsx';
 import { LoadingSection, ErrorState } from '../components/states.jsx';
-import { useService, useServices } from '../hooks/useContent.js';
+import { usePage, useService, section } from '../hooks/useContent.js';
 import { graph, service as serviceSchema, breadcrumbs } from '../lib/structuredData.js';
 
+/** practice-single.html */
 export default function ServiceDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { data: result, isLoading, isError, error } = useService(slug);
-  const { data: allServices } = useServices();
-
-  const service = result?.data;
-  const redirectTo = result?.meta?.redirectTo;
+  const { data: page } = usePage('service-detail');
+  const { data: service, isLoading, isError, error } = useService(slug);
 
   useEffect(() => {
-    if (redirectTo && redirectTo !== slug) {
-      navigate(`/services/${redirectTo}`, { replace: true });
-    }
-  }, [redirectTo, slug, navigate]);
+    if (service?.slug && service.slug !== slug) navigate(`/services/${service.slug}`, { replace: true });
+  }, [service, slug, navigate]);
+
+  const hero = section(page, 'hero');
+  const parent = { label: hero.labels?.parent, href: '/services' };
 
   if (isLoading) return <div className="container py-5"><LoadingSection rows={8} /></div>;
-  if (isError) return <div className="container py-5"><ErrorState error={error} title="Service not found" /></div>;
+  if (isError) return <div className="container py-5"><ErrorState error={error} /></div>;
+
+  const overview = section(page, 'overview');
+  const help = section(page, 'help');
+  const advisors = section(page, 'advisors');
 
   return (
     <>
@@ -36,57 +42,47 @@ export default function ServiceDetail() {
         path={`/services/${service.slug}`}
         jsonLd={graph(
           serviceSchema(service),
-          breadcrumbs([
-            { label: 'Home', href: '/' },
-            { label: 'Services', href: '/services' },
-            { label: service.title },
-          ]),
+          breadcrumbs([{ label: 'Home', href: '/' }, { label: parent.label, href: parent.href }, { label: service.title }]),
         )}
       />
-      <PageHero
-        title={service.title}
-        image={service.image}
-        crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services' }, { label: service.title }]}
-      />
+      <PageBanner title={service.title} image={hero.image || service.image} parent={parent} />
 
-      <section className="ftco-section">
+      <section className="ftco-section ftco-degree-bg">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 ftco-animate">
               {service.image && (
-                <SmartImage
-                  media={service.image}
-                  width={1200}
-                  className="img-fluid mb-4"
-                  sizes="(max-width: 992px) 100vw, 66vw"
-                  priority
-                />
+                <p>
+                  <SmartImage media={service.image} width={1200} className="img-fluid" sizes="(max-width: 992px) 100vw, 66vw" priority />
+                </p>
               )}
-              <h2 className="mb-4">Overview</h2>
-              {service.summary && <p className="lead">{service.summary}</p>}
-              <RichText html={service.body} />
+              {overview.heading && <h2 className="mb-3">{overview.heading}</h2>}
+              {service.body ? <RichText html={service.body} /> : <p>{service.summary}</p>}
+
+              {help.heading && <h2 className="mb-3 mt-5">{help.heading}</h2>}
+              {help.body && <p>{help.body}</p>}
+              {help.cta?.label && (
+                <p><SmartLink href={help.cta.href} className="btn btn-primary">{help.cta.label}</SmartLink></p>
+              )}
+
+              {service.advisors?.length > 0 && (
+                <div className="row mt-5 pt-5">
+                  <div className="col-md-12">
+                    <h2 className="mb-4 font-weight-bold">{advisors.heading}</h2>
+                  </div>
+                  {service.advisors.map((l) => (
+                    <div className="col-lg-6" key={l.slug}><FlipCard lawyer={l} compact /></div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="col-lg-4 sidebar pl-lg-5 ftco-animate">
-              <div className="sidebar-box ftco-animate">
-                <h3 className="heading">Other services</h3>
-                <ul className="list-unstyled categories">
-                  {(allServices || [])
-                    .filter((s) => s.slug !== service.slug)
-                    .map((s) => (
-                      <li key={s.slug}>
-                        <Link to={`/services/${s.slug}`}>{s.title}</Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-
-              <div className="sidebar-box">
-                <h3 className="heading">How can we help?</h3>
-                <p>Tell us about your matter and we will come back to you.</p>
-                <Link to="/contact" className="btn btn-primary py-2 px-4">Make an enquiry</Link>
-              </div>
-            </div>
+            <Sidebar
+              kind="service"
+              activeSlug={service.slug}
+              widgets={section(page, 'widgets').labels}
+              paragraph={section(page, 'sidebar')}
+            />
           </div>
         </div>
       </section>

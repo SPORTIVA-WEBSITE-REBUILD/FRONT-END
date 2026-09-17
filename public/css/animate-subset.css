@@ -1,5 +1,7 @@
-/* Extracted from animate.css: the site uses one entrance animation.
+/* Extracted from the template's animate.css: the rules the scroll reveal uses
+   (.ftco-animated plus the four effects data-animate-effect can name).
    Shipping the full library meant ~90 unused keyframe sets on every page. */
+
 .animated {
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
@@ -7,25 +9,37 @@
   animation-fill-mode: both;
 }
 
-@-webkit-keyframes fadeInUp {
+.ftco-animated {
+  -webkit-animation-duration: .5s;
+  animation-duration: .5s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
   from {
     opacity: 0;
     visibility: hidden;
-    /*-webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);*/
-    -webkit-transform: translate3d(0, 40px, 0);
-    transform: translate3d(0, 40px, 0);
+    -ms-transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
   }
 
   to {
     opacity: 1;
     visibility: visible;
-    -webkit-transform: none;
-    transform: none;
+    -ms-transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
   }
 }
 
-@-webkit-keyframes fadeInUp {
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
     visibility: hidden;
@@ -36,8 +50,8 @@
   }
 
   to {
-    opacity: 1;
     visibility: visible;
+    opacity: 1;
     -webkit-transform: none;
     transform: none;
   }
@@ -48,6 +62,52 @@
   animation-name: fadeInUp;
 }
 
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    /*-webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);*/
+    -webkit-transform: translate3d(-50px, 0, 0);
+    transform: translate3d(-50px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInLeft {
+  -webkit-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    /*-webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);*/
+    -webkit-transform: translate3d(50px, 0, 0);
+    transform: translate3d(50px, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInRight {
+  -webkit-animation-name: fadeInRight;
+  animation-name: fadeInRight;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animated { animation: none !important; }
+  .animated, .ftco-animated { animation: none !important; }
 }

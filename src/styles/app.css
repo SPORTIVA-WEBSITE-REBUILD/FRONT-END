@@ -95,8 +95,14 @@
 
 /* Social marks are inline SVG rather than an icon font, so they need the
    sizing the font glyphs used to get from line-height. */
-.ftco-footer-social li a svg { display: block; }
-.ftco-footer-social li a { display: inline-flex; align-items: center; justify-content: center; }
+/* Centred in the template's 50px circle exactly as its font glyph span is. */
+.ftco-footer-social li a svg {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 /* ------------------------------- gallery -------------------------------- */
 
@@ -263,4 +269,39 @@
   background-image:
     radial-gradient(circle at 18% 22%, rgba(175, 169, 57, .20) 0%, transparent 46%),
     linear-gradient(135deg, #22252f 0%, #2c2f3a 52%, #1b1e26 100%);
+}
+
+/*
+ * Typewriter cursor. The template draws it absolutely against the rotating
+ * word's inline box, which is fine for one word but stretches over two lines
+ * when a longer phrase wraps. Drawn inline after the last letter instead, at
+ * the height of one line of text, it looks the same and never stretches.
+ */
+.slider-text .txt-rotate > .wrap:after {
+  position: static;
+  display: inline-block;
+  height: 1.4em;
+  vertical-align: -0.35em;
+  margin-left: 5px;
+  margin-right: -10px;
+}
+
+/*
+ * Team flip cards. The reveal's fade-in would otherwise keep a transform on the
+ * card after it finishes, and some browsers (Safari in particular) then fail
+ * to paint the card's 3D faces until a hover forces a repaint. Holding only the
+ * start of the animation leaves the finished card untransformed.
+ */
+.block-2.ftco-animated {
+  animation-fill-mode: backwards;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* A card with no quote has no back: a plain photo that never turns away. */
+.block-2.pcn-no-flip .front,
+.block-2.pcn-no-flip:hover .front {
+  transform: none;
+  -webkit-backface-visibility: visible;
+  backface-visibility: visible;
 }

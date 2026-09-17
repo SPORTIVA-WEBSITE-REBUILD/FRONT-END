@@ -8,7 +8,9 @@
   font-display: swap;
 }
 
-.ion, .ionicons, [class^="ion-"], [class*=" ion-"] {
+/* On the pseudo-element, as the full ionicons.css does: styling the span
+   itself changes its line box and shifts every arrow. */
+.ion, .ionicons, [class^="ion-"]:before, [class*=" ion-"]:before {
   display: inline-block;
   font-family: "Ionicons";
   speak: none;
