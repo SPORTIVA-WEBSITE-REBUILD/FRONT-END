@@ -70,7 +70,7 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
 
     await waitFor(() => expect(screen.getByText('PCN Sportiva LP')).toBeInTheDocument());
     expect(screen.getByRole('link', { name: 'Record' })).toHaveAttribute('href', '/record');
-    expect(screen.getByText('Sports Law')).toBeInTheDocument();
+    expect(screen.queryByText('Sports Law')).not.toBeInTheDocument();
   });
 
   it('shows the firm contact details from settings in the footer', async () => {

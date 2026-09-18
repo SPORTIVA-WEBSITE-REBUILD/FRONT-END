@@ -25,7 +25,7 @@ export default function Navbar() {
   const items = (data?.navigation?.header || [])
     .map((item) => ({ ...item, href: safeHref(item.href) }))
     .filter((item) => item.href);
-  const { siteName, tagline } = layout.settings;
+  const { siteName } = layout.settings;
   const navCta = layout.section('navCta');
 
   useEffect(() => setOpen(false), [pathname]);
@@ -37,7 +37,7 @@ export default function Navbar() {
     >
       <div className="container">
         <Link className="navbar-brand" to="/">
-          {siteName} {tagline && <span>{tagline}</span>}
+          {siteName}
         </Link>
         <button
           className="navbar-toggler"
