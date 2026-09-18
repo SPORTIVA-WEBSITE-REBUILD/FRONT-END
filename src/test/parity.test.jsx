@@ -60,7 +60,6 @@ function api() {
       },
     },
     '/pages/home': page('home'),
-    '/pages/about': page('about'),
     '/pages/': page('other'),
     '/services': { data: [{ slug: 's', title: 'Family Law', summary: 'x', icon: 'flaticon-family' }] },
     '/cases/filters': { data: { forums: [], years: [], parties: [] } },
@@ -91,7 +90,6 @@ const DIVERGENCES = {
 
 const CASES = [
   ['index.html', '/'],
-  ['about.html', '/about'],
   ['attorneys.html', '/lawyers'],
   ['practice-areas.html', '/services'],
   ['case.html', '/record'],

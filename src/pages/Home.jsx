@@ -7,7 +7,6 @@ import Carousel from '../components/template/Carousel.jsx';
 import SmartLink from '../components/template/SmartLink.jsx';
 import AboutBlock from '../components/template/AboutBlock.jsx';
 import Consultation from '../components/template/Consultation.jsx';
-import HiringStrip from '../components/template/HiringStrip.jsx';
 import {
   BlogCard, CaseCard, SectionHeading, ServiceCard, TeamCard, TestimonyCard,
 } from '../components/template/cards.jsx';
@@ -209,7 +208,6 @@ export default function Home() {
         </section>
       )}
 
-      <HiringStrip section={section(page, 'careers')} />
 
       <Consultation section={section(page, 'consultation')} />
 
