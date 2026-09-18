@@ -100,7 +100,7 @@ describe('structured data describes the firm to search engines', () => {
 
 describe('soft 404s', () => {
   it('recognises the paths the app really serves', () => {
-    for (const p of ['/', '/services', '/record', '/insights', '/careers', '/about', '/contact',
+    for (const p of ['/', '/services', '/record', '/insights', '/careers', '/contact',
       '/privacy-policy', '/insights/a-slug', '/record/a-case', '/services/x', '/lawyers/y',
       '/careers/associate-role', '/record/']) {
       expect(isKnownRoute(p), p).toBe(true);

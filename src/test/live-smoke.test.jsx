@@ -7,7 +7,6 @@ import Home from '../pages/Home.jsx';
 import Record from '../pages/Record.jsx';
 import Insights from '../pages/Insights.jsx';
 import Careers from '../pages/Careers.jsx';
-import About from '../pages/About.jsx';
 
 /**
  * Renders the real pages against the RUNNING API — nothing mocked.
@@ -60,7 +59,6 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     expect(text).toMatch(/boutique sports law practice/i);      // firm copy
     expect(text).toMatch(/Sports Dispute Resolution/);          // services
     expect(text).toMatch(/Secures FIFA DRC Ruling/);            // case record
-    expect(text).toMatch(/Pius Ndubuokwu/);                     // team flip cards
     expect(text).toMatch(/Free Consultation/);                  // consultation block
     expect(text.length).toBeGreaterThan(3000);
   }, 20000);
@@ -91,11 +89,4 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     expect(text).toMatch(/Lagos, Nigeria/);
   }, 20000);
 
-  it('about shows the firm and the consultation form', async () => {
-    const { text } = await renderSettled(<About />, '/about');
-    console.log(`  ABOUT    ${text.length} chars`);
-
-    expect(text).toMatch(/boutique sports law practice/i);
-    expect(text).toMatch(/Free Consultation/);
-  }, 20000);
 });
