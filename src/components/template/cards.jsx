@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import ServiceIcon from '../icons.jsx';
 import { backgroundStyle } from '../SmartImage.jsx';
 import { mediaUrl } from '../../lib/media.js';
 import { dateParts, term } from '../../lib/format.js';
@@ -19,34 +20,34 @@ const bg = (media, width, height) => backgroundStyle(media, null, width, height
 const fitted = (media) => backgroundStyle(media, null, 800, { height: 600, crop: 'pad', background: 'auto' });
 
 /**
- * A service card: photograph, title, a short summary and a link. The whole card
- * is clickable. Used on the home page (`wide` false, three across) and on the
+ * A service card: a line icon, the title, a short summary, and — when the firm
+ * has published cases against that practice area — a count of them. The whole
+ * card is the link. Used on the home page (four across, two by two) and on the
  * services page.
  */
 function ServiceTile({ service }) {
-  const common = useCommon();
-  const href = `/services/${service.slug}`;
+  // Counted from the case collection at request time; see listServices.
+  const matters = Number(service.caseCount) || 0;
   return (
-    <div className="pcn-service ftco-animate">
-      <div
-        className={`pcn-service__media${service.image ? '' : ' pcn-banner-fallback'}`}
-        style={bg(service.image, 800, 600)}
-        role="img"
-        aria-label={service.image?.alt || service.title}
-      />
-      <div className="pcn-service__body">
-        <h3 className="pcn-service__title"><Link to={href} className="pcn-stretched-link-after">{service.title}</Link></h3>
-        {service.summary && <p className="pcn-service__summary pcn-clamp pcn-clamp--3">{service.summary}</p>}
-        <span className="pcn-service__more">{common.readMore} <span className="ion-ios-arrow-round-forward" aria-hidden="true" /></span>
-      </div>
-    </div>
+    // The whole card is the link, so there is no separate "read more" to click.
+    <Link to={`/services/${service.slug}`} className="pcn-service ftco-animate">
+      <ServiceIcon slug={service.slug} className="pcn-service__icon" />
+      <h3 className="pcn-service__title">{service.title}</h3>
+      {service.summary && <p className="pcn-service__summary pcn-clamp pcn-clamp--3">{service.summary}</p>}
+      {/* Omitted entirely at zero rather than printing "0 matters". */}
+      {matters > 0 && (
+        <p className="pcn-service__evidence">
+          {matters} {matters === 1 ? 'matter' : 'matters'} in the record
+        </p>
+      )}
+    </Link>
   );
 }
 
 /** Home services block card. */
 export function ServiceCard({ service }) {
   return (
-    <div className="col-md-4 d-flex align-items-stretch mb-4">
+    <div className="col-md-6 d-flex align-items-stretch mb-4">
       <ServiceTile service={service} />
     </div>
   );

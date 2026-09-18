@@ -77,8 +77,20 @@ function api() {
 
 afterEach(() => vi.unstubAllGlobals());
 
+/**
+ * Where the site intentionally departs from the template, with the reason.
+ * Keeping these explicit means parity stays a real assertion everywhere else.
+ *
+ * The home hero is no longer viewport-height, so it no longer carries
+ * .js-fullheight — leaving the class on while overriding its height meant two
+ * rules fighting over the same property. See docs/design-direction.md.
+ */
+const DIVERGENCES = {
+  'index.html': { 'div.hero-wrap.js-fullheight': 'div.hero-wrap' },
+};
+
 const CASES = [
-  ['index.html', '/', 'div.hero-wrap.js-fullheight'],
+  ['index.html', '/'],
   ['about.html', '/about'],
   ['attorneys.html', '/lawyers'],
   ['practice-areas.html', '/services'],
@@ -91,7 +103,7 @@ describe('each page renders the template\'s blocks in the template\'s order', ()
   it.each(CASES)('%s → %s', async (file, route) => {
     vi.stubGlobal('fetch', api());
     const { container } = renderWithProviders(<App />, { route });
-    const expected = templateBlocks(file);
+    const expected = templateBlocks(file).map((s) => DIVERGENCES[file]?.[s] ?? s);
 
     await waitFor(() => {
       const main = container.querySelector('main');

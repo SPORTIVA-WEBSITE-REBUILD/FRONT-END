@@ -1,7 +1,7 @@
 @import 'bootstrap/pcn-bootstrap';
 @import 'bootstrap/variables';
 
-$font-primary: 'Montserrat', Arial, sans-serif; // brand text font (template used Poppins)
+$font-primary: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; // brand text font (template used Poppins)
 
 $white: #fff;
 $black: #000000;
@@ -323,35 +323,10 @@ h1, h2, h3, h4, h5,
 	}
 }
 
-@-webkit-keyframes blinker {
-  from {opacity: 1.0;}
-  to {opacity: 0.0;}
-}
-
+// The template's .txt-rotate typewriter and its blinking @keyframes blinker
+// cursor were removed with the typewriter itself. Each hero slide now carries
+// its own phrase, which slides in (see .pcn-hero-phrase in app.css).
 .slider-text{
-	.txt-rotate {
-		> .wrap { 
-			// border-right: 0.08em solid $primary;
-			position: relative;
-			&:after{
-				position: absolute;
-				top: 0;
-				bottom: 0;
-				right: -10px;
-				width: 5px;
-				height: 100%;
-				content: '';
-				background: $primary;
-
-				text-decoration: blink;
-				-webkit-animation-name: blinker;
-				-webkit-animation-duration: 0.6s;
-				-webkit-animation-iteration-count:infinite;
-				-webkit-animation-timing-function:ease-in-out;
-				-webkit-animation-direction: alternate;
-			}
-		}
-	}
 	h1 {
 		font-size: 48px;
 		color: $white;
@@ -639,23 +614,12 @@ h1, h2, h3, h4, h5,
 
 
 //SERVICES
+// The template put a 140px solid blue band behind the top of the card row. It
+// read as an overflow artefact rather than a design element and competed with
+// the cards' icons, so it is gone; the wrapper keeps only its stacking context.
 .services-wrap{
 	position: relative;
 	z-index: 0;
-	&:after{
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: -1;
-		content: '';
-		height: 140px;
-		background: $primary;
-		@include media-breakpoint-down(sm){
-			height: 100%;
-		}
-	}
 }
 .services{
 	width:100%;

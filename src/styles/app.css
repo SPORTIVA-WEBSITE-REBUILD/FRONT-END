@@ -1,10 +1,13 @@
 /*
  * The template sized these in JavaScript: main.js set .js-fullheight to
  * window.height() on load and on every resize. jQuery is gone, and .hero-wrap
- * is height:100%, so without this the home hero collapses to nothing.
+ * is height:100%, so without this the inner banners collapse to nothing.
  *
  * CSS does the same job better — no resize listener, no layout thrash, and
  * svh accounts for mobile browser chrome that 100vh gets wrong.
+ *
+ * The home hero no longer uses this: it is sized by .pcn-hero further down,
+ * and carries neither class, so the two cannot fight.
  */
 .js-fullheight {
   height: 100vh;
@@ -272,18 +275,23 @@
 }
 
 /*
- * Typewriter cursor. The template draws it absolutely against the rotating
- * word's inline box, which is fine for one word but stretches over two lines
- * when a longer phrase wraps. Drawn inline after the last letter instead, at
- * the height of one line of text, it looks the same and never stretches.
+ * The hero's trailing phrase. It used to be typed out character by character
+ * behind a blinking cursor; the cursor was absolutely positioned against the
+ * word's inline box and stretched over two lines whenever a phrase wrapped.
+ * Both are gone. Each slide's phrase now slides in once and holds.
  */
-.slider-text .txt-rotate > .wrap:after {
-  position: static;
+.pcn-hero-phrase {
   display: inline-block;
-  height: 1.4em;
-  vertical-align: -0.35em;
-  margin-left: 5px;
-  margin-right: -10px;
+  animation: pcn-hero-phrase-in .6s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes pcn-hero-phrase-in {
+  from { opacity: 0; transform: translateX(.4em); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcn-hero-phrase { animation: none; }
 }
 
 /*
@@ -462,13 +470,31 @@ input[type="submit"].btn,
 /* -------------------------------- type ---------------------------------- */
 
 /*
- * Headlines in a high-contrast Baskerville-style serif; everything else (body,
- * small uppercase sub-headlines, buttons, menus, meta) in Montserrat, which the
- * template's base font setting now uses.
+ * Modelled on Bird & Bird, taken from their stylesheet rather than by eye:
+ * Publico Headline for headings, Open Sans for everything else.
+ *
+ * Open Sans is used exactly — it is the same family they serve. Publico is a
+ * commercial licence from Commercial Type, so headings use Source Serif 4, the
+ * closest free equivalent: the same sturdy transitional serif with an optical
+ * size axis for display sizes, rather than the much showier Playfair that was
+ * here before. If the firm licences Publico, add the @font-face and change the
+ * first name in --font-display; nothing else needs to move.
  */
 :root {
-  --font-display: 'Playfair Display', 'Baskerville', 'Libre Baskerville', Georgia, serif;
-  --font-text: 'Montserrat', Arial, sans-serif;
+  --font-display: 'Source Serif 4', 'Publico Headline', Georgia, 'Times New Roman', serif;
+  --font-text: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+
+  /*
+   * Names for colours the site was already using literally in a dozen places.
+   * Nothing here changes what is on screen; it makes the palette editable in
+   * one spot instead of by find-and-replace.
+   */
+  --blue: #047dd6;        /* brand blue: links, CTAs, focus, icon marks */
+  --line: #e6e6e6;        /* hairline borders */
+  --surface: #f8f9fa;     /* the ground a card lifts to on hover */
+  --ink-1: #0f172a;       /* headings */
+  --ink-2: #666;          /* body copy on light ground */
+  --ink-3: #999;          /* metadata, the quietest readable step */
 }
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6,
@@ -507,6 +533,7 @@ textarea {
  */
 .btn.btn-primary,
 .btn.btn-dark,
+.btn-custom,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a,
 .subscribe-form .form-group .submit {
   position: relative;
@@ -527,6 +554,7 @@ textarea {
 /* Edge light. */
 .btn.btn-primary::after,
 .btn.btn-dark::after,
+.btn-custom::after,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a::after,
 .subscribe-form .form-group .submit::after {
   content: '';
@@ -545,6 +573,7 @@ textarea {
 /* Sheen, parked off the left edge until hover. */
 .btn.btn-primary::before,
 .btn.btn-dark::before,
+.btn-custom::before,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
 .subscribe-form .form-group .submit::before {
   content: '';
@@ -562,6 +591,7 @@ textarea {
 
 .btn.btn-primary:hover, .btn.btn-primary:focus-visible,
 .btn.btn-dark:hover, .btn.btn-dark:focus-visible,
+.btn-custom:hover, .btn-custom:focus-visible,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover,
 .subscribe-form .form-group .submit:hover {
   color: #fff !important;
@@ -575,107 +605,96 @@ textarea {
 
 .btn.btn-primary:hover::before, .btn.btn-primary:focus-visible::before,
 .btn.btn-dark:hover::before, .btn.btn-dark:focus-visible::before,
+.btn-custom:hover::before, .btn-custom:focus-visible::before,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover::before,
 .subscribe-form .form-group .submit:hover::before {
   left: 125%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn.btn-primary, .btn.btn-dark,
+  .btn.btn-primary, .btn.btn-dark, .btn-custom,
   .ftco-navbar-light .navbar-nav > .nav-item.cta > a,
   .subscribe-form .form-group .submit { transition: none; }
-  .btn.btn-primary::before, .btn.btn-dark::before,
+  .btn.btn-primary::before, .btn.btn-dark::before, .btn-custom::before,
   .ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
   .subscribe-form .form-group .submit::before { display: none; }
-  .btn.btn-primary:hover, .btn.btn-dark:hover { transform: none; }
+  .btn.btn-primary:hover, .btn.btn-dark:hover, .btn-custom:hover { transform: none; }
 }
 
 /* ---------------------------- service cards ----------------------------- */
 
+/*
+ * Practice-area cards. Rounded, a hairline border and no shadow; on hover the
+ * border takes the brand blue and a blue-to-white wash comes up behind the
+ * copy. Nothing scales and nothing moves — the card is a document, not a
+ * button — so the highlight is the whole of the feedback.
+ *
+ * The whole card is the anchor, so there is no stretched-link pseudo-element
+ * and no separate "read more".
+ */
 .pcn-service {
-  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
+  /* Equal heights come from the row stretching the column, not a fixed value. */
+  height: 100%;
+  padding: 1.75rem 1.5rem;
   background: #fff;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px -16px rgba(15, 23, 42, 0.35);
-  transition: transform .35s ease, box-shadow .35s ease;
-  isolation: isolate;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .25s ease, background .25s ease;
 }
-/* Blue-to-white blend that washes over the card on hover. */
-.pcn-service::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, rgba(4, 125, 214, 0.16) 0%, rgba(4, 125, 214, 0.06) 45%, #ffffff 100%);
-  opacity: 0;
-  transition: opacity .35s ease;
-  z-index: -1;
-}
-.pcn-service__media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background-size: cover;
-  background-position: center;
-  transition: transform .6s ease;
-}
-/* The photograph picks up the same blue fading to white at its foot. */
-.pcn-service__media::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(4, 125, 214, 0.45) 0%, rgba(4, 125, 214, 0.15) 60%, rgba(255, 255, 255, 0.85) 100%);
-  opacity: 0;
-  transition: opacity .35s ease;
-}
-.pcn-service__body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 1.25rem 1.4rem 1.4rem;
-  text-align: left;
-  background: #fff;
-  transition: background-color .35s ease;
-}
-.pcn-service__title { font-size: 20px; line-height: 1.3; margin-bottom: .5rem; }
-.pcn-service__title a { color: #0f172a; }
-.pcn-service__summary { color: #666; font-size: 14px; margin-bottom: 1rem; }
-.pcn-service__more {
-  margin-top: auto;
-  font-family: var(--font-text);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #047dd6;
-}
-.pcn-service__more span { font-size: 18px; vertical-align: -3px; margin-left: 4px; transition: margin-left .35s ease; }
-/* The title link covers the whole card. */
-.pcn-stretched-link-after::after { content: ''; position: absolute; inset: 0; z-index: 2; }
-
 .pcn-service:hover,
-.pcn-service:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 40px -18px rgba(4, 125, 214, 0.45);
+.pcn-service:focus-visible {
+  border-color: var(--blue);
+  /* A shade of blue lifting off white, strongest at the top left. */
+  background:
+    linear-gradient(160deg,
+      rgba(4, 125, 214, .12) 0%,
+      rgba(4, 125, 214, .05) 45%,
+      #fff 100%);
+  text-decoration: none;
 }
-.pcn-service:hover::before,
-.pcn-service:focus-within::before,
-.pcn-service:hover .pcn-service__media::after,
-.pcn-service:focus-within .pcn-service__media::after { opacity: 1; }
-.pcn-service:hover .pcn-service__body,
-.pcn-service:focus-within .pcn-service__body { background: transparent; }
-.pcn-service:hover .pcn-service__title a { color: #047dd6; }
-.pcn-service:hover .pcn-service__more span { margin-left: 10px; }
+.pcn-service:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
 
-/* Home: the template's blue panel behind the cards stays; the old icon card
-   styles no longer apply. */
-.services-wrap .pcn-service { text-align: left; }
+.pcn-service__icon {
+  display: block;
+  color: var(--blue);
+  margin-bottom: 20px;
+}
+.pcn-service__title { font-size: 20px; line-height: 1.3; margin-bottom: .5rem; color: var(--ink-1); }
+.pcn-service__summary { color: var(--ink-2); font-size: 14px; margin-bottom: 1rem; }
+
+/*
+ * The evidence line: how many published cases sit behind this practice area.
+ * Pushed to the foot so it lines up across cards of unequal copy length.
+ */
+.pcn-service__evidence {
+  margin-top: auto;
+  margin-bottom: 0;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .pcn-service, .pcn-service__media, .pcn-service::before, .pcn-service__media::after { transition: none; }
-  .pcn-service:hover { transform: none; }
+  .pcn-service { transition: none; }
+}
+
+/*
+ * A quieter CTA for the foot of a section. The template's buttons are sized for
+ * a hero — at the end of a short intro paragraph, next to a row of cards, the
+ * full-size one shouts. Keeps the glass treatment, just smaller.
+ */
+.btn.pcn-btn--sm {
+  padding: .55rem 1.1rem;
+  font-size: 14px;
+  letter-spacing: .04em;
 }
 
 /* The newsletter's Subscribe button never clips, whatever the font width. */
@@ -696,4 +715,112 @@ textarea {
 .hero-wrap .container { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) {
   .hero-wrap .pcn-hero-scene { transition: none; transform: none; }
+}
+
+/* ------------------------------ hero sizing ----------------------------- */
+
+/*
+ * The hero used to be full-viewport (.js-fullheight). That class is gone from
+ * the home hero markup so the two are not fighting; these values replace it.
+ * Rounded, inset slightly from the page so the radius actually reads.
+ */
+.pcn-hero {
+  height: min(78vh, 760px);
+  min-height: 560px;
+  /* .hero-wrap is width:100%; with side margins that would overflow by 32px
+     and put a horizontal scrollbar on the page. The margins size it instead. */
+  width: auto;
+  margin: 12px 16px 0;
+  border-radius: 12px;
+  /* The map, the photo scenes and the scrim all clip to the radius. */
+  overflow: hidden;
+  /* Nothing flashes pale between cross-fades. */
+  background-color: #0B1426;
+}
+.pcn-hero .container { height: 100%; }
+/* .slider-text tracked the viewport; now it tracks the hero. */
+.pcn-hero .slider-text {
+  height: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 767.98px) {
+  .pcn-hero {
+    height: 68vh;
+    min-height: 460px;
+    margin: 12px 8px 0;
+    border-radius: 8px;
+  }
+}
+
+/* --------------------------- hero map light layers ----------------------- */
+
+/*
+ * The map slide is the firm's own artwork — the concentric rings over Nigeria
+ * are painted into the image, not produced in CSS, which is why they hold their
+ * place on the landmass and never change size. Nothing here redraws the map;
+ * these are three layers of light over it, to stop the hero reading as one flat
+ * block of navy.
+ *
+ * They sit on ::after inside .pcn-hero-scene--map, which is the layer the
+ * scale(1.04) -> scale(1) drift transforms. That matters: fixed over the hero
+ * instead, the artwork would drift beneath a stationary highlight and smear.
+ *
+ * Background layers paint first-on-top, so this list is the reverse of the
+ * order they read in: scrim above horizon above light source.
+ */
+.pcn-hero-scene--map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* 3. The reading scrim, left to right, so the headline still holds.
+          Neutral black — no navy, no blue multiply, no duotone.
+          Measured, not guessed: the copy column crosses bright blue landmass
+          around 40-50% across, which needs ~44% black to hold 4.5:1. The
+          briefed 0.30 at 45% gave 2.75:1, so these stops are heavier. */
+    linear-gradient(90deg,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.55) 52%,
+      rgba(0, 0, 0, 0.26) 64%,
+      transparent 78%),
+    /* 2. A faint horizon band, to give the block some structure. */
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 30%,
+      transparent 72%,
+      rgba(255, 255, 255, 0.03) 100%),
+    /* 1. The light source, upper right, clear of the copy column. Tightened
+          from the briefed 70%/55% at 72%/18% so its edge does not reach the
+          rings over Nigeria — at that size it cost them 11% of their
+          separation from the land beneath. */
+    radial-gradient(ellipse 64% 48% at 74% 16%,
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.06) 40%,
+      transparent 72%);
+}
+
+/*
+ * Below 768px Bootstrap's col-md-6 stops halving the copy column and the text
+ * runs the full frame, so the scrim has to carry all the way across rather than
+ * fading out at 78%. The highlight moves further up and right to stay clear.
+ */
+@media (max-width: 767.98px) {
+  .pcn-hero-scene--map::after {
+    background:
+      linear-gradient(90deg,
+        rgba(0, 0, 0, 0.74) 0%,
+        rgba(0, 0, 0, 0.58) 50%,
+        rgba(0, 0, 0, 0.52) 100%),
+      linear-gradient(180deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 30%,
+        transparent 72%,
+        rgba(255, 255, 255, 0.03) 100%),
+      radial-gradient(ellipse 60% 40% at 82% 13%,
+        rgba(255, 255, 255, 0.14) 0%,
+        rgba(255, 255, 255, 0.06) 40%,
+        transparent 72%);
+  }
 }

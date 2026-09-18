@@ -57,7 +57,7 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     const { text } = await renderSettled(<Home />);
     console.log(`  HOME     ${text.length} chars`);
 
-    expect(text).toMatch(/boutique Sports Law practice/);      // firm copy
+    expect(text).toMatch(/boutique sports law practice/i);      // firm copy
     expect(text).toMatch(/Sports Dispute Resolution/);          // services
     expect(text).toMatch(/Secures FIFA DRC Ruling/);            // case record
     expect(text).toMatch(/Pius Ndubuokwu/);                     // team flip cards
@@ -95,7 +95,7 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     const { text } = await renderSettled(<About />, '/about');
     console.log(`  ABOUT    ${text.length} chars`);
 
-    expect(text).toMatch(/boutique Sports Law practice/);
+    expect(text).toMatch(/boutique sports law practice/i);
     expect(text).toMatch(/Free Consultation/);
   }, 20000);
 });

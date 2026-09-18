@@ -184,53 +184,9 @@ export function CountUp({ value, className = 'number mr-2', duration = 7000 }) {
   return <span className={className} data-number={end}>{commaNumber(shown)}</span>;
 }
 
-/**
- * The hero typewriter (main.js TxtRotate): types a character every 200–300ms,
- * deletes at twice that speed, holds a finished word for `period`, and pauses
- * 500ms before the next word.
+/*
+ * The template's TxtRotate typewriter used to live here. It is gone: the hero
+ * now holds each slide's own phrase and slides it in, so nothing types, and
+ * the blinking cursor that clipped wrapped phrases went with it. Home.jsx
+ * advances the slides on a plain interval.
  */
-export function TxtRotate({ words = [], period = 2000, onWordChange }) {
-  const [text, setText] = useState('');
-  const key = words.join('\u0000');
-
-  useEffect(() => {
-    if (!words.length) return undefined;
-    if (reducedMotion()) { setText(words[0]); return undefined; }
-
-    let loopNum = 0;
-    let txt = '';
-    onWordChange?.(0);
-    let deleting = false;
-    let timer;
-    const hold = Number.parseInt(period, 10) || 2000;
-
-    const tick = () => {
-      const full = words[loopNum % words.length];
-      txt = deleting ? full.substring(0, txt.length - 1) : full.substring(0, txt.length + 1);
-      setText(txt);
-
-      let delta = 300 - Math.random() * 100;
-      if (deleting) delta /= 2;
-      if (!deleting && txt === full) {
-        delta = hold;
-        deleting = true;
-      } else if (deleting && txt === '') {
-        deleting = false;
-        loopNum += 1;
-        onWordChange?.(loopNum % words.length);
-        delta = 500;
-      }
-      timer = window.setTimeout(tick, delta);
-    };
-
-    tick();
-    return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, period]);
-
-  return (
-    <span className="txt-rotate" data-period={period} data-rotate={JSON.stringify(words)}>
-      <span className="wrap">{text}</span>
-    </span>
-  );
-}
