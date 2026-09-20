@@ -33,6 +33,16 @@ describe('gallery section', () => {
     }
   });
 
+  it('asks for only the limit it was given and links to the full gallery', async () => {
+    const f = withGallery(ITEMS);
+    vi.stubGlobal('fetch', f);
+    renderWithProviders(<GallerySection heading="Gallery" limit={3} viewAllHref="/gallery" />);
+
+    const link = await screen.findByRole('link', { name: 'View all' });
+    expect(link.getAttribute('href')).toBe('/gallery');
+    expect(f.mock.calls.some(([u]) => String(u).includes('limit=3'))).toBe(true);
+  });
+
   it('uses the image alt text rather than repeating the title', async () => {
     vi.stubGlobal('fetch', withGallery(ITEMS));
     const { container } = renderWithProviders(<GallerySection heading="Gallery" />);

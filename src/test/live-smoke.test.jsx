@@ -58,8 +58,8 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
 
     expect(text).toMatch(/boutique sports law practice/i);      // firm copy
     expect(text).toMatch(/Sports Dispute Resolution/);          // services
-    expect(text).toMatch(/Secures FIFA DRC Ruling/);            // case record
-    expect(text).toMatch(/Free Consultation/);                  // consultation block
+    expect(text).toMatch(/FIFA DRC/);                            // case record
+    expect(text).toMatch(/Reliable Solutions for Your Legal Matters/);  // consultation block
     expect(text.length).toBeGreaterThan(3000);
   }, 20000);
 
@@ -68,7 +68,7 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     console.log(`  RECORD   ${text.length} chars`);
 
     expect(text).toMatch(/\d+ matters/);
-    expect(text).toMatch(/Secures FIFA DRC Ruling/);
+    expect(text).toMatch(/FIFA DRC/);
     expect(text).toMatch(/All forums/);
   }, 20000);
 

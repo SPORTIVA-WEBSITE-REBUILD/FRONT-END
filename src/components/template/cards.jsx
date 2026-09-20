@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import ServiceIcon from '../icons.jsx';
 import { backgroundStyle } from '../SmartImage.jsx';
 import { mediaUrl } from '../../lib/media.js';
-import { dateParts, term } from '../../lib/format.js';
+import { dateParts, shortDate, term } from '../../lib/format.js';
 import { useCommon, useLayout } from '../../hooks/useContent.js';
 
 const bg = (media, width, height) => backgroundStyle(media, null, width, height
@@ -62,47 +62,57 @@ export function PracticeCard({ service }) {
   );
 }
 
-/** Case study tile (`.case.img`): the image, with title and category on hover. */
-export function CaseTile({ item }) {
-  return (
-    <div
-      className={`case img pcn-fit d-flex align-items-center justify-content-center${item.featuredImage ? '' : ' pcn-banner-fallback'}`}
-      style={fitted(item.featuredImage)}
-    >
-      <div className="text text-center">
-        <h3><Link to={`/record/${item.slug}`}>{item.title}</Link></h3>
-        <span>{item.practiceArea?.title || item.forum}</span>
-      </div>
-    </div>
-  );
-}
+/**
+ * The card's "acting for" phrase, keyed on the category `partyRepresented`
+ * already carries. Deliberately its own short, casual wording rather than
+ * the caseTerms labels the filter dropdown uses ("Athlete") — this line
+ * reads as a sentence, not a form field.
+ */
+const ROLE_PHRASE = {
+  athlete: 'player',
+  club: 'club',
+  federation: 'federation',
+  agent: 'agent',
+  sponsor: 'sponsor',
+  other: 'party',
+};
 
 /**
- * A case tile with a preview caption: forum, year and outcome, two lines of
- * summary and a link to the full matter. The tile itself is the template's.
+ * A case record, rebuilt onto structured fields rather than the social-media
+ * graphics and press-release prose it used to lead with: a forum/year
+ * metadata line, the matter itself, who the firm acted for and the outcome,
+ * and one plain sentence of what was decided. No image — see
+ * docs/design-direction.md, "Record cards".
+ *
+ * The whole card is the link, so there is no separate "read more".
+ *
+ * An anonymised case shows no name: the title falls back to a generic label
+ * rather than the real "X v Y". `holding` is written without naming either
+ * party in the first place (see the seed), so it needs no equivalent
+ * fallback — the same sentence is safe to show either way.
  */
 export function CaseCard({ item }) {
-  const common = useCommon();
   const terms = useLayout().labels('caseTerms');
+  const role = ROLE_PHRASE[item.partyRepresented] || ROLE_PHRASE.other;
+  const title = item.anonymised ? 'Anonymised matter' : item.title;
+  // Legacy cases migrated from the old site have not all been restructured
+  // yet, so summary stands in for any that have no holding of their own.
+  const holding = item.holding || item.summary;
+
   return (
-    <div className="pcn-case">
-      <CaseTile item={item} />
-      <div className="pcn-case__body">
-        <h3 className="pcn-case__title pcn-clamp pcn-clamp--2">
-          <Link to={`/record/${item.slug}`}>{item.title}</Link>
-        </h3>
-        <p className="pcn-case__meta">
-          {[item.forum, item.year].filter(Boolean).join(' · ')}
-          {item.outcome && (
-            <span className={`pcn-outcome pcn-outcome--${item.outcome}`}>{term(terms, 'outcome', item.outcome)}</span>
-          )}
-        </p>
-        {item.summary && <p className="pcn-clamp pcn-clamp--2">{item.summary}</p>}
-        <p className="mb-0">
-          <Link to={`/record/${item.slug}`} className="btn btn-primary btn-sm px-3">{common.readMore}</Link>
-        </p>
-      </div>
-    </div>
+    <Link to={`/record/${item.slug}`} className="pcn-case">
+      {(item.forum || item.year) && (
+        <p className="pcn-case__meta">{[item.forum, item.year].filter(Boolean).join(' · ')}</p>
+      )}
+      <h3 className="pcn-case__title pcn-clamp pcn-clamp--3">{title}</h3>
+      <p className="pcn-case__party">
+        Acting for the {role}
+        {item.outcome && (
+          <span className={`pcn-outcome pcn-outcome--${item.outcome}`}> · {term(terms, 'outcome', item.outcome)}</span>
+        )}
+      </p>
+      {holding && <p className="pcn-case__holding pcn-clamp pcn-clamp--2">{holding}</p>}
+    </Link>
   );
 }
 
@@ -183,43 +193,51 @@ export function TestimonyCard({ item }) {
   );
 }
 
-/** Blog card (`.blog-entry`): title, image, date block, excerpt, Read more. */
+/**
+ * The excerpt with any repeat of the headline removed. News items often store
+ * the headline as their excerpt, which printed it twice; if the excerpt opens
+ * with the title, only what follows is kept, and if nothing follows, nothing
+ * is shown.
+ */
+export function distinctExcerpt(title, excerpt) {
+  const norm = (t) => (t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const t = norm(title);
+  const e = (excerpt || '').trim();
+  if (!e) return '';
+  if (!t || !norm(e).startsWith(t)) return e;
+  const rest = e.slice(Math.min(e.length, title.trim().length)).replace(/^[\s.,;:–—-]+/, '');
+  return norm(rest) ? rest : '';
+}
+
+/**
+ * Insight card (`.blog-entry`): image, one meta line (category, date, reading
+ * time), the headline once, a short excerpt that does not repeat it, and a
+ * text "Read more" link. Same shadow, border and hover lift as the Record cards.
+ */
 export function BlogCard({ article, readMore, col = 'col-md-4' }) {
-  const date = dateParts(article.publishedAt);
   const href = `/insights/${article.slug}`;
   const common = useCommon();
+  const excerpt = distinctExcerpt(article.title, article.excerpt);
   const meta = [
-    article.author?.name,
     article.category?.name,
+    shortDate(article.publishedAt),
     article.readingMinutes ? `${article.readingMinutes} ${common.minRead}` : null,
   ].filter(Boolean);
   return (
     <div className={`${col} d-flex ftco-animate`}>
-      <div className="blog-entry justify-content-end">
-        <div className="text px-4 py-4">
-          <h3 className="heading mb-0 pcn-clamp pcn-clamp--3"><Link to={href}>{article.title}</Link></h3>
-        </div>
+      <div className="blog-entry pcn-blog">
         <Link
           to={href}
-          className={`block-20 pcn-fit${article.featuredImage ? '' : ' pcn-banner-fallback'}`}
+          className={`block-20 pcn-fit pcn-blog__image${article.featuredImage ? '' : ' pcn-banner-fallback'}`}
           style={fitted(article.featuredImage)}
           aria-label={article.title}
+          tabIndex={-1}
         />
-        <div className="text p-4 float-right d-block">
-          {date && (
-            <div className="topper d-flex align-items-center">
-              <div className="one py-2 pl-3 pr-1 align-self-stretch">
-                <span className="day">{date.day}</span>
-              </div>
-              <div className="two pl-0 pr-3 py-2 align-self-stretch">
-                <span className="yr">{date.year}</span>
-                <span className="mos">{date.month}</span>
-              </div>
-            </div>
-          )}
+        <div className="pcn-blog__body">
           {meta.length > 0 && <p className="pcn-blog-meta">{meta.join(' · ')}</p>}
-          <p className="pcn-clamp pcn-clamp--3">{article.excerpt}</p>
-          <p><Link to={href} className="btn btn-primary">{readMore || common.readMore}</Link></p>
+          <h3 className="pcn-blog__title pcn-clamp pcn-clamp--3"><Link to={href}>{article.title}</Link></h3>
+          {excerpt && <p className="pcn-blog__excerpt pcn-clamp pcn-clamp--3">{excerpt}</p>}
+          <Link to={href} className="pcn-blog__more">{readMore || common.readMore}<span aria-hidden="true"> →</span></Link>
         </div>
       </div>
     </div>

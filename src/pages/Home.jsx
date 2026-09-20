@@ -31,7 +31,7 @@ const SLIDE_CYCLE_MS = 1200;
 export default function Home() {
   const { data: page, isError, error, refetch } = usePage('home');
   const { data: services } = useServices();
-  const { data: casesResult } = useCases({ limit: 8 });
+  const { data: casesResult } = useCases({ limit: 3 });
   const { data: articlesResult } = useArticles({ limit: 3 });
   const { data: lawyers } = useLawyers();
   const { data: testimonials } = useTestimonials();
@@ -85,6 +85,10 @@ export default function Home() {
   // background so the parallax hook has something to drift.
   const mapItem = wordItems[0];
   const cases = casesResult?.data || [];
+  // Total published cases, straight off the archive query the record section
+  // already runs — the "Why the firm" record tab prints it rather than a
+  // figure typed into the copy.
+  const recordCount = casesResult?.meta?.total ?? 0;
   const articles = articlesResult?.data || [];
 
   return (
@@ -173,24 +177,28 @@ export default function Home() {
         </div>
       </section>
 
-      <AboutBlock intro={section(page, 'intro')} experience={section(page, 'experience')} />
+      <AboutBlock intro={section(page, 'intro')} recordCount={recordCount} />
 
       {cases.length > 0 && (
         <section className="ftco-section">
           <div className="container">
-            <SectionHeading section={recordSection} col="col-md-10" />
-            <div className="row">
-              <div className="col-md-12">
-                <Carousel className="carousel-case" loop label={recordSection.heading}>
-                  {cases.map((c) => <div className="item" key={c.slug}><CaseCard item={c} /></div>)}
-                </Carousel>
-              </div>
-              {recordSection.cta?.label && (
-                <div className="col-md-12 text-center mt-4">
-                  <SmartLink href={recordSection.cta.href} className="btn btn-primary px-5">{recordSection.cta.label}</SmartLink>
-                </div>
-              )}
+            {/*
+              Centred, matching Team, Testimonials and Insights — the shared
+              SectionHeading component rather than the bespoke left-aligned
+              .heading-section Services and "Why the firm" use.
+            */}
+            <SectionHeading section={recordSection} rowClass="mb-4" h2Class="mb-0" />
+
+            {/* Exactly three, ordered by year descending — see useCases below. */}
+            <div className="pcn-case-grid">
+              {cases.map((c) => <CaseCard item={c} key={c.slug} />)}
             </div>
+
+            {recordSection.cta?.label && (
+              <p className="text-center mt-4 mb-0">
+                <SmartLink href={recordSection.cta.href} className="btn btn-primary px-5">{recordSection.cta.label}</SmartLink>
+              </p>
+            )}
           </div>
         </section>
       )}
@@ -199,9 +207,9 @@ export default function Home() {
         <section className="ftco-section ftco-no-pt">
           <div className="container-fluid px-md-5">
             <SectionHeading section={teamSection} rowClass="mb-5 pb-3" />
-            <div className="row">
-              {lawyers.slice(0, 4).map((l) => (
-                <div className="col-lg-3 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
+            <div className="row justify-content-center">
+              {lawyers.slice(0, 3).map((l) => (
+                <div className="col-lg-4 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
               ))}
             </div>
           </div>
@@ -226,7 +234,13 @@ export default function Home() {
         </section>
       )}
 
-      <GallerySection heading={gallerySection.heading} subheading={gallerySection.subheading} />
+      <GallerySection
+        heading={gallerySection.heading}
+        subheading={gallerySection.subheading}
+        limit={3}
+        viewAllHref="/gallery"
+        viewAllLabel={common.viewAll || 'View all'}
+      />
 
       {articles.length > 0 && (
         <section className="ftco-section bg-light">

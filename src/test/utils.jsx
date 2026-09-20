@@ -25,7 +25,7 @@ export function renderWithProviders(ui, { route = '/' } = {}) {
 export const LAYOUT = {
   slug: 'layout',
   sections: [
-    { key: 'navCta', cta: { label: 'Free Consultation', href: '/contact' }, labels: { menuToggle: 'Menu' } },
+    { key: 'navCta', cta: { label: 'Talk to a Lawyer', href: '/contact' }, labels: { menuToggle: 'Menu' } },
     { key: 'newsletter', heading: 'Subscribe to our Newsletter', labels: { placeholder: 'Enter email address', submit: 'Subscribe', success: 'Thank you for subscribing.', error: 'Please enter a valid email address.' } },
     { key: 'footer', body: 'About the firm.', labels: { servicesHeading: 'Practice Areas', contactHeading: 'Have a Questions?', copyright: 'Copyright ©{year} All rights reserved' } },
     { key: 'hours', heading: 'Business Hours', items: [{ title: 'Opening Days:', text: 'Monday – Friday : 9am to 5pm\nSaturday : closed' }] },

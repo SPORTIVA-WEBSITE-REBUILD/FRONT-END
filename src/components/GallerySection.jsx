@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SmartImage from './SmartImage.jsx';
 import Lightbox from './Lightbox.jsx';
 import { LoadingCards, ErrorState } from './states.jsx';
@@ -9,7 +10,9 @@ import { useGallery } from '../hooks/useContent.js';
  * `gallery` section, the images from their own collection — the same split used
  * by the services and record blocks.
  */
-export default function GallerySection({ heading, subheading, body, limit = 8 }) {
+export default function GallerySection({
+  heading, subheading, body, limit = 3, col = 'col-md-6 col-lg-4', viewAllHref, viewAllLabel = 'View all',
+}) {
   const { data: items, isLoading, isError, error, refetch } = useGallery({ limit });
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -29,11 +32,11 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
         </div>
 
         {isError && <ErrorState error={error} onRetry={refetch} />}
-        {isLoading && <LoadingCards count={4} col="col-md-3" />}
+        {isLoading && <LoadingCards count={limit} col={col} />}
 
         <div className="row">
           {(items || []).map((item, i) => (
-            <div className="col-md-6 col-lg-3 mb-4" key={item._id}>
+            <div className={`${col} mb-4`} key={item._id}>
               <div className="pcn-gallery-item ftco-animate">
                 <button
                   type="button"
@@ -46,7 +49,7 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
                     width={600}
                     height={450}
                     crop="fill"
-                    sizes="(max-width: 768px) 100vw, (max-width: 992px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, (max-width: 992px) 50vw, 33vw"
                     alt={item.image?.alt || item.title}
                     className="pcn-gallery-item__image"
                   />
@@ -58,6 +61,12 @@ export default function GallerySection({ heading, subheading, body, limit = 8 })
             </div>
           ))}
         </div>
+
+        {viewAllHref && (
+          <div className="text-center mt-4">
+            <Link to={viewAllHref} className="btn btn-primary py-3 px-4">{viewAllLabel}</Link>
+          </div>
+        )}
       </div>
 
       <Lightbox

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithProviders, mockApi } from './utils.jsx';
-import { BlogCard, TeamCard } from '../components/template/cards.jsx';
+import { distinctExcerpt, BlogCard, TeamCard } from '../components/template/cards.jsx';
 import HiringStrip from '../components/template/HiringStrip.jsx';
 
 afterEach(() => vi.unstubAllGlobals());
@@ -12,15 +12,15 @@ const careers = {
 };
 
 describe('previews of stored content', () => {
-  it('shows author, category and reading time on an insight card, with a clamped excerpt', async () => {
+  it('shows category, date and reading time on one meta line, with a clamped excerpt', async () => {
     vi.stubGlobal('fetch', mockApi({}));
     renderWithProviders(<BlogCard article={{
       slug: 'a', title: 'Release clauses', excerpt: 'A long excerpt.', publishedAt: '2026-09-16',
       author: { name: 'Pius Ndubuokwu' }, category: { name: 'Analysis' }, readingMinutes: 4,
     }} />);
-    await waitFor(() => expect(screen.getByText('Pius Ndubuokwu · Analysis · 4 min read')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/^Analysis · .*2026 · 4 min read$/)).toBeInTheDocument());
     expect(screen.getByText('A long excerpt.')).toHaveClass('pcn-clamp--3');
-    expect(screen.getByRole('link', { name: 'Read more' })).toHaveAttribute('href', '/insights/a');
+    expect(screen.getByRole('link', { name: /Read more/ })).toHaveAttribute('href', '/insights/a');
   });
 
   it('links a team card to the profile and previews the bio', async () => {
@@ -49,5 +49,22 @@ describe('previews of stored content', () => {
     await waitFor(() => expect(fetchMock.mock.calls.some(([u]) => String(u).includes('/vacancies'))).toBe(true));
     await new Promise((r) => { setTimeout(r, 50); });
     expect(container.querySelector('section')).toBeNull();
+  });
+});
+
+describe('insight card headline', () => {
+  it('shows the headline once when the stored excerpt repeats it', async () => {
+    vi.stubGlobal('fetch', mockApi({}));
+    const title = 'PCN Sportiva LP attends The Football Law Annual Moot.';
+    const { container } = renderWithProviders(<BlogCard article={{ slug: 'm', title, excerpt: title, publishedAt: '2026-09-16' }} />);
+    await waitFor(() => expect(container.querySelector('.pcn-blog__title')).toBeTruthy());
+    expect(container.textContent.split('Football Law Annual Moot').length - 1).toBe(1);
+    expect(container.querySelector('.pcn-blog__excerpt')).toBeNull();
+    expect(container.querySelector('.topper')).toBeNull();
+  });
+
+  it('keeps only what follows the headline when the excerpt opens with it', () => {
+    expect(distinctExcerpt('Big win', 'Big win. The panel ordered payment.')).toBe('The panel ordered payment.');
+    expect(distinctExcerpt('Big win', 'Different text.')).toBe('Different text.');
   });
 });
