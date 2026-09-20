@@ -99,3 +99,34 @@ export default function ServiceIcon({ slug, size = 32, className }) {
 }
 
 export const ICON_SLUGS = Object.keys(ICONS);
+
+/**
+ * Contact-detail marks (phone, email, location) — not practice areas, so
+ * they live outside the slug-keyed ICONS map, but share the same frame and
+ * stroke so a row of them reads as part of the same icon family.
+ */
+export function PhoneIcon({ size = 20, className }) {
+  return (
+    <Glyph size={size} className={className}>
+      <path d="M6 3.5c.6 0 1.1.4 1.3 1l1 2.6c.2.5 0 1-.3 1.4L6.8 9.8a12 12 0 0 0 5.4 5.4l1.3-1.2c.4-.3.9-.5 1.4-.3l2.6 1c.6.2 1 .7 1 1.3v2.2c0 1-.8 1.8-1.8 1.7C10.4 19.4 4.6 13.6 4.3 6.3 4.2 5.3 5 4.5 6 4.5z" />
+    </Glyph>
+  );
+}
+
+export function MailIcon({ size = 20, className }) {
+  return (
+    <Glyph size={size} className={className}>
+      <rect x="2.5" y="5" width="19" height="14" rx="2" />
+      <path d="M3.5 6.5l8.5 6.5 8.5-6.5" />
+    </Glyph>
+  );
+}
+
+export function PinIcon({ size = 20, className }) {
+  return (
+    <Glyph size={size} className={className}>
+      <path d="M12 21.5s7-6.6 7-12A7 7 0 0 0 5 9.5c0 5.4 7 12 7 12z" />
+      <circle cx="12" cy="9.5" r="2.5" />
+    </Glyph>
+  );
+}

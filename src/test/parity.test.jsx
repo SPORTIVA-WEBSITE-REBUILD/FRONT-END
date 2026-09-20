@@ -33,7 +33,7 @@ const section = (key, extra = {}) => ({ key, heading: `${key} heading`, subheadi
 const PAGES = {
   home: [
     section('hero', { items: [{ title: 'Rights.' }], value: '2000', cta: { label: 'Go', href: '/contact' } }),
-    section('services', { body: 'x', cta: { label: 'Free Consultation', href: '/contact' } }),
+    section('services', { body: 'x', cta: { label: 'Talk to a Lawyer', href: '/contact' } }),
     section('intro', { video: 'https://vimeo.com/45830194', items: [{ title: 'Mission', text: 'x' }] }),
     { key: 'experience', value: '40', heading: 'Years' },
     section('record', { cta: { label: 'See all', href: '/record' } }),
@@ -85,7 +85,19 @@ afterEach(() => vi.unstubAllGlobals());
  * rules fighting over the same property. See docs/design-direction.md.
  */
 const DIVERGENCES = {
-  'index.html': { 'div.hero-wrap.js-fullheight': 'div.hero-wrap' },
+  'index.html': {
+    'div.hero-wrap.js-fullheight': 'div.hero-wrap',
+    // "Why the firm" was rebuilt onto its own grid (.pcn-why) rather than the
+    // template's ftco-section/ftco-no-pt/ftco-no-pb classes, so it could take
+    // an explicit padding scale and a two-column layout the template's
+    // section-level utility classes could not express. See
+    // docs/design-direction.md.
+    'section.ftco-no-pb.ftco-no-pt.ftco-section': 'section',
+    // The free consultation panel dropped its background photograph (and the
+    // .ftco-consultation/.img classes that carried it) for a flat two-tone
+    // navy/white layout — see "Free consultation" in design-direction.md.
+    'section.ftco-consultation.ftco-no-pb.ftco-no-pt.ftco-section.img': 'section.ftco-no-pb.ftco-no-pt.ftco-section',
+  },
 };
 
 const CASES = [

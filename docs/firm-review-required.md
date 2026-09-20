@@ -116,3 +116,95 @@ is in this file and in the git history of `scripts/seed-content.js`:
 > PCN SPORTIVA LP's ultimate mission is to provide comprehensive and integrated
 > sports legal advice and representation to clients, who want optimal levels of
 > skill and expertise to match their resources.
+
+## Three figures removed as unsupported
+
+The home page's "Why the firm" tabs and its years-of-experience badge carried
+three numbers with nothing behind them. All three are **removed from the site
+now**, not merely flagged. If the firm can evidence any of them, they can go
+back in — as a fixed line if the firm is confident in the number, or as
+something counted live from the database the way the record tab's case count
+now is. Until then they stay off.
+
+| Figure | Where it was | Status |
+|---|---|---|
+| "over 50 clubs, academies and players" | Home, "Our Record" tab | Removed |
+| "over 150 disputes" before CAS, the FIFA Clearing House and the FIFA Football Tribunal | Home, "Our Record" tab | Removed |
+| "7 Years of Experience" | Home, badge over the "Why the firm" photograph | Removed — the badge itself is gone, not just the figure |
+
+**What replaced the tab text** — the firm's own wording, supplied directly, so
+this line needs no sign-off:
+
+> Counsel before the FIFA Football Tribunal, the FIFA Dispute Resolution
+> Chamber and the Court of Arbitration for Sport, acting for players, coaches,
+> clubs and federations across Africa and Europe.
+
+Beneath it, the site now prints a live count of published cases — "N MATTERS
+PUBLISHED IN THE RECORD", linking to `/record` — read from the case
+collection at request time rather than typed into the copy. It cannot go
+stale the way "over 150" did, and it disappears on its own if the count is
+ever zero.
+
+**The badge has no replacement.** If the firm wants a figure highlighted
+here, the request that removed it was explicit that it belongs inside the
+copy column on the grid, not floating across the image/copy boundary the way
+the badge did.
+
+## Mission tab, rewritten
+
+Not a factual claim needing evidence — a rewrite for content, done without a
+figure to check. Listed here because it changed at the same time as the two
+items above and the firm has not seen the new wording yet.
+
+**Now reads:**
+
+> We work a matter end to end — from the first contract to a tribunal hearing
+> — so the firm advising you throughout is the same firm representing you
+> when it counts.
+
+**Previously:** "PCN SPORTIVA LP's ultimate mission is to provide
+comprehensive and integrated sports legal advice and representation to
+clients, who want optimal levels of skill and expertise to match their
+resources." — thirty words that said nothing a competitor's site could not
+say unedited.
+
+Cleared? ☐
+
+## Named parties in the three restructured case records
+
+The Record section was rebuilt onto structured fields — forum, year, the
+parties, the outcome, a plain holding sentence — replacing the social-media
+graphics and press-release prose the cards used to lead with (see
+`docs/design-direction.md`, "Record cards"). Restructuring did not change
+whether these matters name real people and clubs: they already did, on the
+live site, before this rebuild.
+
+Six names appear across the three matters. Each needs the firm's sign-off,
+matter by matter, on whether it may stay named:
+
+| Matter | Represented | Opposing party | Cleared to name both? |
+|---|---|---|---|
+| Karim Abubakar v Al Qasim | Karim Abubakar (Ghana) | Al Qasim (Iraq) | ☐ |
+| Anthony Uchenna Nwadioha v Bigman FC | Anthony Uchenna Nwadioha (Nigeria) | Bigman FC (Tanzania) | ☐ |
+| Wisdom Uda Kanu v Kabuscorp Sport Clube do Palanca | Wisdom Uda Kanu (Nigeria) | Kabuscorp Sport Clube do Palanca (Angola) | ☐ |
+
+**If a matter is not cleared**, set that case's `anonymised` field to `true`
+from the dashboard. The card already handles this: an anonymised case's title
+renders as "Anonymised matter" instead of the real names, and the holding
+sentence — written without naming either party for exactly this reason —
+needs no change either way.
+
+All three are currently `anonymised: false`, matching how they were already
+published (named) before this rebuild. That is the pre-existing state, not a
+decision made here; it stays that way only until the firm confirms it, or
+says otherwise for any one of them.
+
+## Social media graphics removed from the case cards
+
+The three matters above previously used social-media graphics (headline,
+watermark and follow bar burned into the image) as their `featuredImage`.
+Those references are cleared from the case records; the case cards no longer
+render an image at all, for any case. The graphics themselves are untouched
+in the media library, and remain available for whichever Insights article
+carries the same announcement, where a promotional card is the right context
+for them.

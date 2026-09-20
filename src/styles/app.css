@@ -23,7 +23,10 @@
 
 /* The hero is capped on short landscape screens so the copy stays reachable. */
 @media (max-height: 600px) and (orientation: landscape) {
-  .js-fullheight { height: auto; min-height: 520px; }
+  .js-fullheight {
+    height: auto;
+    min-height: 520px;
+  }
 }
 
 /*
@@ -39,18 +42,33 @@
 }
 
 @keyframes pcn-skeleton-shimmer {
-  0% { background-position: 100% 50%; }
-  100% { background-position: 0 50%; }
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pcn-skeleton { animation: none; }
+  .pcn-skeleton {
+    animation: none;
+  }
 }
 
-.pcn-richtext img { max-width: 100%; height: auto; }
-.pcn-richtext table { width: 100%; margin-bottom: 1.5rem; }
+.pcn-richtext img {
+  max-width: 100%;
+  height: auto;
+}
+.pcn-richtext table {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
 .pcn-richtext th,
-.pcn-richtext td { padding: .5rem .75rem; border: 1px solid #e6e6e6; }
+.pcn-richtext td {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e6e6e6;
+}
 .pcn-richtext blockquote {
   border-left: 3px solid #047dd6;
   padding-left: 1.25rem;
@@ -59,41 +77,102 @@
 }
 
 /* The archive's filter controls. */
-.pcn-filters { background: #f8f9fa; padding: 1.5rem; margin-bottom: 2.5rem; }
-.pcn-filters label { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: #999; }
-.pcn-active-filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
-.pcn-chip {
-  background: #0f172a; color: #fff; border: 0; border-radius: 2rem;
-  padding: .25rem .9rem; font-size: 13px;
+.pcn-filters {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
 }
-.pcn-chip:hover { background: #047dd6; }
+.pcn-filters label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #999;
+}
+.pcn-active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.pcn-chip {
+  background: #0f172a;
+  color: #fff;
+  border: 0;
+  border-radius: 2rem;
+  padding: 0.25rem 0.9rem;
+  font-size: 13px;
+}
+.pcn-chip:hover {
+  background: #047dd6;
+}
 
 /* Case metadata badges. */
-.pcn-meta { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
-.pcn-badge {
-  font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
-  padding: .2rem .6rem; background: #f0f0f0; color: #666;
+.pcn-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
 }
-.pcn-badge--won { background: #e8f3ec; color: #2e7d4f; }
-.pcn-badge--ongoing { background: #fdf3e0; color: #9a6b12; }
-.pcn-badge--settled { background: #e9eef6; color: #3a5d97; }
+.pcn-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  background: #f0f0f0;
+  color: #666;
+}
+.pcn-badge--won {
+  background: #e8f3ec;
+  color: #2e7d4f;
+}
+.pcn-badge--ongoing {
+  background: #fdf3e0;
+  color: #9a6b12;
+}
+.pcn-badge--settled {
+  background: #e9eef6;
+  color: #3a5d97;
+}
 
 /* Enquiry form feedback. */
-.pcn-field-error { color: #c0392b; font-size: 13px; margin-top: .35rem; display: block; }
-.pcn-form-alert { padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
-.pcn-form-alert--success { background: #e8f3ec; color: #2e7d4f; }
-.pcn-form-alert--error { background: #fdecea; color: #c0392b; }
+.pcn-field-error {
+  color: #c0392b;
+  font-size: 13px;
+  margin-top: 0.35rem;
+  display: block;
+}
+.pcn-form-alert {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.pcn-form-alert--success {
+  background: #e8f3ec;
+  color: #2e7d4f;
+}
+.pcn-form-alert--error {
+  background: #fdecea;
+  color: #c0392b;
+}
 
 /* The honeypot must be reachable by a bot parsing the DOM but never by a person. */
 .pcn-honeypot {
   position: absolute !important;
   left: -9999px !important;
-  width: 1px; height: 1px; overflow: hidden;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Social marks are inline SVG rather than an icon font, so they need the
@@ -109,22 +188,41 @@
 
 /* ------------------------------- gallery -------------------------------- */
 
+/*
+ * Non-navigational — opens a lightbox rather than a page — so it takes the
+ * site's standard shadow change on hover but not the lift: see "Card
+ * elevation" in design-direction.md for the navigational/static split.
+ */
 .pcn-gallery-item__button {
   display: block;
   width: 100%;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
   background: none;
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.pcn-gallery-item__button:hover,
+.pcn-gallery-item__button:focus-visible {
+  border-color: var(--blue);
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
 }
 
 .pcn-gallery-item__image {
   width: 100%;
   height: 100%;
   display: block;
-  transition: transform .4s ease;
+  transition: transform 0.4s ease;
 }
 
 .pcn-gallery-item__button:hover .pcn-gallery-item__image,
@@ -135,12 +233,16 @@
 .pcn-gallery-item__overlay {
   position: absolute;
   inset: auto 0 0 0;
-  padding: 2.5rem .9rem .9rem;
-  background: linear-gradient(to top, rgba(15, 23, 42, .85), rgba(15, 23, 42, 0));
+  padding: 2.5rem 0.9rem 0.9rem;
+  background: linear-gradient(
+    to top,
+    rgba(15, 23, 42, 0.85),
+    rgba(15, 23, 42, 0)
+  );
   color: #fff;
   text-align: left;
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
 .pcn-gallery-item__button:hover .pcn-gallery-item__overlay,
@@ -148,11 +250,17 @@
   opacity: 1;
 }
 
-.pcn-gallery-item__title { font-size: 14px; font-weight: 500; line-height: 1.3; }
+.pcn-gallery-item__title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.3;
+}
 
 /* The caption must not be hover-only on touch, where there is no hover. */
 @media (hover: none) {
-  .pcn-gallery-item__overlay { opacity: 1; }
+  .pcn-gallery-item__overlay {
+    opacity: 1;
+  }
 }
 
 .pcn-gallery-item__button:focus-visible {
@@ -162,8 +270,15 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pcn-gallery-item__image,
-  .pcn-gallery-item__overlay { transition: none; }
-  .pcn-gallery-item__button:hover .pcn-gallery-item__image { transform: none; }
+  .pcn-gallery-item__overlay {
+    transition: none;
+  }
+  .pcn-gallery-item__button:hover .pcn-gallery-item__image {
+    transform: none;
+  }
+  /* No transform is applied to the card itself (only to the image above), so
+     the shadow/border-color change on hover needs no override here — it is
+     already the only thing that changes on the card. */
 }
 
 /* ------------------------------ lightbox -------------------------------- */
@@ -172,7 +287,7 @@
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(16, 18, 26, .94);
+  background: rgba(16, 18, 26, 0.94);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,15 +313,30 @@
   margin: 0 auto;
 }
 
-.pcn-lightbox__caption { color: #fff; padding: 1.25rem .5rem 0; text-align: center; }
-.pcn-lightbox__caption h3 { color: #fff; font-size: 18px; margin-bottom: .4rem; }
-.pcn-lightbox__caption p { color: rgba(255, 255, 255, .78); margin-bottom: .35rem; font-size: 14px; }
-.pcn-lightbox__meta { font-size: 13px !important; color: rgba(255, 255, 255, .55) !important; }
+.pcn-lightbox__caption {
+  color: #fff;
+  padding: 1.25rem 0.5rem 0;
+  text-align: center;
+}
+.pcn-lightbox__caption h3 {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 0.4rem;
+}
+.pcn-lightbox__caption p {
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 0.35rem;
+  font-size: 14px;
+}
+.pcn-lightbox__meta {
+  font-size: 13px !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+}
 
 .pcn-lightbox__close,
 .pcn-lightbox__nav {
   position: absolute;
-  background: rgba(255, 255, 255, .1);
+  background: rgba(255, 255, 255, 0.1);
   border: 0;
   color: #fff;
   cursor: pointer;
@@ -217,32 +347,54 @@
 }
 
 .pcn-lightbox__close {
-  top: 1rem; right: 1rem;
-  width: 44px; height: 44px;
-  font-size: 30px; line-height: 1;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  font-size: 30px;
+  line-height: 1;
 }
 
 .pcn-lightbox__nav {
   top: 50%;
   transform: translateY(-50%);
-  width: 46px; height: 46px;
+  width: 46px;
+  height: 46px;
   font-size: 22px;
 }
 
-.pcn-lightbox__nav--prev { left: 1rem; }
-.pcn-lightbox__nav--next { right: 1rem; }
+.pcn-lightbox__nav--prev {
+  left: 1rem;
+}
+.pcn-lightbox__nav--next {
+  right: 1rem;
+}
 
 .pcn-lightbox__close:hover,
-.pcn-lightbox__nav:hover { background: rgba(255, 255, 255, .22); }
+.pcn-lightbox__nav:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
 
 .pcn-lightbox__close:focus-visible,
-.pcn-lightbox__nav:focus-visible { outline: 3px solid #047dd6; outline-offset: 2px; }
+.pcn-lightbox__nav:focus-visible {
+  outline: 3px solid #047dd6;
+  outline-offset: 2px;
+}
 
 @media (max-width: 576px) {
-  .pcn-lightbox { padding: 3.5rem .5rem 1rem; }
-  .pcn-lightbox__nav { width: 38px; height: 38px; }
-  .pcn-lightbox__nav--prev { left: .25rem; }
-  .pcn-lightbox__nav--next { right: .25rem; }
+  .pcn-lightbox {
+    padding: 3.5rem 0.5rem 1rem;
+  }
+  .pcn-lightbox__nav {
+    width: 38px;
+    height: 38px;
+  }
+  .pcn-lightbox__nav--prev {
+    left: 0.25rem;
+  }
+  .pcn-lightbox__nav--next {
+    right: 0.25rem;
+  }
 }
 
 /*
@@ -252,7 +404,10 @@
  * immediately, without waiting on an observer.
  */
 @media (prefers-reduced-motion: reduce) {
-  .ftco-animate { opacity: 1 !important; visibility: visible !important; }
+  .ftco-animate {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
 
 /*
@@ -270,7 +425,11 @@
 .pcn-banner-fallback {
   background-color: #0f172a;
   background-image:
-    radial-gradient(circle at 18% 22%, rgba(4, 125, 214, .20) 0%, transparent 46%),
+    radial-gradient(
+      circle at 18% 22%,
+      rgba(4, 125, 214, 0.2) 0%,
+      transparent 46%
+    ),
     linear-gradient(135deg, #0b1426 0%, #0f172a 52%, #070d1c 100%);
 }
 
@@ -282,16 +441,24 @@
  */
 .pcn-hero-phrase {
   display: inline-block;
-  animation: pcn-hero-phrase-in .6s cubic-bezier(.22, 1, .36, 1) both;
+  animation: pcn-hero-phrase-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes pcn-hero-phrase-in {
-  from { opacity: 0; transform: translateX(.4em); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateX(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pcn-hero-phrase { animation: none; }
+  .pcn-hero-phrase {
+    animation: none;
+  }
 }
 
 /*
@@ -329,16 +496,6 @@ input[type="submit"].btn,
   border-radius: 999px !important;
 }
 
-/* The newsletter's email box and Subscribe button form one pill together. */
-.subscribe-form .form-group input.form-control {
-  border-radius: 999px 0 0 999px !important;
-  padding-left: 1.25rem;
-}
-.subscribe-form .form-group .submit {
-  border-radius: 0 999px 999px 0 !important;
-  padding-right: 1.25rem !important;
-}
-
 /* ------------------------------ previews -------------------------------- */
 
 /* Short previews of stored content, clamped to a set number of lines so cards
@@ -348,70 +505,341 @@ input[type="submit"].btn,
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.pcn-clamp--2 { -webkit-line-clamp: 2; line-clamp: 2; }
-.pcn-clamp--3 { -webkit-line-clamp: 3; line-clamp: 3; }
-.pcn-clamp--4 { -webkit-line-clamp: 4; line-clamp: 4; }
+.pcn-clamp--2 {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+.pcn-clamp--3 {
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+.pcn-clamp--4 {
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
 
-/* Case tile with its caption underneath. */
+/*
+ * Case record cards. Same family as the practice cards: a hairline border, no
+ * shadow, the whole card is the link, hover lifts the border to --blue.
+ * Deliberately no image — the cards used to lead with a social-media graphic
+ * (headline, watermark and follow bar burned in); the graphics stay in the
+ * media library for Insights, where a promotional card is the right context
+ * for them, and this card is text-only.
+ */
 .pcn-case {
-  background: #fff;
-  margin-bottom: 30px;
-  box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.14);
   display: flex;
   flex-direction: column;
-  height: calc(100% - 30px);
+  height: 100%;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: inherit;
+  text-decoration: none;
+  /*
+   * Two shadow layers, not one: a tight first layer gives the card a contact
+   * edge so it sits on the page, and a wider second gives it depth. A single
+   * large blur is what makes a card look like it is hovering for no reason.
+   * This is the site's standard card elevation — see "Card elevation" in
+   * design-direction.md.
+   */
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
 }
-.pcn-case .case { margin-bottom: 0; }
-.pcn-case__body { padding: 1.1rem 1.25rem 1.25rem; display: flex; flex-direction: column; flex: 1; }
-.pcn-case__body > p:last-child { margin-top: auto; }
-.pcn-case__title { font-size: 17px; line-height: 1.4; margin-bottom: .35rem; }
-.pcn-case__title a { color: #000; }
-.pcn-case__title a:hover { color: #047dd6; }
+.pcn-case:hover,
+.pcn-case:focus-visible {
+  border-color: var(--blue);
+  /* Tints toward blue on hover, so the lifted shadow belongs to the same
+     family as the glass buttons' blue-tinted shadows. */
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.pcn-case:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
 .pcn-case__meta {
-  font-size: 13px; color: #999; margin-bottom: .5rem;
-  display: flex; align-items: center; flex-wrap: wrap; gap: .5rem;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.5rem;
 }
+/* The matter itself, in the display face — the one place on this card that
+   is set apart from the surrounding metadata and body copy. Clamped at a
+   line boundary: normal word-wrapping (the browser default here — nothing
+   sets word-break/overflow-wrap to force a mid-word split) means the clamp
+   can only ever cut between words, never inside one. */
+.pcn-case__title {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink-1);
+  margin-bottom: 0.6rem;
+}
+.pcn-case__party {
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-bottom: 0.5rem;
+}
+.pcn-case__holding {
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-bottom: 0;
+  margin-top: auto;
+}
+/* Uppercase metadata style, matching the evidence line on the practice
+   cards — only the colour tells "won" apart from every other outcome. */
 .pcn-outcome {
-  font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
-  padding: .1rem .6rem; border-radius: 999px; background: #eef1f4; color: #555;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
-.pcn-outcome--won { background: #e3f1fb; color: #0365ae; }
-.pcn-outcome--settled { background: #e9eef6; color: #3a5d97; }
-.pcn-outcome--ongoing { background: #fdf3e0; color: #9a6b12; }
-.owl-carousel .pcn-case { height: auto; margin-bottom: 10px; }
+.pcn-outcome--won {
+  color: var(--success);
+}
 
-/* Blog card meta: author · category · reading time. */
-.pcn-blog-meta { font-size: 13px; color: #999; margin-bottom: .5rem; }
+@media (prefers-reduced-motion: reduce) {
+  .pcn-case {
+    transition: none;
+  }
+  /* The shadow still changes on hover — that is the hover state registering
+     — only the 2px lift is dropped, since transition:none alone stops the
+     lift animating but not the lifted position itself applying instantly. */
+  .pcn-case:hover,
+  .pcn-case:focus-visible {
+    transform: none;
+  }
+}
 
-/* Team card: the whole photo links to the profile. */
-.block-2 .front, .block-2 .back { overflow: hidden; }
-.pcn-stretched-link { position: absolute; inset: 0; z-index: 3; }
-.pcn-team { margin-bottom: 30px; }
-.pcn-team .block-2 { margin-bottom: 12px; }
-.pcn-team__bio { font-size: 14px; margin-bottom: .25rem; }
-.pcn-team__more { font-size: 14px; margin-bottom: 0; }
-.pcn-team__more span { font-size: 11px; margin-left: 2px; }
+/* Three across on desktop, two on tablet, one on phone — the grid itself
+   gives every card equal height (a bare grid item stretches to the row's
+   tallest by default), so .pcn-case's height:100% has something to fill. */
+.pcn-case-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 991.98px) {
+  .pcn-case-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 767.98px) {
+  .pcn-case-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Insight card. .blog-entry (below) supplies border, radius, shadow and hover
+   lift; this is its inner layout: 16:9 image, then meta, headline, excerpt and
+   a text link, in that order, with the link pinned to the bottom so cards in
+   a row line up. */
+.pcn-blog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--surface);
+}
+.pcn-blog .pcn-blog__image.block-20.pcn-fit {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  display: block;
+}
+.pcn-blog__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+.pcn-blog-meta {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.5rem;
+}
+.pcn-blog__title {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 0.6rem;
+}
+.pcn-blog__title a { color: var(--ink-1); }
+.pcn-blog__title a:hover,
+.pcn-blog__title a:focus-visible { color: var(--blue); }
+.pcn-blog__excerpt {
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-bottom: 1rem;
+}
+.pcn-blog__more {
+  margin-top: auto;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.pcn-blog__more:hover,
+.pcn-blog__more:focus-visible { color: var(--blue-deep, var(--blue)); text-decoration: underline; }
+
+/*
+ * Navigational (title, image and "Read more" all link to the article), so it
+ * takes the site's standard shadow, border and lift on hover. .blog-entry
+ * already clips its children via overflow:hidden, so the new radius rounds
+ * the image and text panels without any change to their own markup.
+ */
+.blog-entry {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+.blog-entry:hover,
+.blog-entry:focus-within {
+  border-color: var(--blue);
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .blog-entry {
+    transition: none;
+  }
+  .blog-entry:hover,
+  .blog-entry:focus-within {
+    transform: none;
+  }
+}
+
+/*
+ * Team card: the whole photo links to the profile, so it is navigational too.
+ * The shadow/lift goes on .block-2 itself, not on .flipper or .front/.back —
+ * those already carry the flip's own rotateY transform, and stacking a
+ * translateY onto the same property on the same element would fight it.
+ * .block-2 already has overflow:hidden on its .front/.back children, so
+ * clipping to the new radius needs it on .block-2 itself as well.
+ */
+.block-2 .front,
+.block-2 .back {
+  overflow: hidden;
+}
+.block-2 {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+.block-2:hover,
+.block-2:focus-within {
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .block-2 {
+    transition: none;
+  }
+  .block-2:hover,
+  .block-2:focus-within {
+    transform: none;
+  }
+}
+.pcn-stretched-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.pcn-team {
+  margin-bottom: 30px;
+}
+.pcn-team .block-2 {
+  margin-bottom: 12px;
+}
+.pcn-team__bio {
+  font-size: 14px;
+  margin-bottom: 0.25rem;
+}
+.pcn-team__more {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.pcn-team__more span {
+  font-size: 11px;
+  margin-left: 2px;
+}
 
 /* Open roles on the home page. */
 .pcn-role {
-  display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
-  background: #fff; padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: #fff;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
   box-shadow: 0px 5px 21px -14px rgba(0, 0, 0, 0.2);
 }
-.pcn-role__title { font-size: 18px; margin-bottom: .25rem; }
-.pcn-role__title a { color: #000; }
-.pcn-role__meta { font-size: 13px; color: #999; margin-bottom: .25rem; }
-.pcn-role__summary { margin-bottom: 0; }
-.pcn-role > .btn { flex-shrink: 0; white-space: nowrap; }
+.pcn-role__title {
+  font-size: 18px;
+  margin-bottom: 0.25rem;
+}
+.pcn-role__title a {
+  color: #000;
+}
+.pcn-role__meta {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 0.25rem;
+}
+.pcn-role__summary {
+  margin-bottom: 0;
+}
+.pcn-role > .btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
 @media (max-width: 767.98px) {
-  .pcn-role { flex-direction: column; align-items: flex-start; }
+  .pcn-role {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* ---------------------------- responsiveness ---------------------------- */
 
 /* Image boxes that keep a 4:3 shape at every width, holding images Cloudinary
-   has already fitted to 4:3, so nothing is cropped differently per screen. */
-.case.pcn-fit,
+   has already fitted to 4:3, so nothing is cropped differently per screen.
+   Case cards no longer use this — see "Record cards" in design-direction.md
+   — so only the blog tile remains. */
 .block-20.pcn-fit {
   height: auto;
   aspect-ratio: 4 / 3;
@@ -420,23 +848,68 @@ input[type="submit"].btn,
 }
 
 /*
- * Inner-page banners. The template fixes them at 700px, which a long title
- * (an article headline, say) overflows on a phone: the white text spills over
- * the page below. They keep 700px as a minimum and grow when needed.
+ * Inner-page banners. Capped to a refined editorial height (min-height 360px)
+ * with room for long titles to wrap gracefully, rather than an unmanageable 700px.
  */
 .hero-wrap.hero-wrap-2,
 .hero-wrap.hero-wrap-2 .slider-text {
   height: auto;
-  min-height: 700px;
+  min-height: 380px;
 }
-.hero-wrap.hero-wrap-2 .slider-text { padding-top: 120px; }
+.hero-wrap.hero-wrap-2 .slider-text {
+  padding-top: 130px;
+  padding-bottom: 45px;
+}
+.hero-wrap.hero-wrap-2 .overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 20, 38, 0.75) 0%,
+    rgba(11, 20, 38, 0.92) 100%
+  );
+}
+.hero-wrap.hero-wrap-2 h1.bread {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: #fff;
+  margin-bottom: 0.75rem;
+}
+.hero-wrap.hero-wrap-2 .breadcrumbs {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+.hero-wrap.hero-wrap-2 .breadcrumbs a {
+  color: #fff;
+  transition: color 0.15s ease;
+}
+.hero-wrap.hero-wrap-2 .breadcrumbs a:hover {
+  color: var(--blue);
+}
+.hero-wrap.hero-wrap-2 .breadcrumbs span i {
+  color: var(--blue);
+  font-size: 11px;
+}
 
 @media (max-width: 767.98px) {
   .hero-wrap.hero-wrap-2,
-  .hero-wrap.hero-wrap-2 .slider-text { min-height: 420px; }
-  .hero-wrap.hero-wrap-2 .slider-text { padding-top: 100px; }
-  .hero-wrap.hero-wrap-2 .slider-text h1.bread { font-size: 30px; line-height: 1.25; }
-  .hero-wrap.hero-wrap-2 .slider-text .breadcrumbs { font-size: 14px; }
+  .hero-wrap.hero-wrap-2 .slider-text {
+    min-height: 280px;
+  }
+  .hero-wrap.hero-wrap-2 .slider-text {
+    padding-top: 100px;
+    padding-bottom: 30px;
+  }
+  .hero-wrap.hero-wrap-2 .slider-text h1.bread {
+    font-size: 26px;
+    line-height: 1.25;
+  }
+  .hero-wrap.hero-wrap-2 .slider-text .breadcrumbs {
+    font-size: 12px;
+  }
 }
 
 /* Between the collapsed menu (under 992px) and a full desktop width, seven
@@ -447,7 +920,9 @@ input[type="submit"].btn,
     padding-right: 11px;
     font-size: 14px;
   }
-  .ftco-navbar-light .navbar-brand { font-size: 18px; }
+  .ftco-navbar-light .navbar-brand {
+    font-size: 18px;
+  }
 }
 
 /* The current page in a breadcrumb trail is one line, however long the title:
@@ -463,8 +938,13 @@ input[type="submit"].btn,
 
 @media (max-width: 767.98px) {
   /* Headings in the body of detail pages, sized for a phone. */
-  .ftco-degree-bg .col-lg-8 > h2 { font-size: 24px; line-height: 1.3; }
-  .ftco-degree-bg .col-lg-8 > h2.mb-3 { margin-top: 1.5rem; }
+  .ftco-degree-bg .col-lg-8 > h2 {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+  .ftco-degree-bg .col-lg-8 > h2.mb-3 {
+    margin-top: 1.5rem;
+  }
 }
 
 /* -------------------------------- type ---------------------------------- */
@@ -481,23 +961,84 @@ input[type="submit"].btn,
  * first name in --font-display; nothing else needs to move.
  */
 :root {
-  --font-display: 'Source Serif 4', 'Publico Headline', Georgia, 'Times New Roman', serif;
-  --font-text: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-display:
+    "Source Serif 4", "Publico Headline", Georgia, "Times New Roman", serif;
+  --font-text: "Open Sans", "Helvetica Neue", Arial, sans-serif;
 
   /*
    * Names for colours the site was already using literally in a dozen places.
    * Nothing here changes what is on screen; it makes the palette editable in
    * one spot instead of by find-and-replace.
    */
-  --blue: #047dd6;        /* brand blue: links, CTAs, focus, icon marks */
-  --line: #e6e6e6;        /* hairline borders */
-  --surface: #f8f9fa;     /* the ground a card lifts to on hover */
-  --ink-1: #0f172a;       /* headings */
-  --ink-2: #666;          /* body copy on light ground */
-  --ink-3: #999;          /* metadata, the quietest readable step */
+  --blue: #047dd6; /* brand blue: links, CTAs, focus, icon marks */
+  --blue-deep: #035a9a; /* --blue at ~72%: the resting tab's keyboard-focus
+                              outline (its hover is the shared white glass
+                              below). White text on --blue itself is 4.28:1,
+                              just under AA's 4.5:1 for 15px text; on
+                              --blue-deep it is 7.16:1 — the safe one to reach
+                              for when contrast against white text actually
+                              matters. */
+  --line: #e6e6e6; /* hairline borders */
+  --surface: #f8f9fa; /* the ground a card lifts to on hover */
+  --ink-1: #0f172a; /* headings */
+  --ink-2: #666; /* body copy on light ground */
+  --ink-3: #999; /* metadata, the quietest readable step */
+  --success: #2e7d4f; /* a won matter, a submitted form — already used
+                              literally as .pcn-form-alert--success and
+                              .pcn-badge--won before this named it */
+  --navy: #124b89; /* the consultation form panel's background — a
+                              distinct navy-blue from --ink-1/--blue-deep,
+                              matching the firm-approved reference for that
+                              section rather than reusing either */
+
+  /*
+   * White liquid glass: the shared hover/focus-visible state for every solid
+   * CTA on the site (see "white glass hover" in app.css, and
+   * docs/design-direction.md). Named here once so the recipe has one home
+   * regardless of how many selectors apply it.
+   *
+   * The text colour is --ink-1, not --blue. --blue text on this glass has a
+   * hard ceiling of 4.28:1 against white — even at full opacity, on a plain
+   * white page — so no alpha choice ever reaches AA's 4.5:1, and on the two
+   * backgrounds these buttons actually sit on that are not plain white (the
+   * hero's navy, the consultation section's blue overlay) it measures 2.28:1
+   * and 2.94:1 with --blue text: not a hair under, genuinely hard to read.
+   * --ink-1 clears 9.5:1+ on every one of those, so it is the one text colour
+   * that does not need a different value per background.
+   */
+  --glass-hover-bg: rgba(255, 255, 255, 0.72);
+  --glass-hover-bg-fallback: rgba(
+    255,
+    255,
+    255,
+    0.92
+  ); /* @supports not backdrop-filter */
+  --glass-hover-border: rgba(255, 255, 255, 0.55);
+  --glass-hover-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 8px rgba(18, 70, 126, 0.14);
+  --glass-hover-text: var(--ink-1);
+
+  /*
+   * Spacing. An 8px base, which every value below is a whole multiple of, so
+   * sections and the gaps inside them land on one rhythm rather than each
+   * component inventing its own padding.
+   */
+  --space-md: 3rem; /* 48px: the gap between columns inside a section */
+  --space-lg: 4rem; /* 64px: section padding below the lg breakpoint */
+  --space-xl: 6rem; /* 96px: section padding on desktop */
 }
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
 .slider-text h1,
 .hero-wrap .slider-text .bread {
   font-family: var(--font-display);
@@ -521,15 +1062,18 @@ select,
 textarea {
   font-family: var(--font-text);
 }
-.subheading { letter-spacing: 0.08em; font-weight: 600; }
+.subheading {
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
 
 /* ------------------------- liquid glass buttons ------------------------- */
 
 /*
- * Translucent blue with a backdrop blur, a 1px edge light running from white
- * (top left) to translucent blue (bottom right), and on hover a white sheen
- * sweeping across while the blur deepens and the button lifts on a soft blue
- * shadow. Text stays pure white.
+ * Solid blue at rest, with a 1px edge light running from white (top left) to
+ * translucent blue (bottom right). Text stays pure white. Hover and
+ * focus-visible are defined separately below, as one shared rule shared by
+ * every CTA on the site — see "white glass hover".
  */
 .btn.btn-primary,
 .btn.btn-dark,
@@ -546,79 +1090,164 @@ textarea {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: transform .35s ease, box-shadow .35s ease, background-color .35s ease, backdrop-filter .35s ease;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease,
+    backdrop-filter 0.18s ease;
 }
 /* Deep navy glass for the dark variant (the consultation form on blue). */
-.btn.btn-dark { background: rgba(15, 23, 42, 0.72) !important; }
+.btn.btn-dark {
+  background: rgba(15, 23, 42, 0.72) !important;
+}
 
-/* Edge light. */
+/* Edge light, at rest only — see below for why it drops out on hover. */
 .btn.btn-primary::after,
 .btn.btn-dark::after,
 .btn-custom::after,
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a::after,
 .subscribe-form .form-group .submit::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(4, 125, 214, 0.3));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(4, 125, 214, 0.3)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
   pointer-events: none;
   z-index: -1;
+  transition: opacity 0.18s ease;
 }
 
-/* Sheen, parked off the left edge until hover. */
-.btn.btn-primary::before,
-.btn.btn-dark::before,
-.btn-custom::before,
-.ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
-.subscribe-form .form-group .submit::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -75%;
-  width: 60%;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-  transform: skewX(-15deg);
-  transition: left .7s ease;
-  pointer-events: none;
-  z-index: -1;
+/*
+ * ----------------------------- white glass hover -----------------------
+ *
+ * Every solid CTA on the site turns to white liquid glass on hover: this
+ * button, the tab pills in their resting state (not the selected one, which
+ * is already its own glass), and anything else that shares this selector
+ * list. One recipe, defined once as the --glass-hover-* tokens above; nothing
+ * below repeats a literal colour value.
+ *
+ * Split into two rules rather than one, deliberately:
+ *   - :focus-visible is unconditional, so a keyboard user always sees the
+ *     same state a mouse user gets on hover.
+ *   - :hover only applies inside `(hover: hover) and (pointer: fine)`, so a
+ *     touch tap cannot leave a button stuck showing its "hovered" state after
+ *     the finger lifts, which is what happens if a plain :hover rule runs on
+ *     a touchscreen.
+ *
+ * The blue-tinted edge-light pseudo-element (::after, above) is switched off
+ * here rather than left running underneath: it was drawn for the solid-blue
+ * resting state, and layered under the new real border it produced exactly
+ * the doubled-edge/halo effect found on the selected tab pill — a second,
+ * fainter ring outside the visible one. One clean edge means exactly one
+ * element is allowed to draw it.
+ *
+ * :not(.is-active) on the tab selectors: this component always focuses the
+ * tab it selects (see Tabs.jsx — automatic activation, no way to move
+ * keyboard focus onto a tab without also making it the active one), so a
+ * selected tab is never in a state where this recipe's colour and .is-active's
+ * own colour aren't both trying to apply. Same specificity, so the winner
+ * would come down to which rule happens to sit later in the file — exactly
+ * the kind of accident this codebase tries not to depend on. Excluding
+ * .is-active here means the selected pill's own rule, further down, is the
+ * only thing that ever styles it.
+ */
+.btn.btn-primary:focus-visible,
+.btn.btn-dark:focus-visible,
+.btn-custom:focus-visible,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a:focus-visible,
+.subscribe-form .form-group .submit:focus-visible,
+.pcn-tabs__tab:focus-visible:not(.is-active) {
+  background: var(--glass-hover-bg) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-color: var(--glass-hover-border) !important;
+  box-shadow: var(--glass-hover-shadow);
+  color: var(--glass-hover-text) !important;
+}
+.btn.btn-primary:focus-visible::after,
+.btn.btn-dark:focus-visible::after,
+.btn-custom:focus-visible::after,
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a:focus-visible::after,
+.subscribe-form .form-group .submit:focus-visible::after {
+  opacity: 0;
 }
 
-.btn.btn-primary:hover, .btn.btn-primary:focus-visible,
-.btn.btn-dark:hover, .btn.btn-dark:focus-visible,
-.btn-custom:hover, .btn-custom:focus-visible,
-.ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover,
-.subscribe-form .form-group .submit:hover {
-  color: #fff !important;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+@media (hover: hover) and (pointer: fine) {
+  .btn.btn-primary:hover,
+  .btn.btn-dark:hover,
+  .btn-custom:hover,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover,
+  .subscribe-form .form-group .submit:hover,
+  .pcn-tabs__tab:hover:not(.is-active) {
+    background: var(--glass-hover-bg) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    backdrop-filter: blur(16px) saturate(180%);
+    border-color: var(--glass-hover-border) !important;
+    box-shadow: var(--glass-hover-shadow);
+    color: var(--glass-hover-text) !important;
+  }
+  .btn.btn-primary:hover::after,
+  .btn.btn-dark:hover::after,
+  .btn-custom:hover::after,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover::after,
+  .subscribe-form .form-group .submit:hover::after {
+    opacity: 0;
+  }
 }
-.btn.btn-primary:hover { background: rgba(4, 125, 214, 0.9) !important; }
-.btn.btn-dark:hover { background: rgba(15, 23, 42, 0.82) !important; }
 
-.btn.btn-primary:hover::before, .btn.btn-primary:focus-visible::before,
-.btn.btn-dark:hover::before, .btn.btn-dark:focus-visible::before,
-.btn-custom:hover::before, .btn-custom:focus-visible::before,
-.ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover::before,
-.subscribe-form .form-group .submit:hover::before {
-  left: 125%;
+/* Nothing behind these buttons to blur, so a higher flat opacity reads the
+   same as the blurred version would have. */
+@supports not (backdrop-filter: blur(16px)) {
+  .btn.btn-primary:focus-visible,
+  .btn.btn-dark:focus-visible,
+  .btn-custom:focus-visible,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a:focus-visible,
+  .subscribe-form .form-group .submit:focus-visible,
+  .pcn-tabs__tab:focus-visible:not(.is-active) {
+    background: var(--glass-hover-bg-fallback) !important;
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  @supports not (backdrop-filter: blur(16px)) {
+    .btn.btn-primary:hover,
+    .btn.btn-dark:hover,
+    .btn-custom:hover,
+    .ftco-navbar-light .navbar-nav > .nav-item.cta > a:hover,
+    .subscribe-form .form-group .submit:hover,
+    .pcn-tabs__tab:hover:not(.is-active) {
+      background: var(--glass-hover-bg-fallback) !important;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn.btn-primary, .btn.btn-dark, .btn-custom,
+  .btn.btn-primary,
+  .btn.btn-dark,
+  .btn-custom,
   .ftco-navbar-light .navbar-nav > .nav-item.cta > a,
-  .subscribe-form .form-group .submit { transition: none; }
-  .btn.btn-primary::before, .btn.btn-dark::before, .btn-custom::before,
-  .ftco-navbar-light .navbar-nav > .nav-item.cta > a::before,
-  .subscribe-form .form-group .submit::before { display: none; }
-  .btn.btn-primary:hover, .btn.btn-dark:hover, .btn-custom:hover { transform: none; }
+  .subscribe-form .form-group .submit {
+    transition: none;
+  }
+  .btn.btn-primary::after,
+  .btn.btn-dark::after,
+  .btn-custom::after,
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a::after,
+  .subscribe-form .form-group .submit::after {
+    transition: none;
+  }
 }
 
 /* ---------------------------- service cards ----------------------------- */
@@ -641,31 +1270,57 @@ textarea {
   padding: 1.75rem 1.5rem;
   background: #fff;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 16px;
   color: inherit;
   text-decoration: none;
-  transition: border-color .25s ease, background .25s ease;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background 0.25s ease,
+    transform 0.18s ease;
 }
 .pcn-service:hover,
 .pcn-service:focus-visible {
   border-color: var(--blue);
-  /* A shade of blue lifting off white, strongest at the top left. */
-  background:
-    linear-gradient(160deg,
-      rgba(4, 125, 214, .12) 0%,
-      rgba(4, 125, 214, .05) 45%,
-      #fff 100%);
+  /* A shade of blue lifting off white, strongest at the top left — the
+     card's own hover identity, kept alongside the site's standard shadow
+     and lift rather than replaced by them. */
+  background: linear-gradient(
+    160deg,
+    rgba(4, 125, 214, 0.12) 0%,
+    rgba(4, 125, 214, 0.05) 45%,
+    #fff 100%
+  );
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
+  transform: translateY(-2px);
   text-decoration: none;
 }
-.pcn-service:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.pcn-service:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
 
 .pcn-service__icon {
   display: block;
   color: var(--blue);
   margin-bottom: 20px;
 }
-.pcn-service__title { font-size: 20px; line-height: 1.3; margin-bottom: .5rem; color: var(--ink-1); }
-.pcn-service__summary { color: var(--ink-2); font-size: 14px; margin-bottom: 1rem; }
+.pcn-service__title {
+  font-size: 20px;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+  color: var(--ink-1);
+}
+.pcn-service__summary {
+  color: var(--ink-2);
+  font-size: 14px;
+  margin-bottom: 1rem;
+}
 
 /*
  * The evidence line: how many published cases sit behind this practice area.
@@ -677,13 +1332,19 @@ textarea {
   font-family: var(--font-text);
   font-size: 14px;
   font-weight: 600;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pcn-service { transition: none; }
+  .pcn-service {
+    transition: none;
+  }
+  .pcn-service:hover,
+  .pcn-service:focus-visible {
+    transform: none;
+  }
 }
 
 /*
@@ -692,14 +1353,11 @@ textarea {
  * full-size one shouts. Keeps the glass treatment, just smaller.
  */
 .btn.pcn-btn--sm {
-  padding: .55rem 1.1rem;
+  padding: 0.55rem 1.1rem;
   font-size: 14px;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
 }
 
-/* The newsletter's Subscribe button never clips, whatever the font width. */
-.subscribe-form .form-group .form-control { min-width: 0; }
-.subscribe-form .form-group .submit { flex-shrink: 0; white-space: nowrap; }
 
 /* Hero backgrounds per rotating word: stacked, cross-fading beneath the overlay. */
 .hero-wrap .pcn-hero-scene {
@@ -709,12 +1367,23 @@ textarea {
   background-position: center;
   opacity: 0;
   transform: scale(1.04);
-  transition: opacity 1.2s ease, transform 6s ease;
+  transition:
+    opacity 1.2s ease,
+    transform 6s ease;
 }
-.hero-wrap .pcn-hero-scene.is-active { opacity: 1; transform: scale(1); }
-.hero-wrap .container { position: relative; z-index: 1; }
+.hero-wrap .pcn-hero-scene.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+.hero-wrap .container {
+  position: relative;
+  z-index: 1;
+}
 @media (prefers-reduced-motion: reduce) {
-  .hero-wrap .pcn-hero-scene { transition: none; transform: none; }
+  .hero-wrap .pcn-hero-scene {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* ------------------------------ hero sizing ----------------------------- */
@@ -735,9 +1404,11 @@ textarea {
   /* The map, the photo scenes and the scrim all clip to the radius. */
   overflow: hidden;
   /* Nothing flashes pale between cross-fades. */
-  background-color: #0B1426;
+  background-color: #0b1426;
 }
-.pcn-hero .container { height: 100%; }
+.pcn-hero .container {
+  height: 100%;
+}
 /* .slider-text tracked the viewport; now it tracks the hero. */
 .pcn-hero .slider-text {
   height: 100%;
@@ -770,7 +1441,7 @@ textarea {
  * order they read in: scrim above horizon above light source.
  */
 .pcn-hero-scene--map::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -780,25 +1451,31 @@ textarea {
           Measured, not guessed: the copy column crosses bright blue landmass
           around 40-50% across, which needs ~44% black to hold 4.5:1. The
           briefed 0.30 at 45% gave 2.75:1, so these stops are heavier. */
-    linear-gradient(90deg,
+    linear-gradient(
+      90deg,
       rgba(0, 0, 0, 0.72) 0%,
       rgba(0, 0, 0, 0.55) 52%,
       rgba(0, 0, 0, 0.26) 64%,
-      transparent 78%),
+      transparent 78%
+    ),
     /* 2. A faint horizon band, to give the block some structure. */
-    linear-gradient(180deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      transparent 30%,
-      transparent 72%,
-      rgba(255, 255, 255, 0.03) 100%),
+    linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 30%,
+        transparent 72%,
+        rgba(255, 255, 255, 0.03) 100%
+      ),
     /* 1. The light source, upper right, clear of the copy column. Tightened
           from the briefed 70%/55% at 72%/18% so its edge does not reach the
           rings over Nigeria — at that size it cost them 11% of their
           separation from the land beneath. */
-    radial-gradient(ellipse 64% 48% at 74% 16%,
-      rgba(255, 255, 255, 0.14) 0%,
-      rgba(255, 255, 255, 0.06) 40%,
-      transparent 72%);
+    radial-gradient(
+        ellipse 64% 48% at 74% 16%,
+        rgba(255, 255, 255, 0.14) 0%,
+        rgba(255, 255, 255, 0.06) 40%,
+        transparent 72%
+      );
 }
 
 /*
@@ -809,18 +1486,1179 @@ textarea {
 @media (max-width: 767.98px) {
   .pcn-hero-scene--map::after {
     background:
-      linear-gradient(90deg,
+      linear-gradient(
+        90deg,
         rgba(0, 0, 0, 0.74) 0%,
         rgba(0, 0, 0, 0.58) 50%,
-        rgba(0, 0, 0, 0.52) 100%),
-      linear-gradient(180deg,
+        rgba(0, 0, 0, 0.52) 100%
+      ),
+      linear-gradient(
+        180deg,
         rgba(255, 255, 255, 0.05) 0%,
         transparent 30%,
         transparent 72%,
-        rgba(255, 255, 255, 0.03) 100%),
-      radial-gradient(ellipse 60% 40% at 82% 13%,
+        rgba(255, 255, 255, 0.03) 100%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 82% 13%,
         rgba(255, 255, 255, 0.14) 0%,
         rgba(255, 255, 255, 0.06) 40%,
-        transparent 72%);
+        transparent 72%
+      );
   }
+}
+
+/* --------------------------- "Why the firm" ----------------------------- */
+
+/*
+ * The section sits on the page grid: its own .container — the same one
+ * Services and Record use — so the photograph's left edge lands on the same
+ * line as the Services eyebrow above it and the record cards below. Nothing
+ * in this section runs full bleed.
+ */
+.pcn-why {
+  padding: var(--space-xl) 0; /* 96px */
+}
+
+/* Padding drops on its own breakpoint, independent of the two-column collapse
+   below — the two are separate decisions and were tied together by mistake
+   the first time this section was built. */
+@media (max-width: 767.98px) {
+  .pcn-why {
+    padding: var(--space-lg) 0;
+  } /* 64px */
+}
+
+.pcn-why__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-md); /* 48px */
+  /*
+   * Start, not stretch, at the grid level — the copy column's own height is
+   * whatever its content needs, never forced. The one deliberate exception is
+   * the photograph, which opts back into stretch on itself; see
+   * .pcn-why__media below for why.
+   *
+   * minmax(0, 1fr) rather than a bare 1fr: a grid track's automatic minimum
+   * width is its content's min-content size, and without the explicit 0 floor
+   * a wide child (the photograph, an unbroken case name in the copy) can force
+   * its track wider than the fair share, pushing the other column down onto
+   * its own line — the "columns collapsed to a stack" failure this replaces.
+   */
+  align-items: start;
+}
+
+/* Two columns from 992px up, always — this is the one thing that must never
+   change under any combination of content length or viewport width. Below it,
+   one column, photograph first because it is first in the DOM. */
+@media (max-width: 991.98px) {
+  .pcn-why__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pcn-why__media {
+  position: relative;
+  margin: 0;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--surface);
+  /*
+   * The one place this section breaks its own "never force a column's height"
+   * rule. `aspect-ratio` gives the row a natural 3:2 height when the copy
+   * column is shorter than that; `align-self: stretch` lets the row's height
+   * win instead when a tab's own text makes copy the taller column — at that
+   * point the photograph grows to close the gap rather than leaving empty
+   * space beside it, and `object-fit: cover` on the <img> crops the extra
+   * rather than distorting it. Both column widths stay fixed regardless;
+   * only the photograph's height is ever in play.
+   */
+  align-self: stretch;
+}
+.pcn-why__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The play button only exists when the firm has set a video on the section. */
+.pcn-why__media .icon-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+
+.pcn-why__copy .heading-section {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+/*
+ * The eyebrow's cap height, not its line box, has to sit level with the
+ * image's top edge. At the eyebrow's own font-size the browser's default line
+ * height carries real leading above the ink — line-height: 1 collapses most
+ * of that away, and the 16px to the heading is added explicitly afterward
+ * rather than borrowed from leftover leading, so it holds regardless of how
+ * any given browser distributes that leading.
+ *
+ * More specific than .heading-section .subheading in style.scss (5px
+ * margin-bottom, no line-height), which it needs to be to win regardless of
+ * load order.
+ */
+.pcn-why__copy .heading-section .subheading {
+  display: block;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+/* The heading's own .mb-4 (Bootstrap, 1.5rem) already gives the 24px to the
+   body copy beneath it — nothing to add here. */
+.pcn-why__copy h2 {
+  margin-top: 0;
+}
+.pcn-why__body {
+  color: var(--ink-2);
+  margin-top: 0;
+}
+
+/* ---------------------------------- tabs -------------------------------- */
+
+/*
+ * 32px to the tab row. .pcn-why__body is a plain paragraph with no BFC or
+ * flex/grid parent between it and .pcn-tabs, so this top margin collapses
+ * with the paragraph's own bottom margin rather than adding to it — the
+ * visible gap is the larger of the two, which this value is.
+ */
+.pcn-tabs {
+  margin-top: 2rem;
+}
+
+/*
+ * Solid --blue at rest, matching the "Free Consultation" CTA; liquid-glass
+ * navy when selected. Selection is a contrast in *kind* as well as colour —
+ * flat brand blue against frosted, blurred navy — which is what keeps three
+ * tabs reading as one set with a choice made, rather than three equal calls
+ * to action.
+ *
+ * A flex row, not a grid of equal columns: the pills size to their own text,
+ * the way "Speak to us" does, and wrap onto a second line at narrow widths
+ * rather than being squeezed.
+ */
+.pcn-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pcn-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 0;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  box-shadow: 0 1px 2px rgba(11, 27, 43, 0.1);
+  color: #fff;
+  font-family: var(--font-text);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease;
+}
+/* Resting-pill hover/focus-visible is the shared white-glass recipe, defined
+   once in "white glass hover" above — nothing needed here. */
+
+/*
+ * Selected: white glass, not navy. An earlier pass here used a translucent
+ * navy dark enough to pass contrast, and in practice that read as a flat
+ * grey-blue blob with a dark halo rather than glass — the two inset shadows
+ * (a bright top rim, a faint blue-tinted bottom edge) plus the soft outer drop
+ * shadow are what make this one read as frosted and lifted off the page;
+ * dropping either turns it back into a plain tinted rectangle.
+ */
+.pcn-tabs__tab.is-active {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  /*
+   * .85 border + a 6px/18px outer glow read as two rings around the pill —
+   * a visible border plus a diffuse halo outside it. Dropping the border to
+   * .55 stops it reading as its own separate stroke, and tightening the outer
+   * shadow to 2px/8px pulls it in to hug the pill instead of glowing around
+   * it. The second inset shadow is gone entirely; one inset rim (the bright
+   * top edge) plus one tight outer shadow is now the full effect — exactly
+   * one box-shadow declaration, nothing layered from elsewhere. This is also
+   * now identical to the shared --glass-hover-shadow other CTAs use on hover,
+   * which is the point: it is the same glass, not a bespoke one.
+   */
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(18, 70, 126, 0.14);
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/*
+ * Without backdrop-filter there is nothing behind the pill to blur (plain
+ * white page background), so a higher flat opacity reads the same as the
+ * blurred version would have.
+ */
+@supports not (backdrop-filter: blur(16px)) {
+  .pcn-tabs__tab.is-active {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+/*
+ * Never on mouse click — only :focus-visible draws a ring, and it replaces
+ * the browser's own default :focus outline rather than stacking with it.
+ *
+ * :not(.is-active) matters here: Tabs.jsx's keyboard handling always selects
+ * and focuses a tab together (automatic activation — there is no way to move
+ * keyboard focus onto a tab without also making it the active one), so
+ * :focus-visible and .is-active are never independent states on this
+ * component. Without the exclusion, a keyboard-selected tab got this outline
+ * ring on top of its own glass border and shadow — a second ring, the same
+ * class of doubled edge the selected pill's box-shadow had. The glass state
+ * itself is a strong enough visual change to serve as the focus indicator; it
+ * does not also need a ring drawn around it.
+ */
+.pcn-tabs__tab:focus {
+  outline: none;
+}
+.pcn-tabs__tab:focus-visible:not(.is-active) {
+  outline: 2px solid var(--blue-deep);
+  outline-offset: 2px;
+}
+
+/* A little daylight between the floating pills and the panel beneath them —
+   the pills no longer share an edge with the panel now that they are pills
+   rather than a bordered row flush against it. */
+.pcn-tabs__panels {
+  display: grid;
+  margin-top: 16px;
+}
+
+/*
+ * Every panel occupies the same grid cell, so the set is always as tall as its
+ * tallest panel and the page below never jumps when the tab changes. That only
+ * works while the inactive panels still take part in layout, so the
+ * display:none that the `hidden` attribute implies is overridden here —
+ * `hidden` is kept for what it does to the accessibility tree and the tab
+ * order, and visibility does the hiding.
+ */
+.pcn-tabs__panel {
+  grid-area: 1 / 1;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+/*
+ * Bootstrap's reboot sets [hidden] { display: none !important; } site-wide
+ * (for IE10 and below), which otherwise beats this rule regardless of
+ * specificity — the panels were all collapsing to the height of whichever one
+ * happened to be active, silently defeating the point of stacking them. The
+ * !important here is scoped to this one selector, to answer that one.
+ */
+.pcn-tabs__panel[hidden] {
+  display: block !important;
+}
+.pcn-tabs__panel.is-active {
+  visibility: visible;
+  opacity: 1;
+}
+.pcn-tabs__text {
+  color: var(--ink-2);
+  margin-bottom: 0;
+}
+
+/*
+ * The live count of published cases, hung off the record tab. It is a link to
+ * the archive it counts, in the same uppercase metadata style the practice
+ * cards use for the same figure.
+ */
+.pcn-tabs__count {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.pcn-tabs__count:hover {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcn-tabs__tab,
+  .pcn-tabs__panel {
+    transition: none;
+  }
+}
+
+/* --------------------------- free consultation --------------------------- */
+
+/*
+ * Two flush panels sharing one 16px-rounded, clipped box, the site's
+ * standard card elevation (see "Card elevation" in design-direction.md) — a
+ * light column with the firm's own words and real contact details, beside a
+ * dark navy enquiry-form panel of its own, with a matching eyebrow/heading
+ * pair so the two sides read as one design rather than a card glued to a
+ * form. This is the section's fourth pass — see "Free consultation" in
+ * design-direction.md for what the earlier ones got wrong.
+ */
+.pcn-consultation__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+}
+@media (max-width: 991.98px) {
+  .pcn-consultation__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pcn-consultation__panel {
+  padding: var(--space-xl) var(--space-md);
+}
+@media (max-width: 767.98px) {
+  .pcn-consultation__panel {
+    padding: var(--space-lg) 1.5rem;
+  }
+}
+
+.pcn-consultation__panel--light {
+  background: var(--surface);
+}
+/*
+ * No vertical centring here: the form panel's own eyebrow and heading fill
+ * the top of the panel the same way the light panel's do, so both columns
+ * start at the same line. Centring content shorter than the taller column
+ * is what left a blank gap above the fields in an earlier draft.
+ */
+.pcn-consultation__panel--dark {
+  background: var(--navy);
+}
+
+.pcn-consultation__eyebrow {
+  display: block;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--blue);
+  margin-bottom: 0.75rem;
+}
+.pcn-consultation__heading {
+  font-family: var(--font-display);
+  color: var(--ink-1);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.25;
+  margin-bottom: 1.25rem;
+}
+.pcn-consultation__body {
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.pcn-consultation__quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink-1);
+  border-left: 3px solid var(--blue);
+  padding-left: 1.25rem;
+  margin: 0 0 2rem;
+}
+
+.pcn-consultation__contact {
+  border-top: 1px solid var(--line);
+  padding-top: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.pcn-consultation__contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.pcn-consultation__contact-row:last-child {
+  margin-bottom: 0;
+}
+.pcn-consultation__contact-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(4, 125, 214, 0.1);
+  color: var(--blue);
+}
+.pcn-consultation__contact-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 0.15rem;
+}
+.pcn-consultation__contact a,
+.pcn-consultation__address {
+  display: block;
+  color: var(--ink-1);
+  font-size: 16px;
+  font-weight: 600;
+}
+.pcn-consultation__contact a:hover {
+  color: var(--blue);
+}
+
+.pcn-consultation__availability {
+  color: var(--ink-3);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/*
+ * The form panel's fields: a caps label over a placeholder, sitting on the
+ * navy panel with a thin underline as the only boundary — no fill, no
+ * radius, no box outline. A bordered white-box version of these fields was
+ * tried and reverted: boxed inputs on this dark panel read as heavier and
+ * more spaced out than the compact, labelled original called for. See
+ * "Free consultation" in design-direction.md for the full sequence.
+ */
+.pcn-consultation__form {
+  width: 100%;
+}
+.pcn-consultation__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.5rem;
+}
+.pcn-consultation__field--wide {
+  grid-column: 1 / -1;
+}
+@media (max-width: 575.98px) {
+  .pcn-consultation__fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pcn-consultation__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 0.35rem;
+}
+.pcn-consultation__form .form-control {
+  height: auto !important;
+  padding: 0 0 0.6rem !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 0;
+  font-size: 16px;
+  box-shadow: none !important;
+  transition: border-color 0.18s ease;
+}
+.pcn-consultation__form textarea.form-control {
+  resize: vertical;
+}
+.pcn-consultation__form .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+  opacity: 1;
+}
+.pcn-consultation__form .form-control:focus {
+  border-bottom-color: #fff !important;
+}
+/* Tight, even rhythm — Name/Email, Phone/Subject and Message all the same
+   distance apart, matching the compact original this reverts to. */
+.pcn-consultation__form .form-group {
+  margin-bottom: 1.1rem;
+}
+.pcn-consultation__fields {
+  margin-bottom: 1.5rem;
+}
+
+/*
+ * The submit button: the standard glass-hover CTA, reusing the site's
+ * shared --glass-hover-* tokens exactly rather than a bespoke recipe — see
+ * "white liquid glass" in app.css. Only the resting state differs from the
+ * sitewide .btn.btn-primary (solid white, not translucent blue), because
+ * this button sits on navy rather than on the page's own background.
+ */
+.pcn-consultation__form .btn.btn-primary {
+  background: #fff !important;
+  border: 1px solid #fff !important;
+  border-radius: 999px;
+  height: 48px;
+  padding: 0 24px !important;
+  color: var(--blue) !important;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(11, 27, 43, 0.1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.pcn-consultation__form .btn.btn-primary:hover,
+.pcn-consultation__form .btn.btn-primary:focus-visible {
+  background: var(--glass-hover-bg) !important;
+  border-color: var(--glass-hover-border) !important;
+  box-shadow: var(--glass-hover-shadow);
+  color: var(--blue) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .pcn-consultation__form .btn.btn-primary:hover,
+  .pcn-consultation__form .btn.btn-primary:focus-visible {
+    background: var(--glass-hover-bg-fallback) !important;
+  }
+}
+
+/*
+ * The success view: the form panel replaces itself with this rather than
+ * showing a small banner above an emptied form, so the confirmation is the
+ * unmistakable thing on screen after a real submission.
+ */
+.pcn-consultation__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+}
+.pcn-consultation__success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+}
+.pcn-consultation__success-heading {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.pcn-consultation__success-body {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 16px;
+  max-width: 32ch;
+  margin-bottom: 2rem;
+}
+.pcn-consultation__reset {
+  background: transparent;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.pcn-consultation__reset:hover,
+.pcn-consultation__reset:focus-visible {
+  background: #fff;
+  color: var(--navy);
+}
+
+/* -------------------- newsletter band -------------------- */
+/*
+ * A floating card, not a strip: the section gives it room above and below, and
+ * it keeps the same 16px radius on all four corners inside the 1200px
+ * container, like the consultation panel. Copy on the left, form on the right
+ * at desktop; stacked and centred below 992px.
+ */
+.pcn-newsletter.ftco-section { padding: var(--space-lg, 3rem) 0 !important; }
+.pcn-newsletter-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+  padding: var(--space-md, 2rem) 3rem;
+  background: var(--navy);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(11, 27, 43, .04), 0 4px 12px rgba(11, 27, 43, .06);
+}
+@media (max-width: 991.98px) {
+  .pcn-newsletter-card { grid-template-columns: 1fr; text-align: center; padding: 2rem 1.5rem; }
+}
+.pcn-newsletter-card__eyebrow {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #93a5c4;
+  margin-bottom: .5rem;
+}
+.pcn-newsletter-card__heading {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+  margin: 0;
+}
+.pcn-newsletter-card__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 2rem;
+}
+@media (max-width: 575.98px) {
+  .pcn-newsletter-card__row { flex-direction: column; align-items: stretch; }
+}
+.pcn-newsletter-card__field { flex: 1; min-width: 0; }
+.pcn-newsletter-card__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: .35rem;
+}
+/* !important throughout: the site-wide .form-control forces a white fill,
+   black text, 52px height and 5px radius with !important, so anything less
+   leaves the white box in place. Same reason the consultation form does it. */
+.pcn-newsletter-card .form-control {
+  display: block;
+  width: 100%;
+  height: 48px !important;
+  padding: 0 !important;
+  line-height: 48px;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .35) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #fff !important;
+  font-size: 16px;
+  box-shadow: none !important;
+  transition: border-color .18s ease;
+}
+.pcn-newsletter-card .form-control::placeholder { color: rgba(255, 255, 255, .55) !important; opacity: 1; }
+.pcn-newsletter-card .form-control:focus,
+.pcn-newsletter-card .form-control:active {
+  background: transparent !important;
+  color: #fff !important;
+  border-bottom-color: #fff !important;
+  box-shadow: none !important;
+}
+/* Browser autofill would otherwise repaint the field pale yellow or white. */
+.pcn-newsletter-card .form-control:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px var(--navy) inset !important;
+}
+.pcn-newsletter-card button.submit {
+  flex-shrink: 0;
+  white-space: nowrap;
+  height: 48px;
+  padding: 0 24px;
+  border: 1px solid #fff;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--blue);
+  font-weight: 600;
+  transition: background .18s ease, box-shadow .18s ease;
+}
+.pcn-newsletter-card button.submit:hover,
+.pcn-newsletter-card button.submit:focus-visible {
+  background: var(--glass-hover-bg);
+  border-color: var(--glass-hover-border);
+  box-shadow: var(--glass-hover-shadow);
+  color: var(--blue);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pcn-newsletter-card button.submit:hover,
+  .pcn-newsletter-card button.submit:focus-visible { background: var(--glass-hover-bg-fallback); }
+}
+.pcn-newsletter-card__message {
+  margin: .75rem 0 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+/* -------------------- modern sidebar & widgets -------------------- */
+.pcn-sidebar .sidebar-box {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  padding: 1.75rem;
+  margin-bottom: 2rem;
+}
+.pcn-sidebar .sidebar-box h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink-1);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+.pcn-sidebar .search-form .form-group {
+  position: relative;
+  margin-bottom: 0;
+}
+.pcn-sidebar .search-form .form-control {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding-left: 2.5rem;
+  height: 48px;
+  font-size: 14px;
+}
+.pcn-sidebar .search-form .form-control:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(4, 125, 214, 0.15);
+}
+.pcn-sidebar .search-form .icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: var(--blue);
+  font-size: 16px;
+}
+.pcn-sidebar-categories li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #f1f3f5;
+  font-size: 14px;
+}
+.pcn-sidebar-categories li:last-child {
+  border-bottom: none;
+}
+.pcn-sidebar-categories li a {
+  color: var(--ink-2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+.pcn-sidebar-categories li a:hover,
+.pcn-sidebar-categories li.active a {
+  color: var(--blue);
+  font-weight: 600;
+}
+.pcn-sidebar .tagcloud .tag-cloud-link {
+  display: inline-block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.85rem;
+  margin: 0 0.35rem 0.5rem 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
+  background: var(--surface);
+  transition: all 0.15s ease;
+}
+.pcn-sidebar .tagcloud .tag-cloud-link:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* -------------------- modern pagination -------------------- */
+.block-27 ul {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.block-27 ul li a,
+.block-27 ul li span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--ink-1);
+  font-weight: 600;
+  font-size: 15px;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+.block-27 ul li.active span {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(4, 125, 214, 0.25);
+}
+.block-27 ul li a:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--surface);
+}
+
+/* -------------------- case detail layout -------------------- */
+.pcn-matter-summary {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+}
+.pcn-matter-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+.pcn-matter-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  font-weight: 600;
+  color: var(--ink-1);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+.pcn-holding-callout {
+  background: #f0f7fd;
+  border-left: 4px solid var(--blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+}
+.pcn-holding-callout__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 0.4rem;
+}
+.pcn-holding-callout__text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--ink-1);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+/* -------------------- careers & role cards -------------------- */
+.pcn-career-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: left;
+  transition:
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+.pcn-career-card:hover {
+  border-color: var(--blue);
+  box-shadow:
+    0 2px 4px rgba(11, 27, 43, 0.06),
+    0 12px 28px rgba(18, 70, 126, 0.14);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pcn-career-card:hover {
+    transform: none;
+  }
+}
+.pcn-career-card__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.pcn-career-card__title a {
+  color: var(--ink-1);
+  transition: color 0.15s ease;
+}
+.pcn-career-card__title a:hover {
+  color: var(--blue);
+}
+.pcn-career-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+.pcn-career-pill {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+.pcn-career-card__summary {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin-bottom: 1.25rem;
+}
+.pcn-career-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f1f3f5;
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+/* -------------------- modern contact page -------------------- */
+.contact-section.ftco-section { padding: var(--space-xl, 4rem) 0; }
+
+/* Four cards, equal height (grid rows stretch), with the two longest values
+   (email, website) given more of the row so they stay on one line at 1200px. */
+.pcn-contact-info-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.1fr 1.4fr 1.1fr;
+  gap: 1.5rem;
+  margin-bottom: var(--space-lg, 3rem);
+}
+@media (max-width: 991.98px) {
+  .pcn-contact-info-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 575.98px) {
+  .pcn-contact-info-grid { grid-template-columns: 1fr; }
+}
+.pcn-contact-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(11, 27, 43, .04), 0 4px 12px rgba(11, 27, 43, .06);
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
+}
+.pcn-contact-card:hover,
+.pcn-contact-card:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 2px 4px rgba(11, 27, 43, .06), 0 12px 28px rgba(18, 70, 126, .14);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pcn-contact-card { transition: box-shadow .18s ease, border-color .18s ease; }
+  .pcn-contact-card:hover,
+  .pcn-contact-card:focus-within { transform: none; }
+}
+.pcn-contact-card__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(4, 125, 214, .1);
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.pcn-contact-card__icon svg { width: 20px; height: 20px; }
+.pcn-contact-card > div:last-child { min-width: 0; }
+.pcn-contact-card__label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-bottom: .25rem;
+}
+.pcn-contact-card__val {
+  font-size: 15px;
+  color: var(--ink-1);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+.pcn-contact-card__val a { color: var(--ink-1); transition: color .15s ease; }
+.pcn-contact-card__val a:hover { color: var(--blue); }
+
+.pcn-contact-map {
+  display: block;
+  border: 0;
+  border-radius: 16px;
+  min-height: 320px;
+  margin-top: var(--space-lg, 3rem);
+  box-shadow: 0 1px 2px rgba(11, 27, 43, .04), 0 4px 12px rgba(11, 27, 43, .06);
+}
+
+/* -------------------- lawyer profile -------------------- */
+.pcn-lawyer-portrait {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+  margin-bottom: 2rem;
+}
+.pcn-lawyer-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 600;
+  color: var(--ink-1);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.pcn-lawyer-role {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.pcn-qualification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+.pcn-qualification-list li {
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 15px;
+  color: var(--ink-1);
+}
+.pcn-qualification-list li:last-child {
+  border-bottom: none;
+}
+.pcn-qualification-list li::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+/* -------------------- service detail components -------------------- */
+.pcn-featured-media {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+}
+.pcn-featured-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.pcn-help-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--blue);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+}
+.pcn-help-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--ink-1);
+}
+.pcn-help-card p {
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* -------------------- article author box -------------------- */
+.pcn-author-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
+}
+.pcn-author-avatar img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(11, 27, 43, 0.1);
+}
+
+/* -------------------- document panel -------------------- */
+.pcn-document-panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 2px rgba(11, 27, 43, 0.04),
+    0 4px 12px rgba(11, 27, 43, 0.06);
 }

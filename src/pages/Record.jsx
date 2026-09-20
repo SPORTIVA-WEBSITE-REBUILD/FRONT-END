@@ -130,10 +130,8 @@ export default function Record() {
             />
           )}
 
-          <div className="row" style={isPlaceholderData ? { opacity: 0.6 } : undefined}>
-            {cases.map((c) => (
-              <div className="col-md-4 ftco-animate" key={c.slug}><CaseCard item={c} /></div>
-            ))}
+          <div className="pcn-case-grid" style={isPlaceholderData ? { opacity: 0.6 } : undefined}>
+            {cases.map((c) => <CaseCard item={c} key={c.slug} />)}
           </div>
 
           {meta && <Pagination page={meta.page} pages={meta.pages} />}

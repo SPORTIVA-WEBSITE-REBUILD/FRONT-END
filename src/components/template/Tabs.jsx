@@ -1,57 +1,88 @@
-import { useEffect, useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 /**
- * The about block's pill tabs (`.tabulation-2`), with Bootstrap's tab
- * behaviour: the chosen pane becomes `active`, then `show` on the next frame
- * so `.fade` transitions it in.
+ * A tab set following the WAI-ARIA tabs pattern with automatic activation:
+ * arrow keys move focus and switch the panel in the same step, Home and End
+ * jump to the ends, and only the selected tab is in the tab order (roving
+ * tabindex) so Tab steps past the set rather than through every tab.
+ *
+ * Every panel stays in the layout, stacked in one grid cell, so the set is
+ * always as tall as its tallest panel and nothing below moves when the tab
+ * changes. Inactive panels carry `hidden`, which keeps them out of the
+ * accessibility tree and out of the tab order; app.css then overrides the
+ * display:none that `hidden` implies with visibility:hidden, so they still
+ * take part in sizing the grid. Dropping either half brings the jumping back.
+ *
+ * `item.extra` renders after the paragraph — the record tab uses it to hang a
+ * live count off content that is otherwise plain text from the CMS.
+ *
+ * `panelsRef` and `panelMinHeight` are how a parent that needs the panel set
+ * to line up against something else of its own (a photograph, in
+ * AboutBlock.jsx) gets a hook into the panels host without Tabs needing to
+ * know anything about that geometry itself.
  */
-export default function Tabs({ items = [] }) {
+export default function Tabs({ items = [], panelsRef, panelMinHeight }) {
   const id = useId().replace(/:/g, '');
   const [active, setActive] = useState(0);
-  const [shown, setShown] = useState(0);
-
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setShown(active));
-    return () => cancelAnimationFrame(frame);
-  }, [active]);
+  const tabRefs = useRef([]);
 
   if (!items.length) return null;
 
-  const itemClass = (i) => {
-    if (i === 0) return 'nav-item mb-md-0 mb-2';
-    if (i === items.length - 1) return 'nav-item';
-    return 'nav-item px-lg-2 mb-md-0 mb-2';
+  const focusTab = (i) => {
+    setActive(i);
+    tabRefs.current[i]?.focus();
+  };
+
+  const onKeyDown = (e) => {
+    const last = items.length - 1;
+    const keys = {
+      ArrowRight: active === last ? 0 : active + 1,
+      ArrowLeft: active === 0 ? last : active - 1,
+      Home: 0,
+      End: last,
+    };
+    if (!(e.key in keys)) return;
+    e.preventDefault();
+    focusTab(keys[e.key]);
   };
 
   return (
-    <div className="tabulation-2 mt-4">
-      <ul className="nav nav-pills nav-fill d-md-flex d-block" role="tablist">
+    <div className="pcn-tabs">
+      <div className="pcn-tabs__list" role="tablist" onKeyDown={onKeyDown}>
         {items.map((item, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <li className={itemClass(i)} key={i} role="presentation">
-            <a
-              className={`nav-link${i === active ? ' active' : ''} py-2${i === items.length - 1 && i > 0 ? ' mb-md-0 mb-2' : ''}`}
-              href={`#${id}-${i}`}
-              role="tab"
-              aria-selected={i === active}
-              aria-controls={`${id}-${i}`}
-              onClick={(e) => { e.preventDefault(); setActive(i); }}
-            >
-              {item.title}
-            </a>
-          </li>
+          <button
+            key={item.title}
+            type="button"
+            ref={(el) => { tabRefs.current[i] = el; }}
+            className={`pcn-tabs__tab${i === active ? ' is-active' : ''}`}
+            role="tab"
+            id={`${id}-tab-${i}`}
+            aria-selected={i === active}
+            aria-controls={`${id}-panel-${i}`}
+            tabIndex={i === active ? 0 : -1}
+            onClick={() => setActive(i)}
+          >
+            {item.title}
+          </button>
         ))}
-      </ul>
-      <div className="tab-content bg-light rounded mt-2">
+      </div>
+
+      <div
+        className="pcn-tabs__panels"
+        ref={panelsRef}
+        style={panelMinHeight ? { minHeight: panelMinHeight } : undefined}
+      >
         {items.map((item, i) => (
           <div
-            // eslint-disable-next-line react/no-array-index-key
-            key={i}
-            id={`${id}-${i}`}
+            key={item.title}
+            id={`${id}-panel-${i}`}
             role="tabpanel"
-            className={`tab-pane container p-0${i === 0 ? '' : ' fade'}${i === active ? ' active' : ''}${i === shown && i === active ? ' show' : ''}`}
+            aria-labelledby={`${id}-tab-${i}`}
+            className={`pcn-tabs__panel${i === active ? ' is-active' : ''}`}
+            hidden={i !== active}
           >
-            <p>{item.text}</p>
+            {item.text && <p className="pcn-tabs__text">{item.text}</p>}
+            {item.extra}
           </div>
         ))}
       </div>

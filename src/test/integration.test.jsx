@@ -56,6 +56,8 @@ const CASES = {
     partyRepresented: 'athlete',
     outcome: 'won',
     summary: 'Sanction set aside on appeal.',
+    holding: 'The panel found the sanction disproportionate and set it aside.',
+    anonymised: false,
   }],
   meta: { page: 1, limit: 12, total: 1, pages: 1 },
 };
@@ -104,18 +106,20 @@ describe('the site renders content from the API, not from hardcoded copy', () =>
     renderWithProviders(<Record />, { route: '/record' });
 
     await waitFor(() => {
-      expect(screen.getAllByText('Appeal against a sanction').length).toBeGreaterThan(0);
+      expect(screen.getByText('Appeal against a sanction')).toBeInTheDocument();
     });
-    // The template's tile (title on hover, category underneath) plus the
-    // preview caption: forum · year, outcome, two lines of summary, Read more.
-    for (const link of screen.getAllByRole('link', { name: 'Appeal against a sanction' })) {
-      expect(link).toHaveAttribute('href', '/record/appeal-against-a-sanction');
-    }
-    expect(screen.getByText('CAS', { selector: '.case .text span' })).toBeInTheDocument();
-    expect(screen.getByText('CAS · 2026', { exact: false, selector: '.pcn-case__meta' })).toBeInTheDocument();
-    expect(screen.getByText('Won', { selector: '.pcn-outcome--won' })).toBeInTheDocument();
-    expect(screen.getByText('Sanction set aside on appeal.', { selector: '.pcn-clamp' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Read more' })).toHaveAttribute('href', '/record/appeal-against-a-sanction');
+    // The whole card is the link — one link, not a title link plus a
+    // separate "Read more".
+    const link = screen.getByRole('link', { name: /Appeal against a sanction/ });
+    expect(link).toHaveAttribute('href', '/record/appeal-against-a-sanction');
+    expect(link.querySelector('img')).not.toBeInTheDocument();
+    expect(screen.getByText('CAS · 2026', { selector: '.pcn-case__meta' })).toBeInTheDocument();
+    expect(link.querySelector('.pcn-outcome--won').textContent).toContain('Won');
+    expect(screen.getByText(
+      'The panel found the sanction disproportionate and set it aside.',
+      { selector: '.pcn-case__holding' },
+    )).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Read more' })).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Case Studies', level: 1 })).toBeInTheDocument();
   });
 

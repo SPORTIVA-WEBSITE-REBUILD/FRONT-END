@@ -12,6 +12,16 @@ global.IntersectionObserver = class {
 
 window.scrollTo = () => {};
 
+// jsdom has no ResizeObserver either, and AboutBlock's alignment hook
+// constructs one on every mount. jsdom's getBoundingClientRect() always
+// returns a zero rect, so there is nothing meaningful for it to report
+// regardless — this exists so constructing it does not throw.
+global.ResizeObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 if (!window.matchMedia) {
   window.matchMedia = (query) => ({
     matches: false, media: query, addEventListener() {}, removeEventListener() {},

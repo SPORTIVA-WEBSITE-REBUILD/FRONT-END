@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { backgroundStyle } from '../SmartImage.jsx';
-import { useCommon } from '../../hooks/useContent.js';
-import { useParallax } from '../../hooks/useAnimations.jsx';
+import { Link } from "react-router-dom";
+import { backgroundStyle } from "../SmartImage.jsx";
+import { useCommon } from "../../hooks/useContent.js";
+import { useParallax } from "../../hooks/useAnimations.jsx";
 
 /**
  * The inner-page banner (`section.hero-wrap.hero-wrap-2`): title, then a
@@ -15,8 +15,12 @@ export default function PageBanner({ title, crumb, image, parent }) {
   return (
     <section
       ref={ref}
-      className={`hero-wrap hero-wrap-2${image ? '' : ' pcn-banner-fallback'}`}
-      style={backgroundStyle(image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
+      className={`hero-wrap hero-wrap-2 pcn-page-banner${image ? "" : " pcn-banner-fallback"}`}
+      style={backgroundStyle(image, null, 1920, {
+        height: 1080,
+        crop: "fill",
+        gravity: "auto",
+      })}
       data-stellar-background-ratio="0.5"
     >
       <div className="overlay" />
@@ -25,13 +29,24 @@ export default function PageBanner({ title, crumb, image, parent }) {
           <div className="col-md-9 ftco-animate pb-5 text-center">
             <h1 className="mb-3 bread">{title}</h1>
             <p className="breadcrumbs">
-              <span className="mr-2"><Link to="/">{common.breadcrumbHome} <i className="ion-ios-arrow-forward" /></Link></span>{' '}
+              <span className="mr-2">
+                <Link to="/">
+                  {common.breadcrumbHome}{" "}
+                  <i className="ion-ios-arrow-forward" />
+                </Link>
+              </span>{" "}
               {parent?.label && (
                 <>
-                  <span className="mr-2"><Link to={parent.href}>{parent.label} <i className="ion-ios-arrow-forward" /></Link></span>{' '}
+                  <span className="mr-2">
+                    <Link to={parent.href}>
+                      {parent.label} <i className="ion-ios-arrow-forward" />
+                    </Link>
+                  </span>{" "}
                 </>
               )}
-              <span>{crumb || title} <i className="ion-ios-arrow-forward" /></span>
+              <span>
+                {crumb || title} <i className="ion-ios-arrow-forward" />
+              </span>
             </p>
           </div>
         </div>
