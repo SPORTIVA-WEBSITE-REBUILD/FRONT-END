@@ -5,6 +5,7 @@ import Layout from './layout/Layout.jsx';
 // Each route is its own chunk, so a visitor reading one article never downloads
 // the case archive's code (CLAUDE.md section 11).
 const Home = lazy(() => import('./pages/Home.jsx'));
+const About = lazy(() => import('./pages/About.jsx'));
 const Services = lazy(() => import('./pages/Services.jsx'));
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail.jsx'));
 const Record = lazy(() => import('./pages/Record.jsx'));
@@ -25,6 +26,7 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
         <Route path="services" element={<Services />} />
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="record" element={<Record />} />

@@ -30,21 +30,12 @@ Lagos and Abuja are the firm's own offices and would need no clearance.
 
 ## Hero photography
 
-Two photographs ship in the hero rotation, seeded as media records
-`hero-forum` and `hero-gift`:
-
-| File | Alt text as seeded | Cleared for use? |
-|---|---|---|
-| `public/hero/hero-forum.jpg` | "Pius Ndubuokwu speaking to Nigerian broadcast media at the Football Law Annual Moot." | ☐ |
-| `public/hero/hero-gift.jpg` | "A certificate of appreciation presented at the Football Law Annual Moot." | ☐ |
-
-Both show identifiable people. `hero-gift.jpg` also shows a named individual's
-certificate at close range. The firm should confirm it holds the right to
-publish both images, and whether anyone pictured should be credited, named, or
-asked first.
-
-`public/hero/hero-border.jpg` is still in the repository but is no longer used
-by any slide. It can be deleted once the firm confirms it is not wanted.
+The hero rotates four event photographs, seeded as media records `hero-acfta`,
+`hero-table`, `hero-crowd` and `hero-podium` (files in `public/hero/`). Each
+shows identifiable people at an industry event, with their own eyebrow and
+paragraph. The firm should confirm it holds the right to publish all four, and
+whether anyone pictured should be credited, named, or asked first. The
+earlier stadium, forum and certificate images and the map slide are retired.
 
 ## Rewritten copy
 

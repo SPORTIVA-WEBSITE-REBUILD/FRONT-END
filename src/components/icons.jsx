@@ -79,6 +79,14 @@ const ICONS = {
       <path d="M5 20.5V17h4v-3h4v-3h4V8h3" />
     </>
   ),
+  // A test tube, half full: the sample every anti-doping case turns on.
+  'anti-doping': (
+    <>
+      <path d="M9 3h6" />
+      <path d="M10 3v6.5L5.7 18a2.4 2.4 0 0 0 2.1 3.5h8.4a2.4 2.4 0 0 0 2.1-3.5L14 9.5V3" />
+      <path d="M7.6 15h8.8" />
+    </>
+  ),
   // A shield with a band across it.
   'data-protection-and-technology': (
     <>

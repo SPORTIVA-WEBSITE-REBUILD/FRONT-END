@@ -4,6 +4,7 @@ import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import Loader from '../components/template/Loader.jsx';
 import NewsletterBand from '../components/template/NewsletterBand.jsx';
+import ArticlesPopup from '../components/ArticlesPopup.jsx';
 import { LoadingSection } from '../components/states.jsx';
 import { useRevealAll } from '../hooks/useAnimations.jsx';
 
@@ -46,6 +47,7 @@ export default function Layout() {
       </main>
       <Footer />
       <Loader />
+      <ArticlesPopup />
     </>
   );
 }

@@ -31,7 +31,7 @@ export function organisation(settings = {}) {
     ...(settings.tagline ? { description: settings.tagline } : {}),
     ...(imageUrl(settings.logo, 600) ? { logo: imageUrl(settings.logo, 600) } : {}),
     ...(contact.email ? { email: contact.email } : {}),
-    ...(contact.phone ? { telephone: contact.phone } : {}),
+    ...(contact.phone ? { telephone: contact.phone2 ? [contact.phone, contact.phone2] : contact.phone } : {}),
     ...(socials.length ? { sameAs: socials } : {}),
   };
 

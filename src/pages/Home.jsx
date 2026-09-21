@@ -81,9 +81,13 @@ export default function Home() {
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const activeSlide = reduceMotion ? 0 : wordIndex;
   const phrase = wordItems[activeSlide]?.title;
-  // The first slide is the map, and its artwork doubles as the hero's own
-  // background so the parallax hook has something to drift.
-  const mapItem = wordItems[0];
+  // A slide may carry its own small heading and paragraph; the first three
+  // do not, and keep the hero's.
+  const slideEyebrow = wordItems[activeSlide]?.value || hero.subheading;
+  const slideBody = wordItems[activeSlide]?.text || hero.body;
+  // The first slide's photograph doubles as the hero's own background so the
+  // parallax hook has something to drift.
+  const firstSlide = wordItems[0];
   const cases = casesResult?.data || [];
   // Total published cases, straight off the archive query the record section
   // already runs — the "Why the firm" record tab prints it rather than a
@@ -102,38 +106,35 @@ export default function Home() {
       <div
         ref={heroRef}
         className="hero-wrap pcn-hero"
-        // The map carries the hero's own background too, so useParallax — which
+        // The first slide carries the hero's own background too, so useParallax — which
         // drifts backgroundPositionY — has something to move.
-        style={backgroundStyle(mapItem?.image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
+        style={backgroundStyle(firstSlide?.image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
         data-stellar-background-ratio="0.5"
       >
         {wordItems.map((item, i) => {
           const isActive = i === activeSlide;
-          const isMap = i === 0;
+          const isFirst = i === 0;
           // Photographs wait for first paint so they never compete with the
           // headline for the opening frame, and never load at all when the
           // reader has asked for reduced motion (first slide only).
-          if (!isMap && (!painted || reduceMotion)) return null;
+          if (!isFirst && (!painted || reduceMotion)) return null;
           return (
             <div
               key={item.title}
-              className={`pcn-hero-scene${isMap ? ' pcn-hero-scene--map' : ''}${isActive ? ' is-active' : ''}`}
+              className={`pcn-hero-scene${isActive ? ' is-active' : ''}`}
               style={backgroundStyle(item.image, null, 1920, { height: 1080, crop: 'fill', gravity: 'auto' })}
               aria-hidden="true"
             />
           );
         })}
         {/*
-          No .overlay element. The photographs already carry their own
-          left-to-right navy scrim, and the map slide's scrim is the third of
-          the light layers painted inside .pcn-hero-scene--map — it has to live
-          in the transformed layer so it drifts with the artwork rather than
-          sitting still over a moving map.
+          No .overlay element. Each photograph already carries its own
+          neutral scrim, baked into the image.
         */}
         <div className="container">
           <div className="row no-gutters slider-text align-items-center justify-content-start">
             <div className="col-md-6 ftco-animate">
-              {hero.subheading && <h2 className="subheading">{hero.subheading}</h2>}
+              {slideEyebrow && <h2 className="subheading">{slideEyebrow}</h2>}
               <h1>
                 {hero.heading}{' '}
                 {phrase && (
@@ -142,7 +143,7 @@ export default function Home() {
                   <span key={activeSlide} className="pcn-hero-phrase">{phrase}</span>
                 )}
               </h1>
-              {hero.body && <p className="mb-4">{hero.body}</p>}
+              {slideBody && <p className="mb-4">{slideBody}</p>}
               {hero.cta?.label && (
                 <p>
                   <SmartLink href={hero.cta.href} className="btn btn-primary mr-md-4 py-2 px-4">

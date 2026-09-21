@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLayout, useServices, useSiteSettings } from '../hooks/useContent.js';
 import { safeHref, isExternal } from '../lib/links.js';
 import { withYear } from '../lib/format.js';
+import { phonesOf, telHref } from '../lib/contact.js';
 import SocialIcon, { hasIcon, platformLabel } from '../components/SocialIcon.jsx';
 
 /**
@@ -81,13 +82,13 @@ export default function Footer() {
                   {contact.address && (
                     <li><span className="icon icon-map-marker" /><span className="text">{contact.address}</span></li>
                   )}
-                  {contact.phone && (
-                    <li>
-                      <a href={`tel:${contact.phone.replace(/[^\d+]/g, '')}`}>
-                        <span className="icon icon-phone" /><span className="text">{contact.phone}</span>
+                  {phonesOf(contact).map((n) => (
+                    <li key={n}>
+                      <a href={telHref(n)}>
+                        <span className="icon icon-phone" /><span className="text">{n}</span>
                       </a>
                     </li>
-                  )}
+                  ))}
                   {contact.email && (
                     <li>
                       <a href={`mailto:${contact.email}`}>
