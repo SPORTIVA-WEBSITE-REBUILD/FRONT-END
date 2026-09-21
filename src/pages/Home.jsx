@@ -213,6 +213,13 @@ export default function Home() {
                 <div className="col-lg-4 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
               ))}
             </div>
+            {teamSection.cta?.label && (
+              <p className="text-center mt-4 mb-0">
+                <SmartLink href={teamSection.cta.href || '/lawyers'} className="btn btn-primary py-3 px-4">
+                  {teamSection.cta.label}
+                </SmartLink>
+              </p>
+            )}
           </div>
         </section>
       )}
