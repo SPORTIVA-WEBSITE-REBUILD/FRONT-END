@@ -169,7 +169,7 @@ export function TeamCard({ lawyer, compact }) {
       <FlipCard lawyer={lawyer} compact={compact} />
       {lawyer.bioPreview && <p className="pcn-team__bio pcn-clamp pcn-clamp--2">{lawyer.bioPreview}</p>}
       <p className="pcn-team__more">
-        <Link to={`/lawyers/${lawyer.slug}`} className="btn btn-primary pcn-team__cta">{common.viewProfile}<span aria-hidden="true"> →</span></Link>
+        <Link to={`/lawyers/${lawyer.slug}`} className="btn btn-primary pcn-cta">{common.viewProfile}<span aria-hidden="true" className="ml-2">→</span></Link>
       </p>
     </div>
   );
