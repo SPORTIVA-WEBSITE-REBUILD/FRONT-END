@@ -72,6 +72,7 @@ describe('the practice-area icons', () => {
       'sports-governance',
       'player-representation',
       'sports-infrastructure-advisory',
+      'anti-doping',
       'data-protection-and-technology',
     ]);
   });

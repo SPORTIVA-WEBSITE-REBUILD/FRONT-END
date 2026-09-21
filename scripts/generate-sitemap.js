@@ -24,6 +24,7 @@ const OUT = path.resolve('dist');
 const STATIC_ROUTES = [
   ['/', 1.0, 'weekly'],
   ['/services', 0.9, 'monthly'],
+  ['/about', 0.7, 'monthly'],
   ['/record', 0.9, 'weekly'],
   ['/gallery', 0.5, 'monthly'],
   ['/insights', 0.9, 'weekly'],

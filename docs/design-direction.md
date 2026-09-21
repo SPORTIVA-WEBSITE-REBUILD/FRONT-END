@@ -468,7 +468,11 @@ hero's height rather than the viewport for the same reason.
 `.js-fullheight` still exists for the inner-page banners, which remain
 viewport-sized.
 
-## The hero map
+## The hero map (retired)
+
+> The map slide and its light layers were removed when the hero moved to four
+> event photographs, each carrying its own scrim. This section is kept as a
+> record of how the map was built and why.
 
 The first hero slide is **the firm's own artwork**, not a map drawn in code:
 the media record `pcn-sportiva/hero-beyond`, served from Cloudinary. A world

@@ -1,16 +1,15 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { waitFor } from '@testing-library/react';
+import { waitFor, act } from '@testing-library/react';
 import Home from '../pages/Home.jsx';
 import { renderWithProviders, mockApi } from './utils.jsx';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
-const MAP_URL = 'https://res.cloudinary.com/pkesmajk/image/upload/v1/pcn-sportiva/hero-beyond.jpg';
+const photo = (name) => ({ secureUrl: `/hero/${name}.jpg`, alt: name, width: 1920, height: 1080 });
 
 /**
- * The home page as the seed leaves it: the firm's map artwork, then two
- * photographs. The map's rings are painted into the image, so the slide is a
- * background like the other two rather than anything drawn in code.
+ * The home page as the seed leaves it: four event photographs, each with its
+ * own phrase, small heading and paragraph.
  */
 const HOME_PAGE = {
   data: {
@@ -23,10 +22,12 @@ const HOME_PAGE = {
         subheading: 'PCN Sportiva LP',
         body: 'A boutique sports law practice.',
         cta: { label: 'Speak to us', href: '/contact' },
+        value: '100',
         items: [
-          { title: 'the continent', image: { secureUrl: MAP_URL, alt: 'Map', width: 1920, height: 1080 } },
-          { title: 'every forum', image: { secureUrl: '/hero/hero-forum.jpg', alt: 'Forum', width: 1920, height: 1080 } },
-          { title: 'every border', image: { secureUrl: '/hero/hero-gift.jpg', alt: 'Gift', width: 1920, height: 1080 } },
+          { title: 'every event', value: 'Recognition', text: 'Recognised at events.', image: photo('hero-acfta') },
+          { title: 'the table', value: 'Client Relationships', text: 'Close relationships.', image: photo('hero-table') },
+          { title: 'the room', value: 'Industry Presence', text: 'Present where decisions are made.', image: photo('hero-crowd') },
+          { title: 'the stage', value: 'Thought Leadership', text: 'Contributing to the discussion.', image: photo('hero-podium') },
         ],
       },
     ],
@@ -36,49 +37,66 @@ const HOME_PAGE = {
 afterEach(() => { vi.unstubAllGlobals(); });
 
 describe('the hero shell', () => {
-  it('renders the three seeded slides, the map among them', async () => {
+  it('renders the four event photographs, in order, and nothing else', async () => {
     vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
     const { container } = renderWithProviders(<Home />);
 
-    await waitFor(() => expect(container.querySelectorAll('.pcn-hero-scene').length).toBe(3));
+    await waitFor(() => expect(container.querySelectorAll('.pcn-hero-scene').length).toBe(4));
 
-    const scenes = container.querySelectorAll('.pcn-hero-scene');
-    expect(scenes[0].getAttribute('style')).toContain('hero-beyond.jpg');
-    expect(scenes[1].getAttribute('style')).toContain('hero-forum.jpg');
-    expect(scenes[2].getAttribute('style')).toContain('hero-gift.jpg');
-  });
-
-  it('marks the map slide so the light layers attach to the drifting layer', async () => {
-    vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
-    const { container } = renderWithProviders(<Home />);
-
-    await waitFor(() => expect(container.querySelector('.pcn-hero-scene--map')).toBeTruthy());
-    const scenes = container.querySelectorAll('.pcn-hero-scene');
-    // Only the first slide. The photographs carry their own scrim and get no
-    // highlight, and the layers must ride the transformed layer, not the hero.
-    expect(container.querySelectorAll('.pcn-hero-scene--map')).toHaveLength(1);
-    expect(scenes[0].classList.contains('pcn-hero-scene--map')).toBe(true);
+    const scenes = [...container.querySelectorAll('.pcn-hero-scene')].map((s) => s.getAttribute('style'));
+    ['hero-acfta', 'hero-table', 'hero-crowd', 'hero-podium'].forEach((name, i) => {
+      expect(scenes[i]).toContain(`${name}.jpg`);
+    });
+    // The retired map and stock slides leave nothing behind.
+    expect(container.querySelector('.pcn-hero-scene--map')).toBeNull();
+    expect(scenes.join('')).not.toMatch(/hero-(forum|gift|border|beyond)/);
   });
 
   it('gives the hero its own background so the parallax hook has something to drift', async () => {
     vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
     const { container } = renderWithProviders(<Home />);
 
-    // .hero-wrap exists from the first render, so wait for a node that only
-    // appears once the page data has arrived.
-    await waitFor(() => expect(container.querySelector('.pcn-hero-scene--map')).toBeTruthy());
+    await waitFor(() => expect(container.querySelector('.pcn-hero-scene')).toBeTruthy());
     // useParallax drifts backgroundPositionY, which needs a background image.
-    expect(container.querySelector('.hero-wrap').style.backgroundImage).toContain('hero-beyond.jpg');
+    expect(container.querySelector('.hero-wrap').style.backgroundImage).toContain('hero-acfta.jpg');
   });
 
   it('lays no second overlay over the slides', async () => {
     vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
     const { container } = renderWithProviders(<Home />);
 
-    await waitFor(() => expect(container.querySelector('.pcn-hero-scene--map')).toBeTruthy());
-    // The map's scrim is the third light layer, inside the transformed layer;
-    // the photographs already carry their own.
+    await waitFor(() => expect(container.querySelector('.pcn-hero-scene')).toBeTruthy());
     expect(container.querySelectorAll('.hero-wrap > .overlay')).toHaveLength(0);
+  });
+
+  it('shows the first slide\'s own eyebrow and paragraph on load', async () => {
+    vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
+    const { container } = renderWithProviders(<Home />);
+
+    await waitFor(() => expect(container.querySelector('.pcn-hero-phrase')).toBeTruthy());
+    expect(container.querySelector('.pcn-hero .subheading').textContent).toBe('Recognition');
+    expect(container.querySelector('.pcn-hero p.mb-4').textContent).toBe('Recognised at events.');
+  });
+
+  it('cycles through all four slides and loops back to the first', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      vi.stubGlobal('fetch', mockApi({ '/pages/home': HOME_PAGE }));
+      const { container } = renderWithProviders(<Home />);
+      await waitFor(() => expect(container.querySelector('.pcn-hero-phrase')).toBeTruthy());
+
+      const phrase = () => container.querySelector('.pcn-hero-phrase').textContent;
+      const seen = [phrase()];
+      // Step the clock in small increments until the phrase changes, so the
+      // test does not depend on the exact length of a slide.
+      for (let guard = 0; seen.length < 5 && guard < 400; guard += 1) {
+        await act(async () => { vi.advanceTimersByTime(250); });
+        if (phrase() !== seen[seen.length - 1]) seen.push(phrase());
+      }
+      expect(seen).toEqual(['every event', 'the table', 'the room', 'the stage', 'every event']);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('shows the active slide\'s phrase, with no typewriter left behind', async () => {
@@ -90,7 +108,7 @@ describe('the hero shell', () => {
     const phrase = container.querySelector('.pcn-hero-phrase');
     // One phrase at a time — the first slide's, on load.
     expect(container.querySelectorAll('.pcn-hero-phrase')).toHaveLength(1);
-    expect(phrase.textContent).toBe('the continent');
+    expect(phrase.textContent).toBe('every event');
     // The heading keeps its fixed half.
     expect(container.querySelector('h1').textContent).toContain('Sports law, across');
     // Nothing of the typewriter or its blinking cursor survives.
@@ -114,7 +132,7 @@ describe('the hero shell', () => {
 });
 
 describe('the seeded hero, against the running API', () => {
-  it('serves three hero items, the first the firm\'s map artwork', async () => {
+  it('serves four hero items, all event photographs', async () => {
     let page;
     try {
       const res = await fetch(`${API}/public/pages/home`);
@@ -125,10 +143,9 @@ describe('the seeded hero, against the running API', () => {
     }
 
     const hero = page.sections.find((s) => s.key === 'hero');
-    expect(hero.items).toHaveLength(3);
-    expect(hero.items.map((i) => i.title)).toEqual(['the continent', 'every forum', 'every border']);
-    expect(hero.items[0].image.secureUrl).toContain('hero-beyond');
-    expect(hero.items[1].image.secureUrl).toBe('/hero/hero-forum.jpg');
-    expect(hero.items[2].image.secureUrl).toBe('/hero/hero-gift.jpg');
+    expect(hero.items).toHaveLength(4);
+    expect(hero.items.map((i) => i.image.secureUrl)).toEqual([
+      '/hero/hero-acfta.jpg', '/hero/hero-table.jpg', '/hero/hero-crowd.jpg', '/hero/hero-podium.jpg',
+    ]);
   });
 });

@@ -56,7 +56,7 @@ describe.skipIf(!apiUp)('live pages render real content from the running API', (
     const { text } = await renderSettled(<Home />);
     console.log(`  HOME     ${text.length} chars`);
 
-    expect(text).toMatch(/boutique sports law practice/i);      // firm copy
+    expect(text).toMatch(/recognised at major sports/i);      // firm copy (hero slide)
     expect(text).toMatch(/Sports Dispute Resolution/);          // services
     expect(text).toMatch(/FIFA DRC/);                            // case record
     expect(text).toMatch(/Reliable Solutions for Your Legal Matters/);  // consultation block

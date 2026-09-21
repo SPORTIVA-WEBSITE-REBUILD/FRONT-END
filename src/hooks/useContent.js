@@ -1,24 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiGet, qs } from '../lib/api.js';
 
-// Content changes rarely, so cached data stays fresh for five minutes and the
-// site does not refetch on every navigation (CLAUDE.md section 11).
+// Cached data stays fresh for 30 seconds, so navigating around does not refetch
+// constantly, but something an editor has just published shows up on the next
+// visit or when the tab is refocused, not five minutes later (CLAUDE.md section 11).
 const CONTENT_OPTIONS = {
-  staleTime: 5 * 60 * 1000,
+  staleTime: 30 * 1000,
   gcTime: 30 * 60 * 1000,
   retry: 1,
-  refetchOnWindowFocus: false,
+  refetchOnWindowFocus: true,
 };
 
 export function useSiteSettings() {
   return useQuery({
     queryKey: ['settings'],
     queryFn: ({ signal }) => apiGet('/settings', { signal }).then((r) => r.data),
-    // The shell needs this on every page; keep it warm for the whole session.
-    staleTime: 15 * 60 * 1000,
+    // The shell needs this on every page; keep it warm for the whole session,
+    // but not stale for a quarter of an hour after a settings change.
+    staleTime: 60 * 1000,
     gcTime: Infinity,
     retry: 1,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
   });
 }
 

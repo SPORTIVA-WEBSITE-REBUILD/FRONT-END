@@ -2,6 +2,7 @@ import EnquiryForm from './EnquiryForm.jsx';
 import { SectionHeading } from './cards.jsx';
 import { PhoneIcon, MailIcon, PinIcon } from '../icons.jsx';
 import { useLayout } from '../../hooks/useContent.js';
+import { phonesOf, telHref } from '../../lib/contact.js';
 
 /**
  * The two-panel card: a light column with the firm's own words and real
@@ -18,6 +19,7 @@ export function ContactPanels({ section, source }) {
   const { settings } = useLayout();
   const contact = settings.contact || {};
   const labels = section.labels || {};
+  const phones = phonesOf(contact);
 
   return (
     <div className="pcn-consultation__grid">
@@ -26,14 +28,14 @@ export function ContactPanels({ section, source }) {
 
         {section.value && <blockquote className="pcn-consultation__quote">{section.value}</blockquote>}
 
-        {(contact.phone || contact.email || contact.address) && (
+        {(phones.length > 0 || contact.email || contact.address) && (
           <div className="pcn-consultation__contact">
-            {contact.phone && (
+            {phones.length > 0 && (
               <p className="pcn-consultation__contact-row">
                 <span className="pcn-consultation__contact-icon"><PhoneIcon /></span>
                 <span>
                   <span className="pcn-consultation__contact-label">{labels.callUs || 'Call Us'}</span>
-                  <a href={`tel:${contact.phone.replace(/[^\d+]/g, '')}`}>{contact.phone}</a>
+                  {phones.map((n) => <a key={n} href={telHref(n)}>{n}</a>)}
                 </span>
               </p>
             )}

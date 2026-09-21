@@ -3,6 +3,7 @@ import PageBanner from "../components/template/PageBanner.jsx";
 import { ContactPanels } from "../components/template/Consultation.jsx";
 import { useLayout, usePage, section } from "../hooks/useContent.js";
 import { safeHref } from "../lib/links.js";
+import { phonesOf, telHref } from "../lib/contact.js";
 import { graph, breadcrumbs } from "../lib/structuredData.js";
 
 /** contact.html */
@@ -82,7 +83,7 @@ export default function Contact() {
                     </div>
                   </div>
                 )}
-                {contact.phone && (
+                {phonesOf(contact).length > 0 && (
                   <div className="pcn-contact-card">
                     <div className="pcn-contact-card__icon">
                       <span className="icon icon-phone" />
@@ -92,9 +93,9 @@ export default function Contact() {
                         {labels.phone}
                       </div>
                       <p className="pcn-contact-card__val">
-                        <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}>
-                          {contact.phone}
-                        </a>
+                        {phonesOf(contact).map((n) => (
+                          <a key={n} href={telHref(n)} className="d-block">{n}</a>
+                        ))}
                       </p>
                     </div>
                   </div>
