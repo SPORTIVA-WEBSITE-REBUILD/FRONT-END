@@ -214,11 +214,11 @@ export default function Home() {
               ))}
             </div>
             {teamSection.cta?.label && (
-              <p className="text-center mt-4 mb-0">
-                <SmartLink href={teamSection.cta.href || '/lawyers'} className="btn btn-primary py-3 px-4">
+              <div className="pcn-cta-row">
+                <SmartLink href={teamSection.cta.href || '/lawyers'} className="btn btn-primary pcn-cta">
                   {teamSection.cta.label}
                 </SmartLink>
-              </p>
+              </div>
             )}
           </div>
         </section>
@@ -257,6 +257,13 @@ export default function Home() {
             <div className="row d-flex">
               {articles.map((a) => <BlogCard article={a} readMore={common.readMore} key={a.slug} />)}
             </div>
+            {insightsSection.cta?.label && (
+              <div className="pcn-cta-row">
+                <SmartLink href={insightsSection.cta.href || '/insights'} className="btn btn-primary pcn-cta">
+                  {insightsSection.cta.label}
+                </SmartLink>
+              </div>
+            )}
           </div>
         </section>
       )}
