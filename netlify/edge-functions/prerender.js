@@ -110,9 +110,14 @@ export default async function prerender(request, context) {
     // No page photo and no default set in Settings > SEO yet: fall back to
     // the site's own logo, so a shared link still shows a picture rather than
     // a bare text card. Replaced the moment an administrator sets a proper
-    // 1200x630 image in Settings > SEO, since that fallback is checked first,
-    // above.
-    if (!meta.imageUrl) meta.imageUrl = `${SITE}/favicon.png`;
+    // image in Settings > SEO, since that fallback is checked first, above.
+    // 600x600, not the 1200x630 a real photo gets transformed to — declaring
+    // the wrong size can make a client stretch or crop it oddly.
+    if (!meta.imageUrl) {
+      meta.imageUrl = `${SITE}/favicon.png`;
+      meta.imageWidth = 600;
+      meta.imageHeight = 600;
+    }
 
     const html = renderPreview(meta, { siteName, url: `${SITE}${pathname}`, ogType: route.ogType });
 
