@@ -73,6 +73,9 @@ describe('the practice-area icons', () => {
       'player-representation',
       'sports-infrastructure-advisory',
       'anti-doping',
+      'football-law',
+      'gaming-betting-esports',
+      'intellectual-property-services',
       'data-protection-and-technology',
     ]);
   });

@@ -76,6 +76,55 @@
   color: #666;
 }
 
+/*
+ * A structured list of numbered items (a service's "we cover X, Y, Z"
+ * breakdown) — a bold label per item, a filled numeral instead of the
+ * browser's plain "1.", and a rule between items so a long list still reads
+ * as discrete points rather than one dense paragraph. `<strong>` inside a
+ * list item's own text (the item's own label, written by whoever edited it
+ * in the dashboard) still renders as ordinary bold, not another numeral.
+ */
+.pcn-richtext ol {
+  counter-reset: pcn-list;
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+}
+.pcn-richtext ol > li {
+  counter-increment: pcn-list;
+  position: relative;
+  padding: 0.15rem 0 1.1rem 2.75rem;
+  border-top: 1px solid var(--line);
+}
+.pcn-richtext ol > li:first-child { border-top: none; padding-top: 0; }
+.pcn-richtext ol > li:not(:first-child) { padding-top: 1.1rem; }
+.pcn-richtext ol > li::before {
+  content: counter(pcn-list);
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: rgba(4, 125, 214, 0.1);
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+.pcn-richtext ol > li:first-child::before { top: 0.15rem; }
+.pcn-richtext ol > li > strong:first-child {
+  display: block;
+  color: var(--ink-1);
+  margin-bottom: 0.2rem;
+}
+.pcn-richtext ul {
+  padding-left: 1.25rem;
+  margin: 0 0 1.5rem;
+}
+
 /* The archive's filter controls. */
 .pcn-filters {
   background: #f8f9fa;

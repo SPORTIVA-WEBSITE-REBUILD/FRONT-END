@@ -87,6 +87,32 @@ const ICONS = {
       <path d="M7.6 15h8.8" />
     </>
   ),
+  // A football, drawn as a pentagon within a ring — the game, not a trophy.
+  'football-law': (
+    <>
+      <circle cx="12" cy="12" r="9.5" />
+      <path d="M12 6.5l4.1 3-1.6 4.8h-5l-1.6-4.8z" />
+      <path d="M12 6.5V3M16.1 9.5l3.2-2M14.5 14.3l1.9 3.4M9.5 14.3l-1.9 3.4M7.9 9.5l-3.2-2" />
+    </>
+  ),
+  // A game pad: body, two sticks, two face buttons.
+  'gaming-betting-esports': (
+    <>
+      <path d="M6 9.5h12a4 4 0 0 1 4 4.7l-.6 3a2.2 2.2 0 0 1-3.9.9l-1.6-2.1H8.1L6.5 18.1a2.2 2.2 0 0 1-3.9-.9l-.6-3A4 4 0 0 1 6 9.5z" />
+      <path d="M7.5 11.5v3M6 13h3" />
+      <circle cx="15.5" cy="12" r=".6" />
+      <circle cx="17.5" cy="14" r=".6" />
+    </>
+  ),
+  // A document with a registration seal at its corner.
+  'intellectual-property-services': (
+    <>
+      <path d="M6 2.8h8.5L18 6.3V21a.7.7 0 0 1-.7.7H6.7a.7.7 0 0 1-.7-.7V3.5a.7.7 0 0 1 .7-.7z" />
+      <path d="M9 10.5h6M9 14h6" />
+      <circle cx="17" cy="17" r="4" />
+      <path d="M15.5 17l1 1 2-2" />
+    </>
+  ),
   // A shield with a band across it.
   'data-protection-and-technology': (
     <>
