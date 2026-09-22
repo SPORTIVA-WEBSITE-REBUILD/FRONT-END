@@ -5,6 +5,16 @@
   command = "npm run build"
   publish = "dist"
 
+# Serves link-preview crawlers (WhatsApp, etc.) a small server-rendered page
+# with real title/description/image tags — they do not run JavaScript, so
+# without this every shared link shows the bare index.html shell. See
+# netlify/edge-functions/prerender.js and lib/prerender.js. Runs before the
+# SPA fallback below; ordinary visitors pass straight through it untouched.
+[[edge_functions]]
+  path = "/*"
+  function = "prerender"
+  excludedPath = ["/assets/*", "/css/*", "/fonts/*", "/favicon.png", "/robots.txt", "/sitemap.xml"]
+
 # Served live by the API so a newly published article appears in the sitemap
 # without a frontend redeploy.
 [[redirects]]
