@@ -63,8 +63,8 @@ export default function GallerySection({
         </div>
 
         {viewAllHref && (
-          <div className="text-center mt-4">
-            <Link to={viewAllHref} className="btn btn-primary py-3 px-4">{viewAllLabel}</Link>
+          <div className="pcn-cta-row">
+            <Link to={viewAllHref} className="btn btn-primary pcn-cta">{viewAllLabel}</Link>
           </div>
         )}
       </div>
