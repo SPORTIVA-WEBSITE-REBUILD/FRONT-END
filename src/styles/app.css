@@ -1146,6 +1146,31 @@ textarea {
     color 0.18s ease,
     backdrop-filter 0.18s ease;
 }
+/*
+ * The nav CTA only ever inherited the plain nav-link's padding (.9rem/20px,
+ * from style.scss's generic .nav-item > .nav-link rule) — never its own
+ * height or padding, and never a fixed width. On the collapsed mobile menu
+ * that was enough to look like a pill by accident, sized to its own text,
+ * because .navbar-nav's flex-direction is row there. Below the lg breakpoint
+ * it becomes flex-direction: column, whose cross axis is width — and
+ * align-items' default of stretch then stretches the <li>, with the <a>'s
+ * own block display filling that full width in turn. Sized explicitly here
+ * to the standard 48px/24px CTA spec instead, so it is never at the mercy of
+ * its container's flex direction either way.
+ */
+.ftco-navbar-light .navbar-nav > .nav-item.cta > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 48px;
+  padding: 0 24px !important;
+}
+@media (max-width: 991.98px) {
+  .ftco-navbar-light .navbar-nav > .nav-item.cta {
+    align-self: flex-start;
+  }
+}
 /* Deep navy glass for the dark variant (the consultation form on blue). */
 .btn.btn-dark {
   background: rgba(15, 23, 42, 0.72) !important;
