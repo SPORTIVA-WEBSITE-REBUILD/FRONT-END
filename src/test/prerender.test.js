@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  isCrawler, isSocialCrawler, isSearchCrawler, resolveRoute, extractMeta, renderPreview,
+  isCrawler, isSocialCrawler, isSearchCrawler, isKnownRoute, resolveRoute, extractMeta, renderPreview,
 } from '../../lib/prerender.js';
 
 describe('crawler detection', () => {
@@ -83,6 +83,26 @@ describe('route resolution', () => {
   it('returns nothing for an unknown route so the SPA handles it', () => {
     expect(resolveRoute('/nonsense')).toBeNull();
     expect(resolveRoute('/a/b/c')).toBeNull();
+  });
+
+  it('maps the About page', () => {
+    expect(resolveRoute('/about').endpoint).toBe('/public/pages/about');
+  });
+});
+
+/**
+ * Every path src/App.jsx actually routes, kept as a literal list rather than
+ * imported from App.jsx (whose routes live inside JSX, not a plain array) —
+ * this is what catches a route added to the app but never taught to
+ * isKnownRoute, which /lawyers, /about and /gallery all were at one point,
+ * each serving crawlers a false 404 until this test would have caught it.
+ */
+describe('every app route is a known route', () => {
+  it.each([
+    '/', '/about', '/services', '/record', '/insights', '/careers', '/contact',
+    '/privacy-policy', '/lawyers', '/gallery',
+  ])('%s', (path) => {
+    expect(isKnownRoute(path)).toBe(true);
   });
 });
 
