@@ -93,10 +93,19 @@ export default async function prerender(request, context) {
       return new Response(null, { status: 301, headers: { Location: target } });
     }
 
+    // The home page's Page.title is "Home" — the admin-facing label in the
+    // dashboard's page list, not public copy. The client-side <Seo> never
+    // passes it as a title for that reason, so the crawler version has to
+    // drop it the same way, or a shared homepage link reads "Home | PCN
+    // Sportiva LP" instead of matching what a real visitor's browser tab says.
+    const contentForMeta = pathname === '/' && !data?.seo?.metaTitle
+      ? { ...data, title: undefined }
+      : data;
+
     // Falls back to the site's own default preview image (Settings > SEO)
     // when the page itself has none — otherwise every page without its own
     // photo shows no image at all in a shared link.
-    const meta = extractMeta(data, siteName, settings?.seoDefaults?.ogImage);
+    const meta = extractMeta(contentForMeta, siteName, settings?.seoDefaults?.ogImage);
     const html = renderPreview(meta, { siteName, url: `${SITE}${pathname}`, ogType: route.ogType });
 
     return new Response(html, {
