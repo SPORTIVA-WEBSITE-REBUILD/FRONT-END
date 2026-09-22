@@ -19,7 +19,14 @@ export default function Seo({ seo = {}, title, description, image, path, type = 
   const canonical = seo.canonicalUrl || (path ? `${SITE_URL}${path}` : undefined);
 
   const ogSource = seo.ogImage || image || defaults.ogImage;
-  const ogImage = ogSource ? mediaUrl(ogSource, { width: 1200, height: 630 }) : undefined;
+  // No page photo and no default set in Settings > SEO yet: fall back to the
+  // site's own logo, so a shared link still shows a picture. Matches the
+  // fallback the prerender edge function applies for crawlers that don't run
+  // this component at all — see netlify/edge-functions/prerender.js.
+  const ogImage = ogSource ? mediaUrl(ogSource, { width: 1200, height: 630 }) : `${SITE_URL}/favicon.png`;
+  // The logo fallback is square, not the 1200x630 a real photo would be, so it
+  // gets Twitter's small card rather than the large one built for a photo.
+  const twitterCard = ogSource ? 'summary_large_image' : 'summary';
 
   return (
     <Helmet prioritizeSeoTags>
@@ -33,12 +40,12 @@ export default function Seo({ seo = {}, title, description, image, path, type = 
       <meta property="og:title" content={fullTitle} />
       {metaDescription && <meta property="og:description" content={metaDescription} />}
       {canonical && <meta property="og:url" content={canonical} />}
-      {ogImage && <meta property="og:image" content={ogImage} />}
+      <meta property="og:image" content={ogImage} />
 
-      <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+      <meta name="twitter:card" content={twitterCard} />
       <meta name="twitter:title" content={fullTitle} />
       {metaDescription && <meta name="twitter:description" content={metaDescription} />}
-      {ogImage && <meta name="twitter:image" content={ogImage} />}
+      <meta name="twitter:image" content={ogImage} />
 
       {article?.publishedAt && (
         <meta property="article:published_time" content={new Date(article.publishedAt).toISOString()} />

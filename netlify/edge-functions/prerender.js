@@ -106,6 +106,14 @@ export default async function prerender(request, context) {
     // when the page itself has none — otherwise every page without its own
     // photo shows no image at all in a shared link.
     const meta = extractMeta(contentForMeta, siteName, settings?.seoDefaults?.ogImage);
+
+    // No page photo and no default set in Settings > SEO yet: fall back to
+    // the site's own logo, so a shared link still shows a picture rather than
+    // a bare text card. Replaced the moment an administrator sets a proper
+    // 1200x630 image in Settings > SEO, since that fallback is checked first,
+    // above.
+    if (!meta.imageUrl) meta.imageUrl = `${SITE}/favicon.png`;
+
     const html = renderPreview(meta, { siteName, url: `${SITE}${pathname}`, ogType: route.ogType });
 
     return new Response(html, {
