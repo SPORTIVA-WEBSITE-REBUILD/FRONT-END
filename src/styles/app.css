@@ -2095,6 +2095,11 @@ textarea {
 }
 @media (max-width: 991.98px) {
   .pcn-newsletter-card { grid-template-columns: 1fr; text-align: center; padding: 2rem 1.5rem; }
+  /* The form sits directly under the heading here (the grid is one column),
+     with no field label between them any more to carry that transition — a
+     little extra room stands in for it, rather than the input crowding the
+     heading above it. */
+  .pcn-newsletter-card__form { margin-top: .5rem; }
 }
 .pcn-newsletter-card__eyebrow {
   display: block;
@@ -2122,15 +2127,6 @@ textarea {
   .pcn-newsletter-card__row { flex-direction: column; align-items: stretch; }
 }
 .pcn-newsletter-card__field { flex: 1; min-width: 0; }
-.pcn-newsletter-card__label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  color: #fff;
-  margin-bottom: .35rem;
-}
 /* !important throughout: the site-wide .form-control forces a white fill,
    black text, 52px height and 5px radius with !important, so anything less
    leaves the white box in place. Same reason the consultation form does it. */
