@@ -50,12 +50,12 @@ export default function NewsletterBand({ light = false }) {
           <form onSubmit={onSubmit} className="subscribe-form pcn-newsletter-card__form" noValidate>
             <div className="pcn-newsletter-card__row">
               <div className="pcn-newsletter-card__field">
-                <label htmlFor="newsletter-email" className="pcn-newsletter-card__label">{labels.emailLabel || "Email:"}</label>
                 <input
                   id="newsletter-email"
                   type="email"
                   className="form-control"
                   placeholder={labels.placeholder}
+                  aria-label={labels.emailLabel || "Email"}
                   aria-invalid={invalid || undefined}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
