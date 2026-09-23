@@ -63,7 +63,7 @@ export default function Footer() {
             <div className="ftco-footer-widget mb-4 ml-md-5">
               <h2 className="ftco-heading-2">{labels.servicesHeading}</h2>
               <ul className="list-unstyled">
-                {(services || []).slice(0, 8).map((s) => (
+                {(services || []).map((s) => (
                   <li key={s.slug}>
                     <Link to={`/services/${s.slug}`} className="py-1 d-block">
                       <span className="ion-ios-arrow-forward mr-3" />{s.title}
