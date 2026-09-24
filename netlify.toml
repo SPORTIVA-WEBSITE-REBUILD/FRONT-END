@@ -19,13 +19,13 @@
 # without a frontend redeploy.
 [[redirects]]
   from = "/sitemap.xml"
-  to = "https://pcn-sportiva-api.netlify.app/api/public/sitemap.xml"
+  to = "https://pcnsportivalp-api.netlify.app/api/public/sitemap.xml"
   status = 200
   force = true
 
 [[redirects]]
   from = "/robots.txt"
-  to = "https://pcn-sportiva-api.netlify.app/api/public/robots.txt"
+  to = "https://pcnsportivalp-api.netlify.app/api/public/robots.txt"
   status = 200
   force = true
 

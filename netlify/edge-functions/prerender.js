@@ -29,8 +29,8 @@ function env(key, fallback) {
   }
 }
 
-const API = env('VITE_API_URL', 'https://pcn-sportiva-api.netlify.app/api');
-const SITE = env('VITE_SITE_URL', 'https://pcn-sportiva-web.netlify.app').replace(/\/$/, '');
+const API = env('VITE_API_URL', 'https://pcnsportivalp-api.netlify.app/api');
+const SITE = env('VITE_SITE_URL', 'https://pcnsportivalp.com').replace(/\/$/, '');
 
 const NOT_FOUND_HEADERS = {
   'Content-Type': 'text/html; charset=utf-8',
