@@ -134,6 +134,12 @@ export default function Footer() {
                 </span>
               ))}
             </p>
+            <p className="pcn-footer-credit">
+              Website by{" "}
+              <a href="mailto:agurichard3@gmail.com">AG &amp; Co.</a>
+              {" | "}
+              <a href="tel:+447831005329">07831 005329</a>
+            </p>
           </div>
         </div>
       </div>
