@@ -137,20 +137,24 @@ export default function LawyerDetail() {
                 <div className="sidebar-box ftco-animate">
                   <h3>{section(page, "contact").heading}</h3>
                   <ul className="list-unstyled mb-3">
-                    {lawyer.email && (
-                      <li className="mb-3 d-flex align-items-center">
-                        <span
-                          className="icon icon-envelope mr-3"
-                          style={{ color: "var(--blue)", fontSize: 16 }}
-                        />
-                        <a
-                          href={`mailto:${lawyer.email}`}
-                          style={{ color: "var(--ink-1)" }}
-                        >
-                          {lawyer.email}
-                        </a>
-                      </li>
-                    )}
+                    {(lawyer.email || "")
+                      .split(",")
+                      .map((e) => e.trim())
+                      .filter(Boolean)
+                      .map((addr) => (
+                        <li key={addr} className="mb-3 d-flex align-items-center">
+                          <span
+                            className="icon icon-envelope mr-3"
+                            style={{ color: "var(--blue)", fontSize: 16 }}
+                          />
+                          <a
+                            href={`mailto:${addr}`}
+                            style={{ color: "var(--ink-1)" }}
+                          >
+                            {addr}
+                          </a>
+                        </li>
+                      ))}
                     {lawyer.phone && (
                       <li className="mb-3 d-flex align-items-center">
                         <span
