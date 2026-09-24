@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import ServiceIcon from '../icons.jsx';
 import { backgroundStyle } from '../SmartImage.jsx';
 import { mediaUrl } from '../../lib/media.js';
-import { dateParts, shortDate, term } from '../../lib/format.js';
+import { dateParts, shortDate, term, authorsOf } from '../../lib/format.js';
 import { useCommon, useLayout } from '../../hooks/useContent.js';
 
 const bg = (media, width, height) => backgroundStyle(media, null, width, height
@@ -169,7 +169,7 @@ export function TeamCard({ lawyer, compact }) {
       <FlipCard lawyer={lawyer} compact={compact} />
       {lawyer.bioPreview && <p className="pcn-team__bio pcn-clamp pcn-clamp--2">{lawyer.bioPreview}</p>}
       <p className="pcn-team__more">
-        <Link to={`/lawyers/${lawyer.slug}`} className="btn btn-primary pcn-cta">{common.viewProfile}<span aria-hidden="true" className="ml-2">→</span></Link>
+        <Link to={`/lawyers/${lawyer.slug}`} className="btn btn-primary pcn-cta">{common.viewProfile}</Link>
       </p>
     </div>
   );
@@ -217,7 +217,7 @@ export function distinctExcerpt(title, excerpt) {
 export function BlogCard({ article, readMore, col = 'col-md-4' }) {
   const href = `/articles/${article.slug}`;
   const common = useCommon();
-  const excerpt = distinctExcerpt(article.title, article.excerpt);
+  const names = authorsOf(article).map((a) => a.name);
   const meta = [
     article.category?.name,
     shortDate(article.publishedAt),
@@ -236,8 +236,8 @@ export function BlogCard({ article, readMore, col = 'col-md-4' }) {
         <div className="pcn-blog__body">
           {meta.length > 0 && <p className="pcn-blog-meta">{meta.join(' · ')}</p>}
           <h3 className="pcn-blog__title pcn-clamp pcn-clamp--3"><Link to={href}>{article.title}</Link></h3>
-          {excerpt && <p className="pcn-blog__excerpt pcn-clamp pcn-clamp--3">{excerpt}</p>}
-          <Link to={href} className="pcn-blog__more">{readMore || common.readMore}<span aria-hidden="true"> →</span></Link>
+          {names.length > 0 && <p className="pcn-blog__authors">By {names.join(', ')}</p>}
+          <Link to={href} className="pcn-blog__more">{readMore || common.readMore}</Link>
         </div>
       </div>
     </div>
