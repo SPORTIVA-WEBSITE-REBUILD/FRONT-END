@@ -209,7 +209,7 @@ export default function Home() {
           <div className="container-fluid px-md-5">
             <SectionHeading section={teamSection} rowClass="mb-5 pb-3" />
             <div className="row justify-content-center">
-              {lawyers.slice(0, 3).map((l) => (
+              {lawyers.slice(0, 2).map((l) => (
                 <div className="col-lg-4 col-sm-6" key={l.slug}><TeamCard lawyer={l} /></div>
               ))}
             </div>
