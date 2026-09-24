@@ -7,7 +7,7 @@ import {
   useServices,
   useTags,
 } from "../../hooks/useContent.js";
-import { shortDate } from "../../lib/format.js";
+import { shortDate, authorsOf } from "../../lib/format.js";
 
 /**
  * The template's sidebar on Practice Single and Blog Single: search, a
@@ -115,11 +115,15 @@ export default function Sidebar({
                       {shortDate(a.publishedAt)}
                     </Link>
                   </div>
-                  {a.author?.name && (
+                  {authorsOf(a).length > 0 && (
                     <div>
-                      <Link to={`/lawyers/${a.author.slug}`}>
-                        <span className="icon-person" /> {a.author.name}
-                      </Link>
+                      <span className="icon-person" />{" "}
+                      {authorsOf(a).map((au, i) => (
+                        <span key={au.slug}>
+                          {i > 0 && ", "}
+                          <Link to={`/lawyers/${au.slug}`}>{au.name}</Link>
+                        </span>
+                      ))}
                     </div>
                   )}
                   <div>

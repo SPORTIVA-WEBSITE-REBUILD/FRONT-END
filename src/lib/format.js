@@ -57,3 +57,12 @@ export function term(labels, prefix, value) {
   const key = prefix + value.split('_').map((w) => w[0].toUpperCase() + w.slice(1)).join('');
   return labels[key] || labels[value.replace(/_([a-z])/g, (_, c) => c.toUpperCase())] || value;
 }
+
+/**
+ * The people credited on an article or case, in order. Older entries only have
+ * a single `author`, so it stands in when `authors` is empty.
+ */
+export function authorsOf(entry) {
+  if (entry?.authors?.length) return entry.authors.filter((a) => a && a.name);
+  return entry?.author?.name ? [entry.author] : [];
+}

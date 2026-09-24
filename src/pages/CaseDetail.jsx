@@ -13,7 +13,7 @@ import {
   useSiteSettings,
   section,
 } from "../hooks/useContent.js";
-import { term } from "../lib/format.js";
+import { term, authorsOf } from "../lib/format.js";
 import {
   graph,
   article as articleSchema,
@@ -164,6 +164,17 @@ export default function CaseDetail() {
                     <strong>{dl.outcome}</strong>{" "}
                     {term(terms, "outcome", item.outcome)}
                   </li>
+                  {authorsOf(item).length > 0 && (
+                    <li className="mb-2">
+                      <strong>Team:</strong>{" "}
+                      {authorsOf(item).map((a, i) => (
+                        <span key={a.slug}>
+                          {i > 0 && ", "}
+                          <Link to={`/lawyers/${a.slug}`}>{a.name}</Link>
+                        </span>
+                      ))}
+                    </li>
+                  )}
                   {item.practiceArea && (
                     <li className="mb-2">
                       <strong>{dl.practiceArea}</strong>{" "}

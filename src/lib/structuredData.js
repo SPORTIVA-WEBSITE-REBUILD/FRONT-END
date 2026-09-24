@@ -59,9 +59,12 @@ export function article(entry = {}, settings = {}, pathPrefix = '/articles') {
     ...(imageUrl(entry.featuredImage) ? { image: imageUrl(entry.featuredImage) } : {}),
     ...(entry.publishedAt ? { datePublished: new Date(entry.publishedAt).toISOString() } : {}),
     ...(entry.updatedAt ? { dateModified: new Date(entry.updatedAt).toISOString() } : {}),
-    author: entry.author?.name
-      ? { '@type': 'Person', name: entry.author.name, url: abs(`/lawyers/${entry.author.slug}`) }
-      : { '@id': `${SITE}/#organisation` },
+    author: (() => {
+      const people = (entry.authors?.length ? entry.authors : entry.author ? [entry.author] : []).filter((p) => p?.name);
+      const list = people.map((p) => ({ '@type': 'Person', name: p.name, url: abs(`/lawyers/${p.slug}`) }));
+      if (!list.length) return { '@id': `${SITE}/#organisation` };
+      return list.length === 1 ? list[0] : list;
+    })(),
     publisher: { '@id': `${SITE}/#organisation` },
     mainEntityOfPage: { '@type': 'WebPage', '@id': abs(`${pathPrefix}/${entry.slug}`) },
   };
