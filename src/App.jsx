@@ -31,8 +31,8 @@ export default function App() {
         <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="record" element={<Record />} />
         <Route path="record/:slug" element={<CaseDetail />} />
-        <Route path="insights" element={<Insights />} />
-        <Route path="insights/:slug" element={<ArticleDetail />} />
+        <Route path="articles" element={<Insights />} />
+        <Route path="articles/:slug" element={<ArticleDetail />} />
         <Route path="lawyers" element={<Lawyers />} />
         <Route path="lawyers/:slug" element={<LawyerDetail />} />
         <Route path="careers" element={<Careers />} />

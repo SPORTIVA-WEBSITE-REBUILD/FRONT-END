@@ -27,7 +27,7 @@ function ScrollToTop() {
  */
 function bandFor(pathname) {
   if (pathname === '/contact') return null;
-  return { light: pathname === '/' || pathname === '/insights' };
+  return { light: pathname === '/' || pathname === '/articles' };
 }
 
 export default function Layout() {

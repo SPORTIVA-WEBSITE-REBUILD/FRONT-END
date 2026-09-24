@@ -29,6 +29,18 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/insights"
+  to = "/articles"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/insights/*"
+  to = "/articles/:splat"
+  status = 301
+  force = true
+
 # SPA fallback. Must come last: Netlify takes the first rule that matches.
 [[redirects]]
   from = "/*"

@@ -259,7 +259,7 @@ export default function Home() {
             </div>
             {insightsSection.cta?.label && (
               <div className="pcn-cta-row">
-                <SmartLink href={insightsSection.cta.href || '/insights'} className="btn btn-primary pcn-cta">
+                <SmartLink href={insightsSection.cta.href || '/articles'} className="btn btn-primary pcn-cta">
                   {insightsSection.cta.label}
                 </SmartLink>
               </div>

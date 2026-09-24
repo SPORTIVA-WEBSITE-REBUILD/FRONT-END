@@ -51,7 +51,7 @@ export function webSite(settings = {}) {
   };
 }
 
-export function article(entry = {}, settings = {}, pathPrefix = '/insights') {
+export function article(entry = {}, settings = {}, pathPrefix = '/articles') {
   return {
     '@type': 'Article',
     headline: entry.title,
