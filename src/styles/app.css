@@ -2884,3 +2884,14 @@ textarea {
   .btn.btn-primary.pcn-cta:hover,
   .btn.btn-primary.pcn-cta:focus-visible { background: var(--glass-hover-bg-fallback) !important; }
 }
+
+/* Footnotes: numbered markers in the text, a Notes list at the foot. */
+.pcn-richtext sup.pcn-fn { font-size: .75em; line-height: 0; margin-left: 1px; }
+.pcn-richtext sup.pcn-fn a { font-weight: 600; text-decoration: none; padding: 0 2px; }
+.pcn-footnotes { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line, #dfe4ec); }
+.pcn-footnotes h2 { font-size: 1.25rem; margin-bottom: .75rem; }
+.pcn-footnotes ol { padding-left: 1.25rem; margin: 0; }
+.pcn-footnotes li { font-size: .95rem; color: var(--ink-2); margin-bottom: .5rem; overflow-wrap: anywhere; }
+.pcn-footnotes li:target { background: rgba(0, 120, 200, .08); border-radius: 4px; }
+.pcn-fn__back { margin-left: .5rem; font-size: .85rem; white-space: nowrap; }
+.pcn-richtext [id^="fn-"], .pcn-richtext [id^="fnref-"] { scroll-margin-top: 110px; }
