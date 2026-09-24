@@ -43,7 +43,7 @@ describe('structured data describes the firm to search engines', () => {
     expect(node.headline).toBe('A note on eligibility');
     expect(node.author).toMatchObject({ '@type': 'Person', name: 'Agu Richard' });
     expect(node.datePublished).toBe('2026-03-01T00:00:00.000Z');
-    expect(node.mainEntityOfPage['@id']).toContain('/insights/a-note');
+    expect(node.mainEntityOfPage['@id']).toContain('/articles/a-note');
   });
 
   it('falls back to the firm as author when an article has none', () => {
@@ -72,7 +72,7 @@ describe('structured data describes the firm to search engines', () => {
   it('numbers breadcrumb positions from one and links every level but the last', () => {
     const node = breadcrumbs([
       { label: 'Home', href: '/' },
-      { label: 'Insights', href: '/insights' },
+      { label: 'Insights', href: '/articles' },
       { label: 'An article' },
     ]);
     expect(node['@type']).toBe('BreadcrumbList');
@@ -100,8 +100,8 @@ describe('structured data describes the firm to search engines', () => {
 
 describe('soft 404s', () => {
   it('recognises the paths the app really serves', () => {
-    for (const p of ['/', '/services', '/record', '/insights', '/careers', '/contact',
-      '/privacy-policy', '/insights/a-slug', '/record/a-case', '/services/x', '/lawyers/y',
+    for (const p of ['/', '/services', '/record', '/articles', '/careers', '/contact',
+      '/privacy-policy', '/articles/a-slug', '/record/a-case', '/services/x', '/lawyers/y',
       '/careers/associate-role', '/record/']) {
       expect(isKnownRoute(p), p).toBe(true);
     }

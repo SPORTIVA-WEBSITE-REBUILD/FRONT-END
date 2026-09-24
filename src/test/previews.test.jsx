@@ -12,15 +12,16 @@ const careers = {
 };
 
 describe('previews of stored content', () => {
-  it('shows category, date and reading time on one meta line, with a clamped excerpt', async () => {
+  it('shows category, date and reading time on one meta line, with the author names instead of an excerpt', async () => {
     vi.stubGlobal('fetch', mockApi({}));
     renderWithProviders(<BlogCard article={{
       slug: 'a', title: 'Release clauses', excerpt: 'A long excerpt.', publishedAt: '2026-09-16',
       author: { name: 'Pius Ndubuokwu' }, category: { name: 'Analysis' }, readingMinutes: 4,
     }} />);
     await waitFor(() => expect(screen.getByText(/^Analysis · .*2026 · 4 min read$/)).toBeInTheDocument());
-    expect(screen.getByText('A long excerpt.')).toHaveClass('pcn-clamp--3');
-    expect(screen.getByRole('link', { name: /Read more/ })).toHaveAttribute('href', '/insights/a');
+    expect(screen.getByText('By Pius Ndubuokwu')).toBeInTheDocument();
+    expect(screen.queryByText('A long excerpt.')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Read more/ })).toHaveAttribute('href', '/articles/a');
   });
 
   it('links a team card to the profile and previews the bio', async () => {

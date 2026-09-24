@@ -81,7 +81,7 @@ export default function ArticlesPopup() {
                 </h3>
                 {excerpt && <p className="pcn-popup__excerpt pcn-clamp pcn-clamp--2">{excerpt}</p>}
                 <Link to={`/articles/${a.slug}`} className="pcn-blog__more" onClick={close}>
-                  {labels.readMore || 'Read more'}<span aria-hidden="true"> →</span>
+                  {labels.readMore || 'Read more'}
                 </Link>
               </li>
             );

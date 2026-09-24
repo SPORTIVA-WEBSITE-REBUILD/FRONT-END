@@ -737,6 +737,12 @@ input[type="submit"].btn,
   color: var(--ink-2);
   margin-bottom: 1rem;
 }
+.pcn-blog__authors {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 1rem;
+}
 .pcn-blog__more {
   margin-top: auto;
   font-size: 14px;

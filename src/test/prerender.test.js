@@ -61,7 +61,7 @@ describe('search engines are handled differently from link-preview bots', () => 
 
 describe('route resolution', () => {
   it('maps detail routes to their API endpoint', () => {
-    expect(resolveRoute('/insights/a-note-on-eligibility'))
+    expect(resolveRoute('/articles/a-note-on-eligibility'))
       .toEqual({ endpoint: '/public/articles/a-note-on-eligibility', ogType: 'article' });
     expect(resolveRoute('/record/club-licensing-appeal'))
       .toEqual({ endpoint: '/public/cases/club-licensing-appeal', ogType: 'article' });
@@ -72,7 +72,7 @@ describe('route resolution', () => {
   it('maps the fixed pages', () => {
     expect(resolveRoute('/').endpoint).toBe('/public/pages/home');
     expect(resolveRoute('/record').endpoint).toBe('/public/pages/record');
-    expect(resolveRoute('/insights').endpoint).toBe('/public/pages/insights');
+    expect(resolveRoute('/articles').endpoint).toBe('/public/pages/insights');
     expect(resolveRoute('/lawyers').endpoint).toBe('/public/pages/lawyers');
   });
 
@@ -99,7 +99,7 @@ describe('route resolution', () => {
  */
 describe('every app route is a known route', () => {
   it.each([
-    '/', '/about', '/services', '/record', '/insights', '/careers', '/contact',
+    '/', '/about', '/services', '/record', '/articles', '/careers', '/contact',
     '/privacy-policy', '/lawyers', '/gallery',
   ])('%s', (path) => {
     expect(isKnownRoute(path)).toBe(true);
@@ -132,7 +132,7 @@ describe('meta extraction', () => {
 });
 
 describe('preview document', () => {
-  const base = { siteName: 'PCN Sportiva LP', url: 'https://pcnsportivalp.com/insights/x', ogType: 'article' };
+  const base = { siteName: 'PCN Sportiva LP', url: 'https://pcnsportivalp.com/articles/x', ogType: 'article' };
 
   it('emits the tags each platform actually reads', () => {
     const html = renderPreview({
@@ -146,7 +146,7 @@ describe('preview document', () => {
     expect(html).toContain('<meta property="og:description"');
     expect(html).toContain('<meta property="og:image"');
     expect(html).toContain('<meta name="twitter:card" content="summary_large_image">');
-    expect(html).toContain('<link rel="canonical" href="https://pcnsportivalp.com/insights/x">');
+    expect(html).toContain('<link rel="canonical" href="https://pcnsportivalp.com/articles/x">');
     expect(html).toContain('article:published_time');
   });
 

@@ -105,7 +105,7 @@ const CASES = [
   ['attorneys.html', '/lawyers'],
   ['practice-areas.html', '/services'],
   ['case.html', '/record'],
-  ['blog.html', '/insights'],
+  ['blog.html', '/articles'],
   ['contact.html', '/contact'],
 ];
 
