@@ -215,7 +215,7 @@ export function distinctExcerpt(title, excerpt) {
  * text "Read more" link. Same shadow, border and hover lift as the Record cards.
  */
 export function BlogCard({ article, readMore, col = 'col-md-4' }) {
-  const href = `/insights/${article.slug}`;
+  const href = `/articles/${article.slug}`;
   const common = useCommon();
   const excerpt = distinctExcerpt(article.title, article.excerpt);
   const meta = [

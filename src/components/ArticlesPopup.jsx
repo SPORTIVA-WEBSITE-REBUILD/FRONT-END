@@ -23,7 +23,7 @@ export default function ArticlesPopup() {
   const layout = useLayout();
   const copy = layout.section('articlesPopup');
   const labels = copy.labels || {};
-  const onInsights = pathname.startsWith('/insights');
+  const onInsights = pathname.startsWith('/articles');
   const [open, setOpen] = useState(false);
   const { data } = useArticles({ limit: 2 });
   const articles = data?.data || [];
@@ -77,10 +77,10 @@ export default function ArticlesPopup() {
                   {[a.category?.name, shortDate(a.publishedAt)].filter(Boolean).join(' · ')}
                 </p>
                 <h3 className="pcn-popup__title pcn-clamp pcn-clamp--2">
-                  <Link to={`/insights/${a.slug}`} onClick={close}>{a.title}</Link>
+                  <Link to={`/articles/${a.slug}`} onClick={close}>{a.title}</Link>
                 </h3>
                 {excerpt && <p className="pcn-popup__excerpt pcn-clamp pcn-clamp--2">{excerpt}</p>}
-                <Link to={`/insights/${a.slug}`} className="pcn-blog__more" onClick={close}>
+                <Link to={`/articles/${a.slug}`} className="pcn-blog__more" onClick={close}>
                   {labels.readMore || 'Read more'}<span aria-hidden="true"> →</span>
                 </Link>
               </li>
@@ -88,7 +88,7 @@ export default function ArticlesPopup() {
           })}
         </ul>
 
-        <Link to={copy.cta?.href || '/insights'} className="btn btn-primary pcn-popup__cta" onClick={close}>
+        <Link to={copy.cta?.href || '/articles'} className="btn btn-primary pcn-popup__cta" onClick={close}>
           {copy.cta?.label || 'View All Articles'}
         </Link>
       </div>

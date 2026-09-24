@@ -32,7 +32,7 @@ export default function ArticleDetail() {
 
   useEffect(() => {
     if (redirectTo && redirectTo !== slug)
-      navigate(`/insights/${redirectTo}`, { replace: true });
+      navigate(`/articles/${redirectTo}`, { replace: true });
   }, [redirectTo, slug, navigate]);
 
   if (isLoading)
@@ -49,7 +49,7 @@ export default function ArticleDetail() {
     );
 
   const hero = section(page, "hero");
-  const parent = { label: hero.labels?.parent, href: "/insights" };
+  const parent = { label: hero.labels?.parent, href: "/articles" };
 
   return (
     <>
@@ -58,14 +58,14 @@ export default function ArticleDetail() {
         title={article.title}
         description={article.excerpt}
         image={article.featuredImage}
-        path={`/insights/${article.slug}`}
+        path={`/articles/${article.slug}`}
         type="article"
         article={{
           publishedAt: article.publishedAt,
           author: article.author?.name,
         }}
         jsonLd={graph(
-          articleSchema(article, siteData?.settings, "/insights"),
+          articleSchema(article, siteData?.settings, "/articles"),
           breadcrumbs([
             { label: "Home", href: "/" },
             { label: parent.label, href: parent.href },
@@ -138,7 +138,7 @@ export default function ArticleDetail() {
                     {article.tags.map((tag) => (
                       <Link
                         key={tag}
-                        to={`/insights?tag=${encodeURIComponent(tag)}`}
+                        to={`/articles?tag=${encodeURIComponent(tag)}`}
                         className="tag-cloud-link"
                       >
                         {tag}

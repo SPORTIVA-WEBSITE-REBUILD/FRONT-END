@@ -39,6 +39,14 @@ const NOT_FOUND_HEADERS = {
 };
 
 export default async function prerender(request, context) {
+  // The Insights section is now Articles. Old links, bookmarks and search
+  // results keep working through a permanent redirect.
+  const legacy = new URL(request.url);
+  if (legacy.pathname === '/insights' || legacy.pathname.startsWith('/insights/')) {
+    legacy.pathname = legacy.pathname.replace('/insights', '/articles');
+    return Response.redirect(legacy.toString(), 301);
+  }
+
   const userAgent = request.headers.get('user-agent') || '';
   if (!isCrawler(userAgent)) return context.next(); // real visitor: serve the SPA
 

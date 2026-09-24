@@ -27,7 +27,7 @@ const STATIC_ROUTES = [
   ['/about', 0.7, 'monthly'],
   ['/record', 0.9, 'weekly'],
   ['/gallery', 0.5, 'monthly'],
-  ['/insights', 0.9, 'weekly'],
+  ['/articles', 0.9, 'weekly'],
   ['/lawyers', 0.7, 'monthly'],
   ['/careers', 0.6, 'weekly'],
   ['/contact', 0.7, 'yearly'],
@@ -56,7 +56,7 @@ async function main() {
     const sections = [
       ['services', '/services', 0.7],
       ['cases', '/record', 0.8],
-      ['articles', '/insights', 0.8],
+      ['articles', '/articles', 0.8],
       ['lawyers', '/lawyers', 0.6],
       ['vacancies', '/careers', 0.6],
     ];

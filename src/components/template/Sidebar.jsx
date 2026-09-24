@@ -39,7 +39,7 @@ export default function Sidebar({
       : (categories || []).map((c) => ({
           key: c.slug,
           label: c.name,
-          href: `/insights?category=${encodeURIComponent(c.slug)}`,
+          href: `/articles?category=${encodeURIComponent(c.slug)}`,
           active: c.slug === activeSlug,
         }));
 
@@ -53,8 +53,8 @@ export default function Sidebar({
             e.preventDefault();
             navigate(
               q.trim()
-                ? `/insights?q=${encodeURIComponent(q.trim())}`
-                : "/insights",
+                ? `/articles?q=${encodeURIComponent(q.trim())}`
+                : "/articles",
             );
           }}
         >
@@ -95,7 +95,7 @@ export default function Sidebar({
           {recent.data.map((a) => (
             <div className="block-21 mb-4 d-flex" key={a.slug}>
               <Link
-                to={`/insights/${a.slug}`}
+                to={`/articles/${a.slug}`}
                 className={`blog-img mr-4${a.featuredImage ? "" : " pcn-banner-fallback"}`}
                 style={backgroundStyle(a.featuredImage, null, 200, {
                   height: 200,
@@ -106,11 +106,11 @@ export default function Sidebar({
               />
               <div className="text">
                 <h3 className="heading">
-                  <Link to={`/insights/${a.slug}`}>{a.title}</Link>
+                  <Link to={`/articles/${a.slug}`}>{a.title}</Link>
                 </h3>
                 <div className="meta">
                   <div>
-                    <Link to={`/insights/${a.slug}`}>
+                    <Link to={`/articles/${a.slug}`}>
                       <span className="icon-calendar" />{" "}
                       {shortDate(a.publishedAt)}
                     </Link>
@@ -123,7 +123,7 @@ export default function Sidebar({
                     </div>
                   )}
                   <div>
-                    <Link to={`/insights/${a.slug}#comments`}>
+                    <Link to={`/articles/${a.slug}#comments`}>
                       <span className="icon-chat" /> {a.commentCount || 0}
                     </Link>
                   </div>
@@ -141,7 +141,7 @@ export default function Sidebar({
             {tags.map((tag) => (
               <Link
                 key={tag}
-                to={`/insights?tag=${encodeURIComponent(tag)}`}
+                to={`/articles?tag=${encodeURIComponent(tag)}`}
                 className="tag-cloud-link"
               >
                 {tag}

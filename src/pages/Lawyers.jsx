@@ -10,6 +10,10 @@ export default function Lawyers() {
   const { data: page } = usePage("lawyers");
   const { data: lawyers, isLoading, isError, error, refetch } = useLawyers();
   const hero = section(page, "hero");
+  // Anyone whose title says "Intern" is grouped under their own heading.
+  const isIntern = (l) => /intern/i.test(l.role || "");
+  const staff = (lawyers || []).filter((l) => !isIntern(l));
+  const interns = (lawyers || []).filter(isIntern);
 
   return (
     <>
@@ -34,12 +38,24 @@ export default function Lawyers() {
           {isError && <ErrorState error={error} onRetry={refetch} />}
           {isLoading && <LoadingCards count={3} col="col-lg-4 col-md-6" />}
           <div className="row justify-content-center">
-            {(lawyers || []).map((l) => (
+            {staff.map((l) => (
               <div className="col-lg-4 col-md-6 mb-4" key={l.slug}>
                 <TeamCard lawyer={l} />
               </div>
             ))}
           </div>
+          {interns.length > 0 && (
+            <>
+              <h2 className="text-center mt-5 mb-4">Interns</h2>
+              <div className="row justify-content-center">
+                {interns.map((l) => (
+                  <div className="col-lg-4 col-md-6 mb-4" key={l.slug}>
+                    <TeamCard lawyer={l} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
     </>
