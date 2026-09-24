@@ -2895,3 +2895,19 @@ textarea {
 .pcn-footnotes li:target { background: rgba(0, 120, 200, .08); border-radius: 4px; }
 .pcn-fn__back { margin-left: .5rem; font-size: .85rem; white-space: nowrap; }
 .pcn-richtext [id^="fn-"], .pcn-richtext [id^="fnref-"] { scroll-margin-top: 110px; }
+
+/* Footer credit line: small, muted, sits on its own line under the copyright. */
+.pcn-footer-credit {
+  margin: -0.5rem 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.pcn-footer-credit a {
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.2s ease;
+}
+.pcn-footer-credit a:hover,
+.pcn-footer-credit a:focus-visible {
+  color: #fff;
+  text-decoration: underline;
+}
