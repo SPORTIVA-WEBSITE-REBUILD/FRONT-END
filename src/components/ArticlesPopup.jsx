@@ -13,9 +13,9 @@ function alreadyDismissed() {
 
 /**
  * A one-time "latest articles" prompt: appears a few seconds after the first
- * page load, offers the two newest Insights, and stays away for the rest of
+ * page load, offers the two newest Articles, and stays away for the rest of
  * the browser session once closed. Content only, no email capture (the
- * newsletter band already does that). Not shown on the Insights pages, where
+ * newsletter band already does that). Not shown on the Articles pages, where
  * the articles are already on screen.
  */
 export default function ArticlesPopup() {
@@ -89,7 +89,7 @@ export default function ArticlesPopup() {
         </ul>
 
         <Link to={copy.cta?.href || '/insights'} className="btn btn-primary pcn-popup__cta" onClick={close}>
-          {copy.cta?.label || 'View All Insights'}
+          {copy.cta?.label || 'View All Articles'}
         </Link>
       </div>
     </div>
