@@ -76,7 +76,7 @@ export default function ArticleDetail() {
       />
       <PageBanner
         title={article.title}
-        image={hero.image || article.featuredImage}
+        image={hero.image}
         parent={parent}
       />
 
