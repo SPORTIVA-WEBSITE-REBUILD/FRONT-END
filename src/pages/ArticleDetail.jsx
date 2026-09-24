@@ -18,6 +18,7 @@ import {
   article as articleSchema,
   breadcrumbs,
 } from "../lib/structuredData.js";
+import { authorsOf } from "../lib/format.js";
 
 /** blog-single.html */
 export default function ArticleDetail() {
@@ -62,7 +63,7 @@ export default function ArticleDetail() {
         type="article"
         article={{
           publishedAt: article.publishedAt,
-          author: article.author?.name,
+          author: authorsOf(article).map((a) => a.name).join(", "),
         }}
         jsonLd={graph(
           articleSchema(article, siteData?.settings, "/articles"),
@@ -148,18 +149,18 @@ export default function ArticleDetail() {
                 </div>
               )}
 
-              {article.author && (
-                <div className="pcn-author-box p-4 my-5 d-flex align-items-center">
-                  {article.author.photo && (
+              {authorsOf(article).map((author) => (
+                <div key={author.slug} className="pcn-author-box p-4 my-5 d-flex align-items-center">
+                  {author.photo && (
                     <div className="pcn-author-avatar mr-4 flex-shrink-0">
                       <SmartImage
-                        media={article.author.photo}
+                        media={author.photo}
                         width={100}
                         height={100}
                         crop="fill"
                         gravity="faces"
                         className="rounded-circle"
-                        alt={article.author.name}
+                        alt={author.name}
                       />
                     </div>
                   )}
@@ -184,16 +185,16 @@ export default function ArticleDetail() {
                       }}
                     >
                       <Link
-                        to={`/lawyers/${article.author.slug}`}
+                        to={`/lawyers/${author.slug}`}
                         style={{ color: "var(--ink-1)" }}
                       >
-                        {article.author.name}
+                        {author.name}
                       </Link>
                     </h3>
-                    <RichText html={article.author.bio} />
+                    <RichText html={author.bio} />
                   </div>
                 </div>
-              )}
+              ))}
 
               <Comments
                 slug={article.slug}
