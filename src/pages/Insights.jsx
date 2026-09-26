@@ -31,7 +31,7 @@ export default function Insights() {
       <Seo
         seo={page?.seo}
         title={page?.title}
-        path="/insights"
+        path="/articles"
         jsonLd={graph(breadcrumbs([{ label: 'Home', href: '/' }, { label: hero.heading || page?.title }]))}
       />
       <PageBanner title={hero.heading} crumb={hero.subheading} image={hero.image} />

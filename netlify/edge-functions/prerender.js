@@ -62,13 +62,51 @@ export default async function prerender(request, context) {
     );
   }
 
-  // Search engines render JavaScript, so from here on they are left to load
-  // the real page — complete with its structured data. Only link-preview
-  // crawlers, which cannot run JS, receive the prerendered head.
-  if (!isSocialCrawler(userAgent)) return context.next();
-
   const route = resolveRoute(pathname);
   if (!route) return context.next();
+
+  /*
+   * Search engines execute JavaScript, so they are handed the real SPA rather
+   * than the preview stub: the stub carries a title and a link but no article
+   * body, and serving it would get the thin version indexed in place of the
+   * real content and its structured data.
+   *
+   * Two things still have to be answered here, in HTTP, because a client-side
+   * router cannot express either one — the SPA can only ever reply 200:
+   *   - an unpublished or deleted item must return a real 404, or the soft 200
+   *     keeps the dead URL in the index;
+   *   - a renamed slug must return a real 301, or the ranking never moves to
+   *     the new address.
+   * Only detail routes are checked, so static pages cost no extra request.
+   */
+  if (!isSocialCrawler(userAgent)) {
+    if (route.endpoint.startsWith('/public/pages/')) return context.next();
+
+    try {
+      const res = await fetch(`${API}${route.endpoint}`, { signal: AbortSignal.timeout(2000) });
+
+      if (res.status === 404) {
+        return new Response(
+          renderNotFound({ siteName: 'PCN Sportiva LP', url: `${SITE}${pathname}` }),
+          { status: 404, headers: NOT_FOUND_HEADERS },
+        );
+      }
+      if (res.ok) {
+        const payload = await res.json();
+        const canonical = payload.meta?.redirectTo;
+        if (canonical && payload.data?.slug && canonical !== pathname.split('/').pop()) {
+          return new Response(null, {
+            status: 301,
+            headers: { Location: `${SITE}${pathname.replace(/[^/]+$/, canonical)}` },
+          });
+        }
+      }
+    } catch {
+      // API down or slow: fall through to the SPA rather than block the crawl.
+    }
+
+    return context.next();
+  }
 
   try {
     const [contentRes, settingsRes] = await Promise.all([
