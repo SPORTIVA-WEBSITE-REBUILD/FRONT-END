@@ -19,6 +19,7 @@ const VacancyDetail = lazy(() => import('./pages/VacancyDetail.jsx'));
 const Gallery = lazy(() => import('./pages/Gallery.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const Webinar = lazy(() => import('./pages/Webinar.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="gallery" element={<Gallery />} />
         <Route path="contact" element={<Contact />} />
         <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="webinar" element={<Webinar />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

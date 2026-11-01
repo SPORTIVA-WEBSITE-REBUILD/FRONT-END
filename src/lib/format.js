@@ -17,6 +17,33 @@ export function dateParts(value) {
   };
 }
 
+/**
+ * Webinar date/time chip: "Fri 6 Nov 2026, 16:00 to 18:00 WAT". Rendered in
+ * the given IANA timezone regardless of the visitor's own, since the event
+ * happens at one fixed real-world time and every visitor needs to see that
+ * same time, not their local equivalent of it (the brief specifies the
+ * literal format above).
+ */
+export function webinarDateChip(startsAt, endsAt, timezone = 'Africa/Lagos') {
+  const start = asDate(startsAt);
+  if (!start || Number.isNaN(start.getTime())) return '';
+  // Intl inserts a comma after a short weekday ("Fri, 6 Nov 2026"); the
+  // brief's format has none ("Fri 6 Nov 2026"), so it is stripped here
+  // rather than left to whatever a given locale's formatter happens to do.
+  const datePart = new Intl.DateTimeFormat(LOCALE, {
+    weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: timezone,
+  }).format(start).replace(',', '');
+  const startTime = new Intl.DateTimeFormat(LOCALE, {
+    hour: '2-digit', minute: '2-digit', hour12: false, timeZone: timezone,
+  }).format(start);
+  const end = asDate(endsAt);
+  const endTime = end && !Number.isNaN(end.getTime())
+    ? new Intl.DateTimeFormat(LOCALE, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: timezone }).format(end)
+    : '';
+  const zoneAbbr = timezone === 'Africa/Lagos' ? 'WAT' : timezone;
+  return endTime ? `${datePart}, ${startTime} to ${endTime} ${zoneAbbr}` : `${datePart}, ${startTime} ${zoneAbbr}`;
+}
+
 /** Sidebar list: "Oct. 18, 2019". */
 export function shortDate(value) {
   const d = asDate(value);

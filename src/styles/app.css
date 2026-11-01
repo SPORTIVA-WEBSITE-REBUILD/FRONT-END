@@ -2911,3 +2911,197 @@ textarea {
   color: #fff;
   text-decoration: underline;
 }
+
+/* ============================== webinar ================================ */
+/* Shares the site's tokens: --navy, --blue (accent — the design system has
+   no separate "mint" token; --blue is the closest match), --ink-1/2/3,
+   --line, --surface, and the existing 16px card radius + .pcn-cta pill. */
+
+.pcn-webinar-hero {
+  background: var(--navy);
+  color: #fff;
+  padding: 72px 0 56px;
+}
+
+.pcn-webinar-hero__grid {
+  display: grid;
+  gap: 2.5rem 3rem;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "title card"
+    "banner card";
+  align-items: start;
+}
+
+.pcn-webinar-hero__title-block { grid-area: title; }
+.pcn-webinar-hero__card { grid-area: card; }
+.pcn-webinar-hero__banner {
+  grid-area: banner;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  border-radius: 16px;
+  display: block;
+  object-fit: cover;
+}
+
+.pcn-webinar-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.pcn-webinar-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pcn-webinar-hero__card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  color: var(--ink-1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+.pcn-webinar-hero__card-heading {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin-bottom: 1.25rem;
+  color: var(--ink-1);
+}
+
+/* Mobile: title+chip, then the card, then the banner — the brief's order. */
+@media (max-width: 991.98px) {
+  .pcn-webinar-hero { padding: 48px 0 40px; }
+  .pcn-webinar-hero__grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "title" "card" "banner";
+    gap: 1.75rem;
+  }
+  .pcn-webinar-hero__banner { max-width: 100%; }
+}
+
+/* ---------------------------- registration form -------------------------- */
+.pcn-webinar-register .form-group { margin-bottom: 1.1rem; }
+.pcn-webinar-register .pcn-consultation__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.pcn-webinar-register__consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+.pcn-webinar-register__consent input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.pcn-webinar-register__consent a { color: var(--blue); }
+
+.pcn-field-error {
+  display: block;
+  color: #c0392b;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pcn-webinar-register__success,
+.pcn-webinar-register__closed {
+  text-align: center;
+  padding: 1rem 0;
+}
+.pcn-webinar-register__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(4, 125, 214, 0.12);
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.pcn-webinar-register__success-heading {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--ink-1);
+}
+.pcn-webinar-register__success-body { color: var(--ink-2); }
+.pcn-webinar-register__closed {
+  background: var(--surface);
+  border-radius: 12px;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+/* Visible keyboard focus everywhere in the form, on top of any browser
+   default — matches the accessibility requirement explicitly. */
+.pcn-webinar-register input:focus-visible,
+.pcn-webinar-register button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ------------------------------ speakers --------------------------------- */
+.pcn-webinar-speaker-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.75rem;
+  text-align: center;
+  height: 100%;
+}
+.pcn-webinar-speaker-card__photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  display: block;
+}
+.pcn-webinar-speaker-card__photo--placeholder {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.pcn-webinar-speaker-card__role {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.pcn-webinar-speaker-card__name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+  color: var(--ink-1);
+}
+.pcn-webinar-speaker-card__title {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.pcn-webinar-speaker-card__bio {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 10px;
+  line-height: 1.6;
+}
