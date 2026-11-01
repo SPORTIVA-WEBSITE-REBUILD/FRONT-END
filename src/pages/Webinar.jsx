@@ -6,6 +6,12 @@ import { useWebinar } from '../hooks/useWebinar.js';
 import { webinarDateChip } from '../lib/format.js';
 import { graph, breadcrumbs } from '../lib/structuredData.js';
 
+const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://pcnsportivalp.com').replace(/\/$/, '');
+// The generated 1200x630 default (npm run share-image), landscape — not
+// webinar.bannerUrl, which is the portrait 1080x1350 hero photo and is the
+// wrong aspect ratio for a social-share card.
+const DEFAULT_SHARE_IMAGE = `${SITE_URL}/webinar-share.jpg`;
+
 /**
  * Standalone page for the webinar — always reachable at /webinar until the
  * end time (not only while the home page hero is showing it), so a shared
@@ -24,7 +30,7 @@ export default function Webinar() {
       <Seo
         title={webinar?.title}
         description={description}
-        image={webinar?.shareImageUrl || webinar?.bannerUrl}
+        image={webinar?.shareImageUrl || DEFAULT_SHARE_IMAGE}
         path="/webinar"
         type="website"
         jsonLd={webinar ? graph(breadcrumbs([

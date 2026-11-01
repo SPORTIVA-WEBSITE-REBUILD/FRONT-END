@@ -108,6 +108,15 @@ export default function Home() {
       <Seo
         seo={page?.seo}
         path="/"
+        // While the webinar hero is showing, the share card should describe
+        // the webinar rather than the firm's usual homepage copy — but an
+        // admin's own seo.metaTitle/ogImage on the Home page (above) still
+        // wins, same priority Seo.jsx already applies everywhere else.
+        {...(webinar?.isHeroActive ? {
+          title: webinar.title,
+          description: webinar.description || undefined,
+          image: webinar.shareImageUrl || `${(import.meta.env.VITE_SITE_URL || 'https://pcnsportivalp.com').replace(/\/$/, '')}/webinar-share.jpg`,
+        } : {})}
         jsonLd={siteData?.settings ? graph(organisation(siteData.settings), webSite(siteData.settings)) : null}
       />
 

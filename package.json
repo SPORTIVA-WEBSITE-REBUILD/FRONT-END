@@ -8,7 +8,8 @@
     "build": "vite build && node scripts/generate-sitemap.js",
     "preview": "vite preview",
     "test": "vitest run",
-    "build:only": "vite build"
+    "build:only": "vite build",
+    "share-image": "node scripts/generate-share-image.js"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.11",
@@ -22,6 +23,7 @@
     "@testing-library/react": "^16.1.0",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
+    "playwright-core": "^1.64.1",
     "sass": "^1.83.1",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"
