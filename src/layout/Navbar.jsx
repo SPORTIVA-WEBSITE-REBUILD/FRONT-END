@@ -5,6 +5,7 @@ import { useNavbarScroll } from '../hooks/useAnimations.jsx';
 import { safeHref, isExternal } from '../lib/links.js';
 import SmartLink from '../components/template/SmartLink.jsx';
 import { useWebinar } from '../hooks/useWebinar.js';
+import { useWebinarPreview } from '../hooks/useWebinarPreview.js';
 
 function isActive(href, pathname) {
   if (href === '/') return pathname === '/';
@@ -19,6 +20,8 @@ function isActive(href, pathname) {
 export default function Navbar() {
   const { data } = useSiteSettings();
   const { data: webinar } = useWebinar();
+  const webinarPreview = useWebinarPreview();
+  const webinarHeroActive = Boolean(webinar?.isHeroActive || (webinar && webinarPreview));
   const layout = useLayout();
   const scrollClasses = useNavbarScroll();
   const [open, setOpen] = useState(false);
@@ -65,7 +68,7 @@ export default function Navbar() {
                   : <Link to={item.href} className="nav-link">{item.label}</Link>}
               </li>
             ))}
-            {webinar?.isHeroActive && (
+            {webinarHeroActive && (
               <li className={`nav-item${isActive('/webinar', pathname) ? ' active' : ''}`}>
                 <Link to="/webinar" className="nav-link">Register for the webinar</Link>
               </li>

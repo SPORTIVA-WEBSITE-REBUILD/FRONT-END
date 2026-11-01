@@ -10,6 +10,7 @@ import Consultation from '../components/template/Consultation.jsx';
 import WebinarHero from '../components/WebinarHero.jsx';
 import SpeakersSection from '../components/SpeakersSection.jsx';
 import { useWebinar } from '../hooks/useWebinar.js';
+import { useWebinarPreview } from '../hooks/useWebinarPreview.js';
 import {
   BlogCard, CaseCard, SectionHeading, ServiceCard, TeamCard, TestimonyCard,
 } from '../components/template/cards.jsx';
@@ -44,6 +45,10 @@ export default function Home() {
   // slider with nothing, or with a hero for an event that may not even be
   // on any more.
   const { data: webinar } = useWebinar();
+  // ?previewWebinar=1 only: shows this visitor the hero without changing the
+  // stored webinarHeroEnabled value — see useWebinarPreview.js for the gate.
+  const webinarPreview = useWebinarPreview();
+  const webinarHeroActive = Boolean(webinar?.isHeroActive || (webinar && webinarPreview));
   const common = useCommon();
   const heroRef = useParallax(0.5);
   const [wordIndex, setWordIndex] = useState(0);
@@ -112,7 +117,7 @@ export default function Home() {
         // the webinar rather than the firm's usual homepage copy — but an
         // admin's own seo.metaTitle/ogImage on the Home page (above) still
         // wins, same priority Seo.jsx already applies everywhere else.
-        {...(webinar?.isHeroActive ? {
+        {...(webinarHeroActive ? {
           title: webinar.title,
           description: webinar.description || undefined,
           image: webinar.shareImageUrl || `${(import.meta.env.VITE_SITE_URL || 'https://pcnsportivalp.com').replace(/\/$/, '')}/webinar-share.jpg`,
@@ -120,7 +125,7 @@ export default function Home() {
         jsonLd={siteData?.settings ? graph(organisation(siteData.settings), webSite(siteData.settings)) : null}
       />
 
-      {webinar?.isHeroActive ? (
+      {webinarHeroActive ? (
         <>
           <WebinarHero webinar={webinar} />
           <SpeakersSection speakers={webinar.speakers} />
