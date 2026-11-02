@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { registerForWebinar } from '../lib/webinarApi.js';
 import { COUNTRIES } from '../lib/countries.js';
+import { googleCalendarUrl } from '../lib/calendarLink.js';
 
 export const WEBINAR_ROLES = [
   'Athlete (Professional)',
@@ -36,9 +37,12 @@ function validate(values) {
  * Same shape as EnquiryForm.jsx's "panel" variant (role="status"/"alert"
  * live regions, an off-screen honeypot, a full success swap-out) so this
  * form feels native to the site rather than a bolted-on widget, per the
- * brief.
+ * brief. Field pairs are wrapped in .pcn-webinar-register__row purely so the
+ * hero's compact card can lay them out two-up with scoped CSS — unscoped,
+ * that wrapper has no styling of its own, so the standalone /webinar page's
+ * single-column layout (using this same component) is unaffected.
  */
-export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen }) {
+export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen, webinar }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
 
@@ -70,6 +74,7 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
   const result = mutation.data; // { ok, code?, message } once the request completes
   const succeeded = mutation.isSuccess && result?.ok;
   const alreadyRegistered = succeeded && result?.code === 'ALREADY_REGISTERED';
+  const calendarUrl = webinar ? googleCalendarUrl(webinar) : '';
 
   if (succeeded) {
     return (
@@ -82,7 +87,14 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         <h3 className="pcn-webinar-register__success-heading">
           {alreadyRegistered ? "You're already registered" : "You're registered"}
         </h3>
-        <p className="pcn-webinar-register__success-body">{result.message}</p>
+        <p className="pcn-webinar-register__success-body">
+          {alreadyRegistered ? result.message : "You're registered. Check your inbox for the confirmation email."}
+        </p>
+        {calendarUrl && (
+          <a href={calendarUrl} target="_blank" rel="noopener noreferrer" className="pcn-webinar-register__calendar-link">
+            Add to calendar
+          </a>
+        )}
       </div>
     );
   }
@@ -102,51 +114,76 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         )}
       </div>
 
-      <div className="form-group">
-        <label htmlFor={`${idPrefix}-name`} className="pcn-consultation__label">Name</label>
-        <input
-          id={`${idPrefix}-name`}
-          type="text"
-          className="form-control"
-          value={values.name}
-          onChange={update('name')}
-          aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? `${idPrefix}-name-error` : undefined}
-          required
-        />
-        {errors.name && <span id={`${idPrefix}-name-error`} className="pcn-field-error" role="alert">{errors.name}</span>}
+      <div className="pcn-webinar-register__row">
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-name`} className="pcn-consultation__label">Name</label>
+          <input
+            id={`${idPrefix}-name`}
+            type="text"
+            className="form-control"
+            value={values.name}
+            onChange={update('name')}
+            aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? `${idPrefix}-name-error` : undefined}
+            required
+          />
+          <span id={`${idPrefix}-name-error`} className="pcn-field-error" role={errors.name ? 'alert' : undefined}>{errors.name}</span>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-email`} className="pcn-consultation__label">Email</label>
+          <input
+            id={`${idPrefix}-email`}
+            type="email"
+            className="form-control"
+            value={values.email}
+            onChange={update('email')}
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? `${idPrefix}-email-error` : undefined}
+            required
+          />
+          <span id={`${idPrefix}-email-error`} className="pcn-field-error" role={errors.email ? 'alert' : undefined}>{errors.email}</span>
+        </div>
       </div>
 
-      <div className="form-group">
-        <label htmlFor={`${idPrefix}-email`} className="pcn-consultation__label">Email</label>
-        <input
-          id={`${idPrefix}-email`}
-          type="email"
-          className="form-control"
-          value={values.email}
-          onChange={update('email')}
-          aria-invalid={Boolean(errors.email)}
-          aria-describedby={errors.email ? `${idPrefix}-email-error` : undefined}
-          required
-        />
-        {errors.email && <span id={`${idPrefix}-email-error`} className="pcn-field-error" role="alert">{errors.email}</span>}
-      </div>
+      <div className="pcn-webinar-register__row">
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-role`} className="pcn-consultation__label">Role</label>
+          <select
+            id={`${idPrefix}-role`}
+            className="form-control"
+            value={values.role}
+            onChange={update('role')}
+            aria-invalid={Boolean(errors.role)}
+            aria-describedby={errors.role ? `${idPrefix}-role-error` : undefined}
+            required
+          >
+            <option value="" disabled>Select your role</option>
+            {WEBINAR_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+          <span id={`${idPrefix}-role-error`} className="pcn-field-error" role={errors.role ? 'alert' : undefined}>{errors.role}</span>
+        </div>
 
-      <div className="form-group">
-        <label htmlFor={`${idPrefix}-role`} className="pcn-consultation__label">Role</label>
-        <select
-          id={`${idPrefix}-role`}
-          className="form-control"
-          value={values.role}
-          onChange={update('role')}
-          aria-invalid={Boolean(errors.role)}
-          aria-describedby={errors.role ? `${idPrefix}-role-error` : undefined}
-          required
-        >
-          <option value="" disabled>Select your role</option>
-          {WEBINAR_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
-        </select>
-        {errors.role && <span id={`${idPrefix}-role-error`} className="pcn-field-error" role="alert">{errors.role}</span>}
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-nationality`} className="pcn-consultation__label">Nationality</label>
+          <input
+            id={`${idPrefix}-nationality`}
+            type="text"
+            className="form-control"
+            list={`${idPrefix}-countries`}
+            autoComplete="off"
+            value={values.nationality}
+            onChange={update('nationality')}
+            aria-invalid={Boolean(errors.nationality)}
+            aria-describedby={errors.nationality ? `${idPrefix}-nationality-error` : undefined}
+            placeholder="Start typing to search…"
+            required
+          />
+          <datalist id={`${idPrefix}-countries`}>
+            {COUNTRIES.map((c) => <option key={c} value={c} />)}
+          </datalist>
+          <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role={errors.nationality ? 'alert' : undefined}>{errors.nationality}</span>
+        </div>
       </div>
 
       {values.role === 'Other' && (
@@ -163,30 +200,9 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
             aria-describedby={errors.roleOther ? `${idPrefix}-role-other-error` : undefined}
             required
           />
-          {errors.roleOther && <span id={`${idPrefix}-role-other-error`} className="pcn-field-error" role="alert">{errors.roleOther}</span>}
+          <span id={`${idPrefix}-role-other-error`} className="pcn-field-error" role={errors.roleOther ? 'alert' : undefined}>{errors.roleOther}</span>
         </div>
       )}
-
-      <div className="form-group">
-        <label htmlFor={`${idPrefix}-nationality`} className="pcn-consultation__label">Nationality</label>
-        <input
-          id={`${idPrefix}-nationality`}
-          type="text"
-          className="form-control"
-          list={`${idPrefix}-countries`}
-          autoComplete="off"
-          value={values.nationality}
-          onChange={update('nationality')}
-          aria-invalid={Boolean(errors.nationality)}
-          aria-describedby={errors.nationality ? `${idPrefix}-nationality-error` : undefined}
-          placeholder="Start typing to search…"
-          required
-        />
-        <datalist id={`${idPrefix}-countries`}>
-          {COUNTRIES.map((c) => <option key={c} value={c} />)}
-        </datalist>
-        {errors.nationality && <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role="alert">{errors.nationality}</span>}
-      </div>
 
       <div className="form-group">
         <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone number <span className="muted">(optional)</span></label>
@@ -199,7 +215,7 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
           aria-invalid={Boolean(errors.phone)}
           aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
         />
-        {errors.phone && <span id={`${idPrefix}-phone-error`} className="pcn-field-error" role="alert">{errors.phone}</span>}
+        <span id={`${idPrefix}-phone-error`} className="pcn-field-error" role={errors.phone ? 'alert' : undefined}>{errors.phone}</span>
       </div>
 
       <div className="form-group pcn-webinar-register__consent">
@@ -215,8 +231,8 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
           />
           {' '}I agree to the <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</Link>.
         </label>
-        {errors.consent && <span id={`${idPrefix}-consent-error`} className="pcn-field-error" role="alert">{errors.consent}</span>}
-        <p className="pcn-webinar-register__note muted" style={{ fontSize: 12, marginTop: 4 }}>
+        <span id={`${idPrefix}-consent-error`} className="pcn-field-error" role={errors.consent ? 'alert' : undefined}>{errors.consent}</span>
+        <p className="pcn-webinar-register__note muted">
           Role and nationality are used for event reporting only.
         </p>
       </div>
@@ -226,7 +242,7 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         <input type="text" name="website" tabIndex={-1} autoComplete="off" value={values.website} onChange={update('website')} />
       </div>
 
-      <button type="submit" className="btn btn-primary pcn-cta" disabled={mutation.isPending}>
+      <button type="submit" className="btn btn-primary pcn-cta pcn-webinar-register__submit" disabled={mutation.isPending}>
         {mutation.isPending ? 'Registering…' : 'Register'}
       </button>
     </form>

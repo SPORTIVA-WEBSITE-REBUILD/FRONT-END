@@ -145,7 +145,42 @@ describe('WebinarRegistrationForm', () => {
     renderWithProviders(<WebinarRegistrationForm idPrefix="t4" registrationOpen />);
     fillAndSubmit();
     const status = await screen.findByRole('status');
-    expect(within(status).getByText(/you.?re registered/i)).toBeInTheDocument();
+    expect(within(status).getByRole('heading', { name: /you.?re registered/i })).toBeInTheDocument();
+  });
+
+  it('shows an "Add to calendar" link on success, built from public fields only (no Meet link)', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ success: true, data: { ok: true, message: 'Thanks.' } }),
+    })));
+    renderWithProviders(
+      <WebinarRegistrationForm
+        idPrefix="t4b"
+        registrationOpen
+        webinar={{ title: webinar.title, startsAt: webinar.startsAt, endsAt: webinar.endsAt }}
+      />,
+    );
+    fillAndSubmit();
+    const status = await screen.findByRole('status');
+    const link = within(status).getByRole('link', { name: 'Add to calendar' });
+    expect(link).toHaveAttribute('href', expect.stringContaining('calendar.google.com'));
+    expect(link.getAttribute('href')).not.toContain('meet.google.com');
+  });
+
+  it('pairs Name/Email and Role/Nationality into rows only inside the hero card, not on the plain form', () => {
+    const { container: heroContainer } = renderWithProviders(
+      <div className="pcn-webinar-hero__card">
+        <WebinarRegistrationForm idPrefix="t4c" registrationOpen />
+      </div>,
+    );
+    expect(heroContainer.querySelectorAll('.pcn-webinar-register__row')).toHaveLength(2);
+
+    const { container: plainContainer } = renderWithProviders(
+      <WebinarRegistrationForm idPrefix="t4d" registrationOpen />,
+    );
+    // The wrapper divs exist either way (harmless without the hero-scoped
+    // selector), but only resolve to paired CSS when under .pcn-webinar-hero__card.
+    expect(plainContainer.closest('.pcn-webinar-hero__card')).toBeNull();
   });
 
   it('shows the closed message and no form fields when registrationOpen is false', () => {

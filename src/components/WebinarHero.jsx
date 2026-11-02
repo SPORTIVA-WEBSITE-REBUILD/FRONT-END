@@ -20,29 +20,32 @@ export default function WebinarHero({ webinar }) {
   return (
     <section className="pcn-webinar-hero">
       <div className="container pcn-webinar-hero__grid">
-        <div className="pcn-webinar-hero__title-block">
-          <h1 className="pcn-webinar-hero__title">{webinar.title}</h1>
+        <div className="pcn-webinar-hero__banner-col">
+          {webinar.bannerUrl && (
+            <img
+              src={webinar.bannerUrl}
+              alt={webinar.title}
+              width={480}
+              height={600}
+              className="pcn-webinar-hero__banner"
+            />
+          )}
+        </div>
+
+        <div className="pcn-webinar-hero__intro">
+          <span className="pcn-webinar-hero__eyebrow">Free webinar</span>
           {chip && (
             <div className="pcn-webinar-hero__chip">
               <span className="icon-calendar" aria-hidden="true" /> {chip}, Google Meet
             </div>
           )}
+          <h1 className="pcn-webinar-hero__title">{webinar.title}</h1>
         </div>
 
         <div className="pcn-webinar-hero__card">
           <h2 className="pcn-webinar-hero__card-heading">Register for this webinar</h2>
-          <WebinarRegistrationForm idPrefix="webinar-hero" registrationOpen={webinar.registrationOpen} />
+          <WebinarRegistrationForm idPrefix="webinar-hero" registrationOpen={webinar.registrationOpen} webinar={webinar} />
         </div>
-
-        {webinar.bannerUrl && (
-          <img
-            src={webinar.bannerUrl}
-            alt={webinar.title}
-            width={480}
-            height={600}
-            className="pcn-webinar-hero__banner"
-          />
-        )}
       </div>
     </section>
   );

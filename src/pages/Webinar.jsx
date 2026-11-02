@@ -97,9 +97,9 @@ export default function Webinar() {
                 )}
               </div>
               <div className="col-lg-5">
-                <div className="pcn-webinar-hero__card">
+                <div className="pcn-webinar-page__card">
                   <h2 className="pcn-webinar-hero__card-heading">Register for this webinar</h2>
-                  <WebinarRegistrationForm idPrefix="webinar-page" registrationOpen={webinar.registrationOpen} />
+                  <WebinarRegistrationForm idPrefix="webinar-page" registrationOpen={webinar.registrationOpen} webinar={webinar} />
                 </div>
               </div>
             </div>

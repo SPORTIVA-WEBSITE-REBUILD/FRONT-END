@@ -68,7 +68,16 @@ export default function Navbar() {
                   : <Link to={item.href} className="nav-link">{item.label}</Link>}
               </li>
             ))}
-            {webinarHeroActive && (
+            {/*
+              Only shown when the hero is enabled AND the current page is
+              not already showing a registration form of its own — on the
+              home page (the hero itself) and /webinar, this link would be
+              both redundant and, with "Register" already present in the
+              CMS-driven items above on some configurations, wide enough to
+              overflow the row and clip the CTA pill after it. See the nav
+              CTA fix note below.
+            */}
+            {webinarHeroActive && pathname !== '/' && !pathname.startsWith('/webinar') && (
               <li className={`nav-item${isActive('/webinar', pathname) ? ' active' : ''}`}>
                 <Link to="/webinar" className="nav-link">Register for the webinar</Link>
               </li>
