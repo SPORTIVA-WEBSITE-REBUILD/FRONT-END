@@ -892,6 +892,7 @@ h1, h2, h3, h4, h5,
 	height: 52px!important;
 	background: $white!important;
 	color: $black!important;
+	font-family: inherit; // <select> doesn't inherit this by default like <input> does
 	font-size: 18px;
 	border-radius: 5px;
 	box-shadow: none!important;
