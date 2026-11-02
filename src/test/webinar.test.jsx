@@ -157,6 +157,29 @@ describe('WebinarRegistrationForm', () => {
     expect(screen.getByText('Select your nationality from the list.')).toBeInTheDocument();
   });
 
+  it('Nationality is a real <select> with a pinned Common group above the full A-Z list, each country once', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2g" registrationOpen />);
+    const select = screen.getByLabelText('Nationality');
+    expect(select.tagName).toBe('SELECT');
+
+    const groups = select.querySelectorAll('optgroup');
+    expect(groups).toHaveLength(2);
+    expect(groups[0]).toHaveAttribute('label', 'Common');
+    expect(groups[1]).toHaveAttribute('label', 'All countries (A-Z)');
+
+    const commonLabels = [...groups[0].querySelectorAll('option')].map((o) => o.value);
+    expect(commonLabels).toEqual(['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'United Kingdom', 'United States']);
+
+    // Pinned common countries don't repeat in the A-Z group.
+    const azLabels = [...groups[1].querySelectorAll('option')].map((o) => o.value);
+    expect(azLabels).not.toContain('Nigeria');
+    expect(azLabels).toEqual([...azLabels].sort());
+
+    // No country appears twice across the whole select.
+    const allValues = [...select.querySelectorAll('option')].map((o) => o.value).filter(Boolean);
+    expect(new Set(allValues).size).toBe(allValues.length);
+  });
+
   it('shows a "tell us your role" text field only when role is Other, and requires it', () => {
     renderWithProviders(<WebinarRegistrationForm idPrefix="t2d" registrationOpen />);
     expect(screen.queryByLabelText('Tell us your role')).not.toBeInTheDocument();

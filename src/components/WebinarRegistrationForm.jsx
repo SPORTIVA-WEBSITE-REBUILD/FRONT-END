@@ -16,6 +16,12 @@ export const WEBINAR_ROLES = [
 
 const COUNTRY_SET = new Set(COUNTRIES);
 
+// Pinned to the top of the Nationality dropdown, ahead of the A-Z list —
+// removed from the A-Z group below so each country appears only once.
+const COMMON_COUNTRIES = ['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'United Kingdom', 'United States'];
+const COMMON_SET = new Set(COMMON_COUNTRIES);
+const OTHER_COUNTRIES = COUNTRIES.filter((c) => !COMMON_SET.has(c));
+
 const EMPTY = {
   name: '', email: '', role: '', roleOther: '', nationality: '', phone: '',
   consent: false, website: '',
@@ -166,22 +172,23 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
 
         <div className="form-group">
           <label htmlFor={`${idPrefix}-nationality`} className="pcn-consultation__label">Nationality</label>
-          <input
+          <select
             id={`${idPrefix}-nationality`}
-            type="text"
             className="form-control"
-            list={`${idPrefix}-countries`}
-            autoComplete="off"
             value={values.nationality}
             onChange={update('nationality')}
             aria-invalid={Boolean(errors.nationality)}
             aria-describedby={errors.nationality ? `${idPrefix}-nationality-error` : undefined}
-            placeholder="Start typing to search…"
             required
-          />
-          <datalist id={`${idPrefix}-countries`}>
-            {COUNTRIES.map((c) => <option key={c} value={c} />)}
-          </datalist>
+          >
+            <option value="" disabled>Select your nationality</option>
+            <optgroup label="Common">
+              {COMMON_COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </optgroup>
+            <optgroup label="All countries (A-Z)">
+              {OTHER_COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </optgroup>
+          </select>
           <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role={errors.nationality ? 'alert' : undefined}>{errors.nationality}</span>
         </div>
 
