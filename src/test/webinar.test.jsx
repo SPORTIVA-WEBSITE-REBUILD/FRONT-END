@@ -296,4 +296,24 @@ describe('Home: webinar hero replaces the slider, and fails safe', () => {
     // full SpeakersSection rendered below the hero.
     expect(screen.getAllByText('Caroline Mwanzia').length).toBeGreaterThan(0);
   });
+
+  it('swaps back to the normal slider hero once registration succeeds, in this session only', async () => {
+    vi.stubGlobal('fetch', mockApi({
+      // Checked in insertion order by mockApi's substring match — the more
+      // specific route must come first, or "/webinar" alone would also
+      // match "/webinar/register" and shadow it.
+      '/webinar/register': { data: { ok: true, message: 'Thanks — you are registered.' } },
+      '/webinar': { data: webinar },
+      '/pages/home': { data: { slug: 'home', title: 'Home', sections: [{ key: 'hero', items: [{ title: 'x' }] }] } },
+    }));
+    renderWithProviders(<Home />);
+    await waitFor(() => expect(screen.getByText(/Register for this webinar/)).toBeInTheDocument());
+
+    fillAndSubmit();
+
+    // The normal 3-slide hero replaces the webinar hero, in this same render.
+    await waitFor(() => expect(document.querySelector('.hero-wrap.pcn-hero')).toBeInTheDocument());
+    expect(screen.queryByText(/Register for this webinar/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /you.?re registered/i })).not.toBeInTheDocument();
+  });
 });

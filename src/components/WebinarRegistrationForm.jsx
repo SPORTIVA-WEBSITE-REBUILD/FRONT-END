@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { registerForWebinar } from '../lib/webinarApi.js';
@@ -48,13 +48,21 @@ function validate(values) {
  * that wrapper has no styling of its own, so the standalone /webinar page's
  * single-column layout (using this same component) is unaffected.
  */
-export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen, webinar }) {
+export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen, webinar, onRegistered }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
 
   const mutation = useMutation({
     mutationFn: () => registerForWebinar(values),
   });
+
+  // Fires once, right when the success state first appears — lets a parent
+  // (the home page) swap the webinar hero back to the normal site hero for
+  // the rest of this visit, without persisting anything: a refresh starts
+  // the page fresh and the webinar hero (if still active) shows again.
+  useEffect(() => {
+    if (mutation.isSuccess && mutation.data?.ok) onRegistered?.();
+  }, [mutation.isSuccess, mutation.data, onRegistered]);
 
   const update = (field) => (e) => {
     const v = field === 'consent' ? e.target.checked : e.target.value;
