@@ -83,6 +83,26 @@ describe('WebinarHero', () => {
     renderWithProviders(<WebinarHero webinar={webinar} />); // social: {}
     expect(screen.queryByText('Follow us')).not.toBeInTheDocument();
   });
+
+  it('shows the collaboration line, from webinar.collaborationLine, only when it is set', () => {
+    renderWithProviders(<WebinarHero webinar={webinar} />); // no collaborationLine on the base fixture
+    expect(screen.queryByText(/In Collaboration/)).not.toBeInTheDocument();
+
+    const withLine = { ...webinar, collaborationLine: 'In Collaboration with Rasheedat Ajibade Foundation' };
+    renderWithProviders(<WebinarHero webinar={withLine} />);
+    expect(screen.getByText('In Collaboration with Rasheedat Ajibade Foundation')).toBeInTheDocument();
+  });
+
+  it('shows the collaboration logo next to the line only when collaborationLogoUrl is set', () => {
+    const withLogo = {
+      ...webinar,
+      collaborationLine: 'In Collaboration with Rasheedat Ajibade Foundation',
+      collaborationLogoUrl: 'https://res.cloudinary.com/demo/raf-logo.png',
+    };
+    renderWithProviders(<WebinarHero webinar={withLogo} />);
+    const logo = screen.getByAltText('');
+    expect(logo).toHaveAttribute('src', 'https://res.cloudinary.com/demo/raf-logo.png');
+  });
 });
 
 describe('SpeakersSection', () => {

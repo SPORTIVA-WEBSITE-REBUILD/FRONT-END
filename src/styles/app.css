@@ -2975,10 +2975,19 @@ textarea {
   margin-bottom: 7px;
 }
 .pcn-webinar-hero__kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-size: 12px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
   margin-bottom: 5px;
+}
+.pcn-webinar-hero__kicker-logo {
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .pcn-webinar-hero__title {
   font-family: var(--font-display);
