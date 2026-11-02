@@ -146,7 +146,7 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         </div>
       </div>
 
-      <div className="pcn-webinar-register__row">
+      <div className="pcn-webinar-register__row pcn-webinar-register__row--three">
         <div className="form-group">
           <label htmlFor={`${idPrefix}-role`} className="pcn-consultation__label">Role</label>
           <select
@@ -184,6 +184,20 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
           </datalist>
           <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role={errors.nationality ? 'alert' : undefined}>{errors.nationality}</span>
         </div>
+
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone <span className="muted">(optional)</span></label>
+          <input
+            id={`${idPrefix}-phone`}
+            type="tel"
+            className="form-control"
+            value={values.phone}
+            onChange={update('phone')}
+            aria-invalid={Boolean(errors.phone)}
+            aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
+          />
+          <span id={`${idPrefix}-phone-error`} className="pcn-field-error" role={errors.phone ? 'alert' : undefined}>{errors.phone}</span>
+        </div>
       </div>
 
       {values.role === 'Other' && (
@@ -203,20 +217,6 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
           <span id={`${idPrefix}-role-other-error`} className="pcn-field-error" role={errors.roleOther ? 'alert' : undefined}>{errors.roleOther}</span>
         </div>
       )}
-
-      <div className="form-group">
-        <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone number <span className="muted">(optional)</span></label>
-        <input
-          id={`${idPrefix}-phone`}
-          type="tel"
-          className="form-control"
-          value={values.phone}
-          onChange={update('phone')}
-          aria-invalid={Boolean(errors.phone)}
-          aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
-        />
-        <span id={`${idPrefix}-phone-error`} className="pcn-field-error" role={errors.phone ? 'alert' : undefined}>{errors.phone}</span>
-      </div>
 
       <div className="form-group pcn-webinar-register__consent">
         <label htmlFor={`${idPrefix}-consent`}>

@@ -119,7 +119,7 @@ describe('WebinarRegistrationForm', () => {
 
   it('accepts an invalid phone number as an inline error, but allows submitting with no phone at all', () => {
     renderWithProviders(<WebinarRegistrationForm idPrefix="t2e" registrationOpen />);
-    fireEvent.change(screen.getByLabelText(/Phone number/), { target: { value: 'abc' } });
+    fireEvent.change(screen.getByLabelText(/^Phone/), { target: { value: 'abc' } });
     fillAndSubmit();
     expect(screen.getByText('Enter a valid phone number.')).toBeInTheDocument();
   });

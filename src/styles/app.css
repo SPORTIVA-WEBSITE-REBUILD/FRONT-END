@@ -2947,39 +2947,16 @@ textarea {
   /* Clears the fixed/overlaid header (position: absolute, top: 20px — see
      .ftco-navbar-light in style.scss) with real room to spare; the header's
      own rendered height varies slightly by content, so this is generous
-     rather than tuned to a measured pixel value. Top-aligned, not
-     vertically centred — centring inside a hard 100vh box pushed the
-     content down by roughly half of the leftover space on both sides,
-     reading as a large empty gap under the header. */
-  padding: 120px 0 48px;
-  min-height: calc(100vh - 90px);
+     rather than tuned to a measured pixel value. */
+  padding: 96px 0 28px;
 }
 
-.pcn-webinar-hero__grid {
-  display: grid;
-  gap: 2rem 3rem;
-  grid-template-columns: 45% 1fr;
-  grid-template-areas:
-    "banner intro"
-    "banner card";
-  align-items: start;
-  width: 100%;
+/* ---- full-width header: eyebrow, title (no clamp), date pill — centred ---- */
+.pcn-webinar-hero__intro {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 1.25rem;
 }
-
-.pcn-webinar-hero__banner-col { grid-area: banner; }
-.pcn-webinar-hero__intro { grid-area: intro; }
-.pcn-webinar-hero__card { grid-area: card; }
-
-.pcn-webinar-hero__banner {
-  width: 100%;
-  max-height: 75vh;
-  height: auto;
-  border-radius: 16px;
-  display: block;
-  object-fit: contain;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
 .pcn-webinar-hero__eyebrow {
   display: block;
   font-size: 12px;
@@ -2987,7 +2964,15 @@ textarea {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--blue);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+.pcn-webinar-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  /* The whole title always shows — no clamp/ellipsis/truncation. */
 }
 .pcn-webinar-hero__chip {
   display: inline-flex;
@@ -3000,46 +2985,94 @@ textarea {
   font-size: 14px;
   font-weight: 600;
   color: #fff;
-  margin-bottom: 16px;
 }
-.pcn-webinar-hero__title {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  line-height: 1.2;
-  color: #fff;
-  margin-bottom: 1.75rem;
-  /* Max 3 lines, per the brief. */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+
+/* ---- two equal-height cards, same top edge ---- */
+.pcn-webinar-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "banner card";
+  gap: 32px;
+  align-items: stretch;
+}
+/* Bounds the row's height on desktop: without this, the banner image's own
+   480:600 intrinsic aspect ratio (the only thing otherwise sizing an
+   object-fit: contain box) would set the row far taller than the form
+   content actually needs, blowing past "about one screen" on a laptop. The
+   lower bound is comfortably above the trimmed form's natural content
+   height so nothing in the card is ever clipped. */
+@media (min-width: 1024px) {
+  .pcn-webinar-hero__grid { height: clamp(400px, 46vh, 480px); }
+}
+.pcn-webinar-hero__banner-card { grid-area: banner; }
+.pcn-webinar-hero__card { grid-area: card; }
+
+.pcn-webinar-hero__banner-card {
+  background: #0b1220;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  text-overflow: ellipsis;
+  height: 100%;
+}
+.pcn-webinar-hero__banner {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
 .pcn-webinar-hero__card {
   background: #fff;
   border-radius: 20px;
-  padding: 28px;
+  padding: 22px 24px;
   color: var(--ink-1);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .pcn-webinar-hero__card-heading {
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  margin-bottom: 1.1rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
   color: var(--ink-1);
 }
 
-/* Compact field layout inside the hero card only — Name/Email and
-   Role/Nationality pair up two-up; Phone, consent and the submit button
-   stay full width. .pcn-webinar-register__row has no styling outside this
-   scope, so the plain /webinar page keeps its normal single-column stack. */
+/* The form fills the card's remaining height, pushing the Register button
+   to the bottom (see .pcn-webinar-register__submit below) rather than
+   leaving it stranded right under the last field. */
+.pcn-webinar-hero__card .pcn-webinar-register {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.pcn-webinar-hero__card .pcn-webinar-register__submit { margin-top: auto; }
+.pcn-webinar-hero__card .pcn-webinar-register__success,
+.pcn-webinar-hero__card .pcn-webinar-register__closed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Compact field layout inside the hero card only — Name/Email pair up,
+   Role/Nationality/Phone pair up three-across (so Phone is never left
+   alone on its own row, which is what lets everything fit in one screen);
+   consent and the submit button stay full width. .pcn-webinar-register__row
+   has no styling outside this scope, so the plain /webinar page keeps its
+   normal single-column stack. */
 .pcn-webinar-hero__card .pcn-webinar-register__row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 14px;
 }
-.pcn-webinar-hero__card .form-group { margin-bottom: 14px; }
+.pcn-webinar-hero__card .pcn-webinar-register__row--three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.pcn-webinar-hero__card .form-group { margin-bottom: 10px; }
 .pcn-webinar-hero__card .form-control {
   height: 44px;
   padding-top: 0;
@@ -3050,14 +3083,6 @@ textarea {
 /* Reserves a line of space for an inline error so a field turning invalid
    never shifts the fields below it. */
 .pcn-webinar-hero__card .pcn-field-error { min-height: 15px; }
-
-/* Keeps the card from visibly resizing between the form and the success
-   message — an approximate match to the filled-in form's height, not a
-   hard guarantee, since the exact content never matches to the pixel. */
-.pcn-webinar-hero__card { min-height: 560px; display: flex; flex-direction: column; justify-content: center; }
-.pcn-webinar-hero__card .pcn-webinar-register,
-.pcn-webinar-hero__card .pcn-webinar-register__success,
-.pcn-webinar-hero__card .pcn-webinar-register__closed { width: 100%; }
 
 /* The standalone /webinar page's card — same look the hero card had before
    this redesign, kept as its own class so the hero's new compact/paired
@@ -3078,32 +3103,24 @@ textarea {
   text-decoration: underline;
 }
 
-@media (max-width: 1023.98px) and (min-width: 640px) {
-  .pcn-webinar-hero { padding: 120px 0 48px; min-height: 0; }
+/* Stack: label/title/pill (already above the grid), form card, then the
+   banner card — a grid-area reorder, not a DOM change. Full width, no
+   centred max-width constraint, per the brief. */
+@media (max-width: 1023.98px) {
+  .pcn-webinar-hero { padding: 104px 0 40px; }
   .pcn-webinar-hero__grid {
     grid-template-columns: 1fr;
-    grid-template-areas: "intro" "banner" "card";
-    justify-items: center;
-  }
-  .pcn-webinar-hero__intro { text-align: center; }
-  .pcn-webinar-hero__banner-col,
-  .pcn-webinar-hero__card { width: 100%; max-width: 560px; }
-  .pcn-webinar-hero__title { -webkit-line-clamp: unset; }
-  .pcn-webinar-hero__card { min-height: 0; text-align: left; }
-}
-
-/* Mobile: date pill, title, card, then the banner — the brief's order. */
-@media (max-width: 639.98px) {
-  .pcn-webinar-hero { padding: 104px 0 40px; min-height: 0; }
-  .pcn-webinar-hero__grid {
-    grid-template-columns: 1fr;
-    grid-template-areas: "intro" "card" "banner";
+    grid-template-areas: "card" "banner";
     gap: 1.5rem;
   }
-  .pcn-webinar-hero__title { -webkit-line-clamp: unset; }
-  .pcn-webinar-hero__banner { max-width: 100%; }
-  .pcn-webinar-hero__card { padding: 20px; min-height: 0; }
-  .pcn-webinar-hero__card .pcn-webinar-register__row {
+  .pcn-webinar-hero__banner-card { min-height: 320px; }
+  .pcn-webinar-hero__card { padding: 24px; }
+}
+
+@media (max-width: 639.98px) {
+  .pcn-webinar-hero__card { padding: 20px; }
+  .pcn-webinar-hero__card .pcn-webinar-register__row,
+  .pcn-webinar-hero__card .pcn-webinar-register__row--three {
     grid-template-columns: 1fr;
   }
   /* 48px minimum touch targets on mobile, per the brief. */
