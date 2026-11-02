@@ -2948,11 +2948,12 @@ textarea {
      .ftco-navbar-light in style.scss) with real room to spare; the header's
      own rendered height varies slightly by content, so this is generous
      rather than tuned to a measured pixel value. */
-  /* Deliberately tight: real browsers lose 60-150px of viewport height to
-     their own chrome (address bar, bookmarks bar, OS title bar) that a
-     plain 1440x900 Playwright screenshot does not account for — this
-     needs headroom for that, not just a bare fit against a raw viewport. */
-  padding: 64px 0 20px;
+  /* Real browsers lose 60-150px of viewport height to their own chrome
+     (address bar, bookmarks bar, OS title bar) that a plain 1440x900
+     Playwright screenshot does not account for, so this stays on the
+     tight side — but with at least 24px of clear space below the
+     overlaid header before the FREE WEBINAR pill. */
+  padding: 72px 0 20px;
 }
 
 /* ---- full-width header: eyebrow, kicker, title, date pill — centred ---- */
@@ -3017,19 +3018,20 @@ textarea {
    900px of window height). align-items: stretch alone already makes
    both columns match the taller one's natural content height, which is
    what actually keeps nothing clipped. */
-.pcn-webinar-hero__speakers-card { grid-area: left; }
+/* min-width: 0 overrides the grid item default of min-width: auto — without
+   it, the speaker photos' own min-content size can force this column (and
+   the whole outer grid) wider than its 1fr share, pushing it to overlap
+   the form card beside it. */
+.pcn-webinar-hero__speakers-card { grid-area: left; min-width: 0; }
 .pcn-webinar-hero__card { grid-area: card; }
 
 .pcn-webinar-hero__speakers-card {
   display: flex;
   flex-direction: column;
-  /* flex-start, not center — the speakers card must share the same top
-     edge as the form card beside it (see .pcn-webinar-hero__card, which
-     is top-anchored by its own flex layout), not centre within the row's
-     stretched height. padding-top matches the form card's own so the two
-     headings line up exactly, not just the two outer card edges. */
-  justify-content: flex-start;
-  padding-top: 16px;
+  /* Centred, not top-anchored — with the form card now noticeably taller
+     than the speakers block, top-anchoring left a large empty gap at the
+     bottom of this column. Centring balances the two columns instead. */
+  justify-content: center;
   overflow: hidden;
 }
 .pcn-webinar-hero__speakers-heading {
@@ -3043,34 +3045,39 @@ textarea {
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 1.25rem;
 }
+/* Three equal-width columns spanning the card's full width — a single
+   grid row auto-sizes to its tallest cell, so all three cards come out
+   the same height for free, however differently their names/roles wrap. */
 .pcn-webinar-hero__speakers-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   list-style: none;
   margin: 0 0 1.25rem;
   padding: 0;
 }
-/* A real card per speaker, per the brief — not bare text on the hero
-   background. Adapts to 1, 2 or 4+ speakers via flex-wrap + the centred
-   list above, rather than a fixed three-column grid. */
 .pcn-webinar-hero__speaker {
-  flex: 0 1 108px;
-  min-width: 96px;
+  min-width: 0;
   text-align: center;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  padding: 14px 10px;
+  padding: 14px 8px;
 }
+/* Scales with the column's own width (14vw tracks it closely enough, since
+   the column is roughly a fixed fraction of the page) rather than a fixed
+   px, so it never outgrows a narrower card between 1024 and 1440px — capped
+   at 180px, the top of the requested 160-180px desktop range. The <img>
+   itself is requested from Cloudinary at 360px (2x) so it stays sharp
+   whatever size it renders at — see WebinarHero.jsx. */
 .pcn-webinar-hero__speaker-photo {
-  width: 64px;
-  height: 64px;
+  width: clamp(90px, 14vw, 180px);
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   object-fit: cover;
   display: block;
-  margin: 0 auto 10px;
+  margin: 0 auto 12px;
 }
 .pcn-webinar-hero__speaker-photo--placeholder {
   background: rgba(255, 255, 255, 0.12);
@@ -3079,13 +3086,17 @@ textarea {
 .pcn-webinar-hero__speaker-name {
   color: #fff;
   font-weight: 700;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 18px;
+  line-height: 1.25;
 }
+/* Allowed to wrap (not nowrap) so "Moderator/Speaker" always stays inside
+   the card rather than overflowing it. */
 .pcn-webinar-hero__speaker-role {
   color: rgba(255, 255, 255, 0.6);
   font-size: 11px;
-  margin-top: 2px;
+  line-height: 1.3;
+  margin-top: 3px;
+  overflow-wrap: break-word;
 }
 
 .pcn-webinar-hero__follow {
@@ -3095,7 +3106,7 @@ textarea {
   background: #fff;
   border-radius: 999px;
   padding: 6px 8px 6px 16px;
-  align-self: center;
+  align-self: flex-start;
 }
 .pcn-webinar-hero__follow-label {
   font-size: 11px;
@@ -3156,7 +3167,7 @@ textarea {
   display: flex;
   flex-direction: column;
 }
-.pcn-webinar-hero__card .pcn-webinar-register__submit { margin-top: auto; }
+.pcn-webinar-hero__card .pcn-webinar-register__submit { margin-top: 2px; }
 .pcn-webinar-hero__card .pcn-webinar-register__success,
 .pcn-webinar-hero__card .pcn-webinar-register__closed {
   flex: 1;
@@ -3179,9 +3190,9 @@ textarea {
 /* Role's enum labels ("Sports Management and Administration") are the
    longest text in the form by far — it gets the most room of the three. */
 .pcn-webinar-hero__card .pcn-webinar-register__row--three {
-  grid-template-columns: 1.4fr 1fr 0.75fr;
+  grid-template-columns: 1.3fr 1fr 0.85fr;
 }
-.pcn-webinar-hero__card .form-group { margin-bottom: 7px; }
+.pcn-webinar-hero__card .form-group { margin-bottom: 16px; }
 .pcn-webinar-hero__card select.form-control {
   font-size: 12.5px;
   padding-left: 8px;
@@ -3230,9 +3241,11 @@ textarea {
     grid-template-areas: "card" "left";
     gap: 1.5rem;
   }
-  .pcn-webinar-hero__speakers-card { text-align: center; }
-  .pcn-webinar-hero__speakers-list { justify-content: center; }
+  .pcn-webinar-hero__speakers-card { text-align: center; justify-content: flex-start; }
+  .pcn-webinar-hero__follow { align-self: center; }
   .pcn-webinar-hero__card { padding: 24px; }
+  /* Tablet: photos about 140px, per the brief. */
+  .pcn-webinar-hero__speaker-photo { width: 140px; height: 140px; }
 }
 
 @media (max-width: 639.98px) {
@@ -3248,6 +3261,20 @@ textarea {
     width: 20px;
     height: 20px;
   }
+
+  /* Mobile: a horizontal swipe row of ~150px-wide cards, 110px photos —
+     nothing cropped or shrunk to illegibility. */
+  .pcn-webinar-hero__speakers-list {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 150px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pcn-webinar-hero__speaker { scroll-snap-align: start; }
+  .pcn-webinar-hero__speaker-photo { width: 110px; height: 110px; }
 }
 
 /* ---------------------------- registration form -------------------------- */

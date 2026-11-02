@@ -186,13 +186,14 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         </div>
 
         <div className="form-group">
-          <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone <span className="muted">(optional)</span></label>
+          <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone</label>
           <input
             id={`${idPrefix}-phone`}
             type="tel"
             className="form-control"
             value={values.phone}
             onChange={update('phone')}
+            placeholder="Optional"
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
           />

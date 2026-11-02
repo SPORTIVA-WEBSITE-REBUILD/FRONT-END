@@ -63,11 +63,14 @@ export default function WebinarHero({ webinar }) {
                 {speakers.map((speaker) => (
                   <li className="pcn-webinar-hero__speaker" key={speaker.name}>
                     {speaker.photoUrl ? (
+                      // Requested at 2x the largest on-screen size (180px desktop) so it
+                      // stays sharp on retina screens — the CSS width/height clamp down
+                      // from there per breakpoint, never up.
                       <img
-                        src={cloudinaryFaceCrop(speaker.photoUrl, 128)}
+                        src={cloudinaryFaceCrop(speaker.photoUrl, 360)}
                         alt={speaker.name}
-                        width={64}
-                        height={64}
+                        width={180}
+                        height={180}
                         className="pcn-webinar-hero__speaker-photo"
                       />
                     ) : (

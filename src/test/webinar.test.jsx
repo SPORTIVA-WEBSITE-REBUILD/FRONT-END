@@ -60,7 +60,8 @@ describe('WebinarHero', () => {
     const names = screen.getAllByText(/Mwanzia|Spreitzer-Kropiunik/).map((el) => el.textContent);
     expect(names[0]).toContain('Caroline Mwanzia'); // order: 1 before 2
     const photo = screen.getByAltText('Caroline Mwanzia');
-    expect(photo).toHaveAttribute('src', expect.stringContaining('c_fill,g_face,w_128,h_128'));
+    // Requested at 360px (2x the largest on-screen 180px size) so it stays sharp on retina screens.
+    expect(photo).toHaveAttribute('src', expect.stringContaining('c_fill,g_face,w_360,h_360'));
   });
 
   it('shows a placeholder, not a broken image, for a speaker with no photo', () => {
