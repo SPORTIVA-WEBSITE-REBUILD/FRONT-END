@@ -2,13 +2,32 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { registerForWebinar } from '../lib/webinarApi.js';
+import { COUNTRIES } from '../lib/countries.js';
 
-const EMPTY = { name: '', email: '', consent: false, website: '' };
+export const WEBINAR_ROLES = [
+  'Athlete (Professional)',
+  'Athlete (Recreational)',
+  'Sports Management and Administration',
+  'Lawyer',
+  'Law Student',
+  'Other',
+];
+
+const COUNTRY_SET = new Set(COUNTRIES);
+
+const EMPTY = {
+  name: '', email: '', role: '', roleOther: '', nationality: '', phone: '',
+  consent: false, website: '',
+};
 
 function validate(values) {
   const errors = {};
   if (values.name.trim().length < 2) errors.name = 'Enter your name.';
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email)) errors.email = 'Enter a valid email address.';
+  if (!WEBINAR_ROLES.includes(values.role)) errors.role = 'Select your role.';
+  if (values.role === 'Other' && !values.roleOther.trim()) errors.roleOther = 'Tell us your role.';
+  if (!COUNTRY_SET.has(values.nationality)) errors.nationality = 'Select your nationality from the list.';
+  if (values.phone && !/^[0-9+()\-.\s]{7,30}$/.test(values.phone)) errors.phone = 'Enter a valid phone number.';
   if (!values.consent) errors.consent = 'Please accept to continue.';
   return errors;
 }
@@ -113,6 +132,76 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
         {errors.email && <span id={`${idPrefix}-email-error`} className="pcn-field-error" role="alert">{errors.email}</span>}
       </div>
 
+      <div className="form-group">
+        <label htmlFor={`${idPrefix}-role`} className="pcn-consultation__label">Role</label>
+        <select
+          id={`${idPrefix}-role`}
+          className="form-control"
+          value={values.role}
+          onChange={update('role')}
+          aria-invalid={Boolean(errors.role)}
+          aria-describedby={errors.role ? `${idPrefix}-role-error` : undefined}
+          required
+        >
+          <option value="" disabled>Select your role</option>
+          {WEBINAR_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+        </select>
+        {errors.role && <span id={`${idPrefix}-role-error`} className="pcn-field-error" role="alert">{errors.role}</span>}
+      </div>
+
+      {values.role === 'Other' && (
+        <div className="form-group">
+          <label htmlFor={`${idPrefix}-role-other`} className="pcn-consultation__label">Tell us your role</label>
+          <input
+            id={`${idPrefix}-role-other`}
+            type="text"
+            className="form-control"
+            maxLength={100}
+            value={values.roleOther}
+            onChange={update('roleOther')}
+            aria-invalid={Boolean(errors.roleOther)}
+            aria-describedby={errors.roleOther ? `${idPrefix}-role-other-error` : undefined}
+            required
+          />
+          {errors.roleOther && <span id={`${idPrefix}-role-other-error`} className="pcn-field-error" role="alert">{errors.roleOther}</span>}
+        </div>
+      )}
+
+      <div className="form-group">
+        <label htmlFor={`${idPrefix}-nationality`} className="pcn-consultation__label">Nationality</label>
+        <input
+          id={`${idPrefix}-nationality`}
+          type="text"
+          className="form-control"
+          list={`${idPrefix}-countries`}
+          autoComplete="off"
+          value={values.nationality}
+          onChange={update('nationality')}
+          aria-invalid={Boolean(errors.nationality)}
+          aria-describedby={errors.nationality ? `${idPrefix}-nationality-error` : undefined}
+          placeholder="Start typing to search…"
+          required
+        />
+        <datalist id={`${idPrefix}-countries`}>
+          {COUNTRIES.map((c) => <option key={c} value={c} />)}
+        </datalist>
+        {errors.nationality && <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role="alert">{errors.nationality}</span>}
+      </div>
+
+      <div className="form-group">
+        <label htmlFor={`${idPrefix}-phone`} className="pcn-consultation__label">Phone number <span className="muted">(optional)</span></label>
+        <input
+          id={`${idPrefix}-phone`}
+          type="tel"
+          className="form-control"
+          value={values.phone}
+          onChange={update('phone')}
+          aria-invalid={Boolean(errors.phone)}
+          aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
+        />
+        {errors.phone && <span id={`${idPrefix}-phone-error`} className="pcn-field-error" role="alert">{errors.phone}</span>}
+      </div>
+
       <div className="form-group pcn-webinar-register__consent">
         <label htmlFor={`${idPrefix}-consent`}>
           <input
@@ -127,6 +216,9 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
           {' '}I agree to the <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</Link>.
         </label>
         {errors.consent && <span id={`${idPrefix}-consent-error`} className="pcn-field-error" role="alert">{errors.consent}</span>}
+        <p className="pcn-webinar-register__note muted" style={{ fontSize: 12, marginTop: 4 }}>
+          Role and nationality are used for event reporting only.
+        </p>
       </div>
 
       {/* Honeypot: off-screen, not display:none — some bots skip display:none. */}

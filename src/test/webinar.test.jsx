@@ -25,9 +25,17 @@ const webinar = {
   social: {},
 };
 
-function fillAndSubmit({ name = 'Jane Doe', email = 'jane@example.com', consent = true } = {}) {
+// null (not undefined — destructuring defaults also trigger on an explicit
+// undefined) means "leave this field untouched at its blank default".
+function fillAndSubmit({
+  name = 'Jane Doe', email = 'jane@example.com', role = 'Lawyer', roleOther = null,
+  nationality = 'Nigeria', consent = true,
+} = {}) {
   fireEvent.change(screen.getByLabelText('Name'), { target: { value: name } });
   fireEvent.change(screen.getByLabelText('Email'), { target: { value: email } });
+  if (role !== null) fireEvent.change(screen.getByLabelText('Role'), { target: { value: role } });
+  if (roleOther !== null) fireEvent.change(screen.getByLabelText('Tell us your role'), { target: { value: roleOther } });
+  if (nationality !== null) fireEvent.change(screen.getByLabelText('Nationality'), { target: { value: nationality } });
   if (consent) fireEvent.click(screen.getByRole('checkbox'));
   fireEvent.click(screen.getByRole('button', { name: 'Register' }));
 }
@@ -85,6 +93,40 @@ describe('WebinarRegistrationForm', () => {
     renderWithProviders(<WebinarRegistrationForm idPrefix="t2" registrationOpen />);
     fillAndSubmit({ consent: false });
     expect(screen.getByText('Please accept to continue.')).toBeInTheDocument();
+  });
+
+  it('requires role and nationality, and shows inline errors when left unset', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2b" registrationOpen />);
+    fillAndSubmit({ role: null, nationality: null });
+    expect(screen.getByText('Select your role.')).toBeInTheDocument();
+    expect(screen.getByText('Select your nationality from the list.')).toBeInTheDocument();
+  });
+
+  it('rejects a nationality that is not in the country list (no free text)', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2c" registrationOpen />);
+    fillAndSubmit({ nationality: 'Not A Real Country' });
+    expect(screen.getByText('Select your nationality from the list.')).toBeInTheDocument();
+  });
+
+  it('shows a "tell us your role" text field only when role is Other, and requires it', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2d" registrationOpen />);
+    expect(screen.queryByLabelText('Tell us your role')).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText('Role'), { target: { value: 'Other' } });
+    expect(screen.getByLabelText('Tell us your role')).toBeInTheDocument();
+    fillAndSubmit({ role: 'Other', roleOther: '' });
+    expect(screen.getByText('Tell us your role.')).toBeInTheDocument();
+  });
+
+  it('accepts an invalid phone number as an inline error, but allows submitting with no phone at all', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2e" registrationOpen />);
+    fireEvent.change(screen.getByLabelText(/Phone number/), { target: { value: 'abc' } });
+    fillAndSubmit();
+    expect(screen.getByText('Enter a valid phone number.')).toBeInTheDocument();
+  });
+
+  it('shows the event-reporting note under the consent checkbox', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2f" registrationOpen />);
+    expect(screen.getByText('Role and nationality are used for event reporting only.')).toBeInTheDocument();
   });
 
   it('includes an off-screen honeypot field', () => {

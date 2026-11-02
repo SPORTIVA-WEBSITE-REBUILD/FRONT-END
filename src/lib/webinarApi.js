@@ -30,11 +30,11 @@ export async function getWebinar({ signal } = {}) {
   return parse(res).then((p) => p.data);
 }
 
-export async function registerForWebinar({ name, email, consent, website }) {
+export async function registerForWebinar({ name, email, role, roleOther, nationality, phone, consent, website }) {
   const res = await fetch(`${BASE}/webinar/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({ name, email, consent, website }),
+    body: JSON.stringify({ name, email, role, roleOther, nationality, phone, consent, website }),
   });
   const payload = await parse(res);
   return payload.data; // { ok, message } or { ok, code, message }
