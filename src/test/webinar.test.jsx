@@ -61,6 +61,16 @@ describe('SpeakersSection', () => {
     const { container } = renderWithProviders(<SpeakersSection speakers={[]} />);
     expect(container).toBeEmptyDOMElement();
   });
+
+  it('shows a literal & in shortBio as a single plain character — no raw entity text, no double-escaping', () => {
+    const speakers = [
+      { name: 'X Speaker', role: 'Speaker', titleLines: [], shortBio: 'Sports Management & Legal Skills', order: 1 },
+    ];
+    const { container } = renderWithProviders(<SpeakersSection speakers={speakers} />);
+    expect(screen.getByText('Sports Management & Legal Skills')).toBeInTheDocument();
+    expect(container.innerHTML).not.toContain('&amp;amp;');
+    expect(screen.queryByText(/&amp;/)).not.toBeInTheDocument();
+  });
 });
 
 describe('WebinarRegistrationForm', () => {
