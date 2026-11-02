@@ -49,6 +49,13 @@ export default function Home() {
   // stored webinarHeroEnabled value — see useWebinarPreview.js for the gate.
   const webinarPreview = useWebinarPreview();
   const webinarHeroActive = Boolean(webinar?.isHeroActive || (webinar && webinarPreview));
+  // Plain component state, not persisted anywhere: once a visitor finishes
+  // registering, the home page swaps back to the normal hero for the rest
+  // of this visit. A refresh remounts Home from scratch, so the webinar
+  // hero (if still active) shows again — exactly the brief's "refresh goes
+  // back to registration" behaviour, with no stored flag to clean up later.
+  const [justRegistered, setJustRegistered] = useState(false);
+  const showWebinarHero = webinarHeroActive && !justRegistered;
   const common = useCommon();
   const heroRef = useParallax(0.5);
   const [wordIndex, setWordIndex] = useState(0);
@@ -117,7 +124,7 @@ export default function Home() {
         // the webinar rather than the firm's usual homepage copy — but an
         // admin's own seo.metaTitle/ogImage on the Home page (above) still
         // wins, same priority Seo.jsx already applies everywhere else.
-        {...(webinarHeroActive ? {
+        {...(showWebinarHero ? {
           title: webinar.title,
           description: webinar.description || undefined,
           image: webinar.shareImageUrl || `${(import.meta.env.VITE_SITE_URL || 'https://pcnsportivalp.com').replace(/\/$/, '')}/webinar-share.jpg`,
@@ -125,9 +132,9 @@ export default function Home() {
         jsonLd={siteData?.settings ? graph(organisation(siteData.settings), webSite(siteData.settings)) : null}
       />
 
-      {webinarHeroActive ? (
+      {showWebinarHero ? (
         <>
-          <WebinarHero webinar={webinar} />
+          <WebinarHero webinar={webinar} onRegistered={() => setJustRegistered(true)} />
           <SpeakersSection speakers={webinar.speakers} />
         </>
       ) : (

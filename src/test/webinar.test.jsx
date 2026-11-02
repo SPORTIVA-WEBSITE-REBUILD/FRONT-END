@@ -157,6 +157,29 @@ describe('WebinarRegistrationForm', () => {
     expect(screen.getByText('Select your nationality from the list.')).toBeInTheDocument();
   });
 
+  it('Nationality is a real <select> with a pinned Common group above the full A-Z list, each country once', () => {
+    renderWithProviders(<WebinarRegistrationForm idPrefix="t2g" registrationOpen />);
+    const select = screen.getByLabelText('Nationality');
+    expect(select.tagName).toBe('SELECT');
+
+    const groups = select.querySelectorAll('optgroup');
+    expect(groups).toHaveLength(2);
+    expect(groups[0]).toHaveAttribute('label', 'Common');
+    expect(groups[1]).toHaveAttribute('label', 'All countries (A-Z)');
+
+    const commonLabels = [...groups[0].querySelectorAll('option')].map((o) => o.value);
+    expect(commonLabels).toEqual(['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'United Kingdom', 'United States']);
+
+    // Pinned common countries don't repeat in the A-Z group.
+    const azLabels = [...groups[1].querySelectorAll('option')].map((o) => o.value);
+    expect(azLabels).not.toContain('Nigeria');
+    expect(azLabels).toEqual([...azLabels].sort());
+
+    // No country appears twice across the whole select.
+    const allValues = [...select.querySelectorAll('option')].map((o) => o.value).filter(Boolean);
+    expect(new Set(allValues).size).toBe(allValues.length);
+  });
+
   it('shows a "tell us your role" text field only when role is Other, and requires it', () => {
     renderWithProviders(<WebinarRegistrationForm idPrefix="t2d" registrationOpen />);
     expect(screen.queryByLabelText('Tell us your role')).not.toBeInTheDocument();
@@ -272,5 +295,25 @@ describe('Home: webinar hero replaces the slider, and fails safe', () => {
     // Appears twice now: once in the hero's speakers card, once in the
     // full SpeakersSection rendered below the hero.
     expect(screen.getAllByText('Caroline Mwanzia').length).toBeGreaterThan(0);
+  });
+
+  it('swaps back to the normal slider hero once registration succeeds, in this session only', async () => {
+    vi.stubGlobal('fetch', mockApi({
+      // Checked in insertion order by mockApi's substring match — the more
+      // specific route must come first, or "/webinar" alone would also
+      // match "/webinar/register" and shadow it.
+      '/webinar/register': { data: { ok: true, message: 'Thanks — you are registered.' } },
+      '/webinar': { data: webinar },
+      '/pages/home': { data: { slug: 'home', title: 'Home', sections: [{ key: 'hero', items: [{ title: 'x' }] }] } },
+    }));
+    renderWithProviders(<Home />);
+    await waitFor(() => expect(screen.getByText(/Register for this webinar/)).toBeInTheDocument());
+
+    fillAndSubmit();
+
+    // The normal 3-slide hero replaces the webinar hero, in this same render.
+    await waitFor(() => expect(document.querySelector('.hero-wrap.pcn-hero')).toBeInTheDocument());
+    expect(screen.queryByText(/Register for this webinar/)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /you.?re registered/i })).not.toBeInTheDocument();
   });
 });

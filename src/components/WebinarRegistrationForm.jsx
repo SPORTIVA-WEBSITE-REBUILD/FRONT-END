@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { registerForWebinar } from '../lib/webinarApi.js';
@@ -15,6 +15,12 @@ export const WEBINAR_ROLES = [
 ];
 
 const COUNTRY_SET = new Set(COUNTRIES);
+
+// Pinned to the top of the Nationality dropdown, ahead of the A-Z list —
+// removed from the A-Z group below so each country appears only once.
+const COMMON_COUNTRIES = ['Nigeria', 'Ghana', 'Kenya', 'South Africa', 'United Kingdom', 'United States'];
+const COMMON_SET = new Set(COMMON_COUNTRIES);
+const OTHER_COUNTRIES = COUNTRIES.filter((c) => !COMMON_SET.has(c));
 
 const EMPTY = {
   name: '', email: '', role: '', roleOther: '', nationality: '', phone: '',
@@ -42,13 +48,21 @@ function validate(values) {
  * that wrapper has no styling of its own, so the standalone /webinar page's
  * single-column layout (using this same component) is unaffected.
  */
-export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen, webinar }) {
+export default function WebinarRegistrationForm({ idPrefix = 'webinar-register', registrationOpen, webinar, onRegistered }) {
   const [values, setValues] = useState(EMPTY);
   const [errors, setErrors] = useState({});
 
   const mutation = useMutation({
     mutationFn: () => registerForWebinar(values),
   });
+
+  // Fires once, right when the success state first appears — lets a parent
+  // (the home page) swap the webinar hero back to the normal site hero for
+  // the rest of this visit, without persisting anything: a refresh starts
+  // the page fresh and the webinar hero (if still active) shows again.
+  useEffect(() => {
+    if (mutation.isSuccess && mutation.data?.ok) onRegistered?.();
+  }, [mutation.isSuccess, mutation.data, onRegistered]);
 
   const update = (field) => (e) => {
     const v = field === 'consent' ? e.target.checked : e.target.value;
@@ -166,22 +180,23 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
 
         <div className="form-group">
           <label htmlFor={`${idPrefix}-nationality`} className="pcn-consultation__label">Nationality</label>
-          <input
+          <select
             id={`${idPrefix}-nationality`}
-            type="text"
             className="form-control"
-            list={`${idPrefix}-countries`}
-            autoComplete="off"
             value={values.nationality}
             onChange={update('nationality')}
             aria-invalid={Boolean(errors.nationality)}
             aria-describedby={errors.nationality ? `${idPrefix}-nationality-error` : undefined}
-            placeholder="Start typing to search…"
             required
-          />
-          <datalist id={`${idPrefix}-countries`}>
-            {COUNTRIES.map((c) => <option key={c} value={c} />)}
-          </datalist>
+          >
+            <option value="" disabled>Select your nationality</option>
+            <optgroup label="Common">
+              {COMMON_COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </optgroup>
+            <optgroup label="All countries (A-Z)">
+              {OTHER_COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            </optgroup>
+          </select>
           <span id={`${idPrefix}-nationality-error`} className="pcn-field-error" role={errors.nationality ? 'alert' : undefined}>{errors.nationality}</span>
         </div>
 
@@ -193,7 +208,6 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
             className="form-control"
             value={values.phone}
             onChange={update('phone')}
-            placeholder="Optional"
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
           />

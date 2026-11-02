@@ -28,7 +28,7 @@ import WebinarRegistrationForm from './WebinarRegistrationForm.jsx';
  * site — see getWebinar()/the API's publicFields(), which never includes
  * it at all, so there is nothing to accidentally leak even by mistake.
  */
-export default function WebinarHero({ webinar }) {
+export default function WebinarHero({ webinar, onRegistered }) {
   const rawChip = webinarDateChip(webinar.startsAt, webinar.endsAt, webinar.timezone);
   // Cosmetic only, for this hero's display — the shared webinarDateChip()
   // format itself is untouched (and explicitly tested elsewhere with no
@@ -111,7 +111,7 @@ export default function WebinarHero({ webinar }) {
 
           <div className="pcn-webinar-hero__card">
             <h2 className="pcn-webinar-hero__card-heading">Register for this webinar</h2>
-            <WebinarRegistrationForm idPrefix="webinar-hero" registrationOpen={webinar.registrationOpen} webinar={webinar} />
+            <WebinarRegistrationForm idPrefix="webinar-hero" registrationOpen={webinar.registrationOpen} webinar={webinar} onRegistered={onRegistered} />
           </div>
         </div>
       </div>
