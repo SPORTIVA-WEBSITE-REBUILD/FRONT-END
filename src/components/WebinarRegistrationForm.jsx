@@ -208,7 +208,6 @@ export default function WebinarRegistrationForm({ idPrefix = 'webinar-register',
             className="form-control"
             value={values.phone}
             onChange={update('phone')}
-            placeholder="Optional"
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? `${idPrefix}-phone-error` : undefined}
           />
