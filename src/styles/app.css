@@ -2948,14 +2948,18 @@ textarea {
      .ftco-navbar-light in style.scss) with real room to spare; the header's
      own rendered height varies slightly by content, so this is generous
      rather than tuned to a measured pixel value. */
-  padding: 96px 0 28px;
+  /* Deliberately tight: real browsers lose 60-150px of viewport height to
+     their own chrome (address bar, bookmarks bar, OS title bar) that a
+     plain 1440x900 Playwright screenshot does not account for — this
+     needs headroom for that, not just a bare fit against a raw viewport. */
+  padding: 64px 0 20px;
 }
 
-/* ---- full-width header: eyebrow, title (no clamp), date pill — centred ---- */
+/* ---- full-width header: eyebrow, kicker, title, date pill — centred ---- */
 .pcn-webinar-hero__intro {
   text-align: center;
   max-width: 900px;
-  margin: 0 auto 1.25rem;
+  margin: 0 auto 0.75rem;
 }
 .pcn-webinar-hero__eyebrow {
   display: inline-block;
@@ -2966,15 +2970,21 @@ textarea {
   color: #6bb8f2;
   border: 1px solid rgba(4, 125, 214, 0.5);
   border-radius: 999px;
-  padding: 5px 16px;
-  margin-bottom: 14px;
+  padding: 4px 14px;
+  margin-bottom: 7px;
+}
+.pcn-webinar-hero__kicker {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 5px;
 }
 .pcn-webinar-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 3.2vw, 3rem);
-  line-height: 1.2;
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  line-height: 1.18;
   color: #fff;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
   /* The whole title always shows — no clamp/ellipsis/truncation. */
 }
 .pcn-webinar-hero__chip {
@@ -2984,8 +2994,8 @@ textarea {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
-  padding: 8px 18px;
-  font-size: 14px;
+  padding: 6px 16px;
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
 }
@@ -2998,14 +3008,15 @@ textarea {
   gap: 32px;
   align-items: stretch;
 }
-/* Bounds the row's height on desktop: without this, a tall speaker list or
-   the banner image's own 480:600 intrinsic aspect ratio could set the row
-   far taller than the form content actually needs, blowing past "about one
-   screen" on a laptop. The lower bound is comfortably above the trimmed
-   form's natural content height so nothing in the card is ever clipped. */
-@media (min-width: 1024px) {
-  .pcn-webinar-hero__grid { height: clamp(400px, 46vh, 480px); }
-}
+/* No explicit height here — an earlier version capped this with
+   clamp(), which silently became SMALLER than the form's real content
+   height and made the card visually overflow past the hero's own bottom
+   edge (invisible in a plain viewport screenshot that happens to be
+   tall enough to show the overflow as "fitting"; very visible as soon as
+   the viewport is shorter, e.g. a real browser's chrome eating into
+   900px of window height). align-items: stretch alone already makes
+   both columns match the taller one's natural content height, which is
+   what actually keeps nothing clipped. */
 .pcn-webinar-hero__speakers-card { grid-area: left; }
 .pcn-webinar-hero__card { grid-area: card; }
 
@@ -3018,7 +3029,7 @@ textarea {
      stretched height. padding-top matches the form card's own so the two
      headings line up exactly, not just the two outer card edges. */
   justify-content: flex-start;
-  padding-top: 22px;
+  padding-top: 16px;
   overflow: hidden;
 }
 .pcn-webinar-hero__speakers-heading {
@@ -3123,7 +3134,7 @@ textarea {
 .pcn-webinar-hero__card {
   background: #fff;
   border-radius: 20px;
-  padding: 22px 24px;
+  padding: 16px 22px;
   color: var(--ink-1);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
   height: 100%;
@@ -3132,8 +3143,8 @@ textarea {
 }
 .pcn-webinar-hero__card-heading {
   font-family: var(--font-display);
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
   color: var(--ink-1);
 }
 
@@ -3170,7 +3181,7 @@ textarea {
 .pcn-webinar-hero__card .pcn-webinar-register__row--three {
   grid-template-columns: 1.4fr 1fr 0.75fr;
 }
-.pcn-webinar-hero__card .form-group { margin-bottom: 10px; }
+.pcn-webinar-hero__card .form-group { margin-bottom: 7px; }
 .pcn-webinar-hero__card select.form-control {
   font-size: 12.5px;
   padding-left: 8px;

@@ -45,6 +45,7 @@ export default function WebinarHero({ webinar }) {
       <div className="container">
         <div className="pcn-webinar-hero__intro">
           <span className="pcn-webinar-hero__eyebrow">Free webinar</span>
+          <p className="pcn-webinar-hero__kicker">In Collaboration with Rasheedat Ajibade Foundation</p>
           <h1 className="pcn-webinar-hero__title">{webinar.title}</h1>
           {chip && (
             <div className="pcn-webinar-hero__chip">
