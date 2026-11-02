@@ -18,7 +18,7 @@ const webinar = {
   isHeroActive: true,
   hasEnded: false,
   speakers: [
-    { name: 'Caroline Mwanzia', role: 'Moderator/Speaker', titleLines: ['Associate, PCN Sportiva LP'], shortBio: 'Short bio text.', order: 1 },
+    { name: 'Caroline Mwanzia', role: 'Moderator/Speaker', titleLines: ['Associate, PCN Sportiva LP'], shortBio: 'Short bio text.', photoUrl: 'https://res.cloudinary.com/demo/image/upload/v1/caroline.jpg', order: 1 },
     { name: 'Martina Spreitzer-Kropiunik', role: 'Speaker', titleLines: ['Court President in Austria'], shortBio: '', order: 2 },
   ],
   faq: [{ question: 'How do I join?', answer: 'Click the link in your email.', order: 1 }],
@@ -44,15 +44,43 @@ describe('WebinarHero', () => {
   it('renders the title, a date/time chip and never prints a Meet link anywhere', () => {
     renderWithProviders(<WebinarHero webinar={webinar} />);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(webinar.title);
-    expect(screen.getByText('Fri 6 Nov 2026, 16:00 to 18:00 WAT, Google Meet', { exact: false })).toBeInTheDocument();
+    expect(screen.getByText('Fri 6 Nov 2026 • 16:00 to 18:00 WAT • Google Meet', { exact: false })).toBeInTheDocument();
     expect(document.body.innerHTML).not.toContain('meet.google.com');
   });
 
-  it('gives the banner explicit width/height attributes (no layout shift)', () => {
+  it('never shows the banner image — speakers replace it', () => {
     renderWithProviders(<WebinarHero webinar={webinar} />);
-    const img = screen.getByAltText(webinar.title);
-    expect(img).toHaveAttribute('width');
-    expect(img).toHaveAttribute('height');
+    expect(screen.queryByAltText(webinar.title)).not.toBeInTheDocument();
+    expect(document.body.innerHTML).not.toContain('banner.jpg');
+  });
+
+  it('lists real speakers from webinar.speakers, ordered, with a face-cropped Cloudinary photo', () => {
+    renderWithProviders(<WebinarHero webinar={webinar} />);
+    expect(screen.getByRole('heading', { name: 'Meet our speakers' })).toBeInTheDocument();
+    const names = screen.getAllByText(/Mwanzia|Spreitzer-Kropiunik/).map((el) => el.textContent);
+    expect(names[0]).toContain('Caroline Mwanzia'); // order: 1 before 2
+    const photo = screen.getByAltText('Caroline Mwanzia');
+    expect(photo).toHaveAttribute('src', expect.stringContaining('c_fill,g_face,w_128,h_128'));
+  });
+
+  it('shows a placeholder, not a broken image, for a speaker with no photo', () => {
+    const noPhoto = { ...webinar, speakers: [{ name: 'No Photo', role: 'Speaker', order: 1 }] };
+    const { container } = renderWithProviders(<WebinarHero webinar={noPhoto} />);
+    expect(screen.queryByAltText('No Photo')).not.toBeInTheDocument();
+    expect(container.querySelector('.pcn-webinar-hero__speaker-photo--placeholder')).toBeInTheDocument();
+  });
+
+  it('shows a Follow Us row only for social links that are actually set', () => {
+    const withSocial = { ...webinar, social: { instagram: 'https://instagram.com/pcnsportivalp', x: '', linkedin: 'https://linkedin.com/company/pcnsportivalp' } };
+    renderWithProviders(<WebinarHero webinar={withSocial} />);
+    expect(screen.getByRole('link', { name: 'instagram' })).toHaveAttribute('href', 'https://instagram.com/pcnsportivalp');
+    expect(screen.getByRole('link', { name: 'linkedin' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'x' })).not.toBeInTheDocument();
+  });
+
+  it('hides the Follow Us row entirely when no social links are set', () => {
+    renderWithProviders(<WebinarHero webinar={webinar} />); // social: {}
+    expect(screen.queryByText('Follow us')).not.toBeInTheDocument();
   });
 });
 
@@ -220,6 +248,8 @@ describe('Home: webinar hero replaces the slider, and fails safe', () => {
     renderWithProviders(<Home />);
     await waitFor(() => expect(screen.getByText(/Register for this webinar/)).toBeInTheDocument());
     expect(document.querySelector('.hero-wrap.pcn-hero')).not.toBeInTheDocument();
-    expect(screen.getByText('Caroline Mwanzia')).toBeInTheDocument();
+    // Appears twice now: once in the hero's speakers card, once in the
+    // full SpeakersSection rendered below the hero.
+    expect(screen.getAllByText('Caroline Mwanzia').length).toBeGreaterThan(0);
   });
 });
