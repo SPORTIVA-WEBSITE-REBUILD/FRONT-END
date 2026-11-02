@@ -2006,6 +2006,11 @@ textarea {
   color: #fff;
   margin-bottom: 0.35rem;
 }
+/* Trailing colon on the dark contact-form panel only — not the webinar
+   form, which reuses this same label class without one. */
+.pcn-consultation__form .pcn-consultation__label::after {
+  content: ":";
+}
 .pcn-consultation__form .form-control {
   height: auto !important;
   padding: 0 0 0.6rem !important;
