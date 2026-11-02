@@ -1171,10 +1171,30 @@ textarea {
   width: auto;
   height: 48px;
   padding: 0 24px !important;
+  white-space: nowrap;
+}
+/* The CTA pill is the last item in the row — it must never be the one that
+   shrinks or wraps when the row is tight, which otherwise clips its text
+   down to a sliver (seen with the webinar hero active, which used to add
+   an extra nav item here too — see Navbar.jsx). The row itself gets a
+   little breathing room back below 1200px by trimming each link's
+   horizontal padding, same fix either way the row gets crowded. */
+.ftco-navbar-light .navbar-nav > .nav-item.cta {
+  flex-shrink: 0;
 }
 @media (max-width: 991.98px) {
   .ftco-navbar-light .navbar-nav > .nav-item.cta {
     align-self: flex-start;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .ftco-navbar-light .navbar-nav > .nav-item > .nav-link {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 14px;
+  }
+  .ftco-navbar-light .navbar-nav > .nav-item.cta > a {
+    padding: 0 18px !important;
   }
 }
 /* Deep navy glass for the dark variant (the consultation form on blue). */
@@ -2910,4 +2930,476 @@ textarea {
 .pcn-footer-credit a:focus-visible {
   color: #fff;
   text-decoration: underline;
+}
+
+/* ============================== webinar ================================ */
+/* Shares the site's tokens: --navy, --blue (accent — the design system has
+   no separate "mint" token; --blue is the closest match), --ink-1/2/3,
+   --line, --surface, and the existing 16px card radius + .pcn-cta pill.
+   Every selector below is scoped under .pcn-webinar-hero (or the shared
+   .pcn-webinar-register rules further down, which the standalone /webinar
+   page's non-hero card also uses) so none of this touches any other
+   section — see WebinarHero.jsx and pages/Webinar.jsx. */
+
+.pcn-webinar-hero {
+  background: var(--navy);
+  color: #fff;
+  /* Clears the fixed/overlaid header (position: absolute, top: 20px — see
+     .ftco-navbar-light in style.scss) with real room to spare; the header's
+     own rendered height varies slightly by content, so this is generous
+     rather than tuned to a measured pixel value. */
+  /* Real browsers lose 60-150px of viewport height to their own chrome
+     (address bar, bookmarks bar, OS title bar) that a plain 1440x900
+     Playwright screenshot does not account for, so this stays on the
+     tight side — but with at least 24px of clear space below the
+     overlaid header before the FREE WEBINAR pill. */
+  padding: 72px 0 20px;
+}
+
+/* ---- full-width header: eyebrow, kicker, title, date pill — centred ---- */
+.pcn-webinar-hero__intro {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 0.75rem;
+}
+.pcn-webinar-hero__eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6bb8f2;
+  border: 1px solid rgba(4, 125, 214, 0.5);
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin-bottom: 7px;
+}
+.pcn-webinar-hero__kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 5px;
+}
+.pcn-webinar-hero__kicker-logo {
+  border-radius: 4px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.pcn-webinar-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  line-height: 1.18;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  /* The whole title always shows — no clamp/ellipsis/truncation. */
+}
+.pcn-webinar-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* ---- left card (speakers, or the banner as a fallback) + form card ---- */
+.pcn-webinar-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "left card";
+  gap: 32px;
+  align-items: stretch;
+}
+/* No explicit height here — an earlier version capped this with
+   clamp(), which silently became SMALLER than the form's real content
+   height and made the card visually overflow past the hero's own bottom
+   edge (invisible in a plain viewport screenshot that happens to be
+   tall enough to show the overflow as "fitting"; very visible as soon as
+   the viewport is shorter, e.g. a real browser's chrome eating into
+   900px of window height). align-items: stretch alone already makes
+   both columns match the taller one's natural content height, which is
+   what actually keeps nothing clipped. */
+/* min-width: 0 overrides the grid item default of min-width: auto — without
+   it, the speaker photos' own min-content size can force this column (and
+   the whole outer grid) wider than its 1fr share, pushing it to overlap
+   the form card beside it. */
+.pcn-webinar-hero__speakers-card { grid-area: left; min-width: 0; }
+.pcn-webinar-hero__card { grid-area: card; }
+
+.pcn-webinar-hero__speakers-card {
+  display: flex;
+  flex-direction: column;
+  /* Centred, not top-anchored — with the form card now noticeably taller
+     than the speakers block, top-anchoring left a large empty gap at the
+     bottom of this column. Centring balances the two columns instead. */
+  justify-content: center;
+  overflow: hidden;
+}
+.pcn-webinar-hero__speakers-heading {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.pcn-webinar-hero__speakers-subheading {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 1.25rem;
+}
+/* Three equal-width columns spanning the card's full width — a single
+   grid row auto-sizes to its tallest cell, so all three cards come out
+   the same height for free, however differently their names/roles wrap. */
+.pcn-webinar-hero__speakers-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+}
+.pcn-webinar-hero__speaker {
+  min-width: 0;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 8px;
+}
+/* Scales with the column's own width (14vw tracks it closely enough, since
+   the column is roughly a fixed fraction of the page) rather than a fixed
+   px, so it never outgrows a narrower card between 1024 and 1440px — capped
+   at 180px, the top of the requested 160-180px desktop range. The <img>
+   itself is requested from Cloudinary at 360px (2x) so it stays sharp
+   whatever size it renders at — see WebinarHero.jsx. */
+.pcn-webinar-hero__speaker-photo {
+  width: clamp(90px, 14vw, 180px);
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 12px;
+}
+.pcn-webinar-hero__speaker-photo--placeholder {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.pcn-webinar-hero__speaker-name {
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.25;
+}
+/* Allowed to wrap (not nowrap) so "Moderator/Speaker" always stays inside
+   the card rather than overflowing it. */
+.pcn-webinar-hero__speaker-role {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  line-height: 1.3;
+  margin-top: 3px;
+  overflow-wrap: break-word;
+}
+
+.pcn-webinar-hero__follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 8px 6px 16px;
+  align-self: flex-start;
+}
+.pcn-webinar-hero__follow-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-1);
+}
+.pcn-webinar-hero__follow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+}
+.pcn-webinar-hero__follow-icon:hover,
+.pcn-webinar-hero__follow-icon:focus-visible {
+  background: var(--blue);
+}
+
+/* No longer used in the hero itself (the hero shows speakers, not the
+   banner) — this is now only the standalone /webinar page's own banner
+   image, a plain block image with its own intrinsic 480x600 sizing. */
+.pcn-webinar-hero__banner {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.pcn-webinar-hero__card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px 22px;
+  color: var(--ink-1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.pcn-webinar-hero__card-heading {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+  color: var(--ink-1);
+}
+
+/* The form fills the card's remaining height, pushing the Register button
+   to the bottom (see .pcn-webinar-register__submit below) rather than
+   leaving it stranded right under the last field. */
+.pcn-webinar-hero__card .pcn-webinar-register {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.pcn-webinar-hero__card .pcn-webinar-register__submit { margin-top: 2px; }
+.pcn-webinar-hero__card .pcn-webinar-register__success,
+.pcn-webinar-hero__card .pcn-webinar-register__closed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Compact field layout inside the hero card only — Name/Email pair up,
+   Role/Nationality/Phone pair up three-across (so Phone is never left
+   alone on its own row, which is what lets everything fit in one screen);
+   consent and the submit button stay full width. .pcn-webinar-register__row
+   has no styling outside this scope, so the plain /webinar page keeps its
+   normal single-column stack. */
+.pcn-webinar-hero__card .pcn-webinar-register__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+}
+/* Role's enum labels ("Sports Management and Administration") are the
+   longest text in the form by far — it gets the most room of the three. */
+.pcn-webinar-hero__card .pcn-webinar-register__row--three {
+  grid-template-columns: 1.3fr 1fr 0.85fr;
+}
+.pcn-webinar-hero__card .form-group { margin-bottom: 16px; }
+.pcn-webinar-hero__card select.form-control {
+  font-size: 12.5px;
+  padding-left: 8px;
+  padding-right: 20px;
+}
+.pcn-webinar-hero__card .pcn-consultation__label {
+  font-size: 11px;
+}
+.pcn-webinar-hero__card .form-control {
+  height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.pcn-webinar-hero__card textarea.form-control { height: auto; }
+.pcn-webinar-hero__card .pcn-webinar-register__submit { width: 100%; }
+/* Reserves a line of space for an inline error so a field turning invalid
+   never shifts the fields below it. */
+.pcn-webinar-hero__card .pcn-field-error { min-height: 15px; }
+
+/* The standalone /webinar page's card — same look the hero card had before
+   this redesign, kept as its own class so the hero's new compact/paired
+   layout above never reaches this page. */
+.pcn-webinar-page__card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  color: var(--ink-1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+.pcn-webinar-register__calendar-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--blue);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Stack: label/title/pill (already above the grid), form card, then
+   speakers — a grid-area reorder, not a DOM change. Full width, no
+   centred max-width constraint, per the brief. */
+@media (max-width: 1023.98px) {
+  .pcn-webinar-hero { padding: 104px 0 40px; }
+  .pcn-webinar-hero__grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "card" "left";
+    gap: 1.5rem;
+  }
+  .pcn-webinar-hero__speakers-card { text-align: center; justify-content: flex-start; }
+  .pcn-webinar-hero__follow { align-self: center; }
+  .pcn-webinar-hero__card { padding: 24px; }
+  /* Tablet: photos about 140px, per the brief. */
+  .pcn-webinar-hero__speaker-photo { width: 140px; height: 140px; }
+}
+
+@media (max-width: 639.98px) {
+  .pcn-webinar-hero__card { padding: 20px; }
+  .pcn-webinar-hero__card .pcn-webinar-register__row,
+  .pcn-webinar-hero__card .pcn-webinar-register__row--three {
+    grid-template-columns: 1fr;
+  }
+  /* 48px minimum touch targets on mobile, per the brief. */
+  .pcn-webinar-hero__card .form-control { height: 48px; }
+  .pcn-webinar-hero__card .pcn-webinar-register__submit { min-height: 48px; }
+  .pcn-webinar-hero__card .pcn-webinar-register__consent input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Mobile: a horizontal swipe row of ~150px-wide cards, 110px photos —
+     nothing cropped or shrunk to illegibility. */
+  .pcn-webinar-hero__speakers-list {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 150px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pcn-webinar-hero__speaker { scroll-snap-align: start; }
+  .pcn-webinar-hero__speaker-photo { width: 110px; height: 110px; }
+}
+
+/* ---------------------------- registration form -------------------------- */
+/* Shared with the plain /webinar page's card — not hero-scoped. */
+.pcn-webinar-register .form-group { margin-bottom: 1.1rem; }
+.pcn-webinar-register .pcn-consultation__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+}
+.pcn-webinar-register__consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  font-weight: 400;
+}
+.pcn-webinar-register__consent input[type="checkbox"] {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.pcn-webinar-register__consent a { color: var(--blue); }
+.pcn-webinar-register__note { font-size: 12px; margin-top: 4px; }
+
+.pcn-field-error {
+  display: block;
+  color: #c0392b;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pcn-webinar-register__success,
+.pcn-webinar-register__closed {
+  text-align: center;
+  padding: 1rem 0;
+}
+.pcn-webinar-register__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(4, 125, 214, 0.12);
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.pcn-webinar-register__success-heading {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: var(--ink-1);
+}
+.pcn-webinar-register__success-body { color: var(--ink-2); }
+.pcn-webinar-register__closed {
+  background: var(--surface);
+  border-radius: 12px;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+/* Visible keyboard focus everywhere in the form, on top of any browser
+   default — matches the accessibility requirement explicitly. */
+.pcn-webinar-register input:focus-visible,
+.pcn-webinar-register button:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ------------------------------ speakers --------------------------------- */
+.pcn-webinar-speaker-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.75rem;
+  text-align: center;
+  height: 100%;
+}
+.pcn-webinar-speaker-card__photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 14px;
+  display: block;
+}
+.pcn-webinar-speaker-card__photo--placeholder {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.pcn-webinar-speaker-card__role {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.pcn-webinar-speaker-card__name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+  color: var(--ink-1);
+}
+.pcn-webinar-speaker-card__title {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.pcn-webinar-speaker-card__bio {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 10px;
+  line-height: 1.6;
 }

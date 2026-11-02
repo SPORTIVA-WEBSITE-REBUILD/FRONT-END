@@ -4,6 +4,8 @@ import { useLayout, useSiteSettings } from '../hooks/useContent.js';
 import { useNavbarScroll } from '../hooks/useAnimations.jsx';
 import { safeHref, isExternal } from '../lib/links.js';
 import SmartLink from '../components/template/SmartLink.jsx';
+import { useWebinar } from '../hooks/useWebinar.js';
+import { useWebinarPreview } from '../hooks/useWebinarPreview.js';
 
 function isActive(href, pathname) {
   if (href === '/') return pathname === '/';
@@ -17,6 +19,9 @@ function isActive(href, pathname) {
  */
 export default function Navbar() {
   const { data } = useSiteSettings();
+  const { data: webinar } = useWebinar();
+  const webinarPreview = useWebinarPreview();
+  const webinarHeroActive = Boolean(webinar?.isHeroActive || (webinar && webinarPreview));
   const layout = useLayout();
   const scrollClasses = useNavbarScroll();
   const [open, setOpen] = useState(false);
@@ -63,6 +68,20 @@ export default function Navbar() {
                   : <Link to={item.href} className="nav-link">{item.label}</Link>}
               </li>
             ))}
+            {/*
+              Only shown when the hero is enabled AND the current page is
+              not already showing a registration form of its own — on the
+              home page (the hero itself) and /webinar, this link would be
+              both redundant and, with "Register" already present in the
+              CMS-driven items above on some configurations, wide enough to
+              overflow the row and clip the CTA pill after it. See the nav
+              CTA fix note below.
+            */}
+            {webinarHeroActive && pathname !== '/' && !pathname.startsWith('/webinar') && (
+              <li className={`nav-item${isActive('/webinar', pathname) ? ' active' : ''}`}>
+                <Link to="/webinar" className="nav-link">Register for the webinar</Link>
+              </li>
+            )}
             {navCta.cta?.label && (
               <li className="nav-item cta">
                 <SmartLink href={navCta.cta.href} className="nav-link">{navCta.cta.label}</SmartLink>

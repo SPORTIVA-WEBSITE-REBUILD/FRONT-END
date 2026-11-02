@@ -14,7 +14,7 @@
  */
 import {
   isCrawler, isSocialCrawler, isKnownRoute, resolveRoute,
-  extractMeta, renderPreview, renderNotFound,
+  extractMeta, extractWebinarMeta, renderPreview, renderNotFound,
 } from '../../lib/prerender.js';
 
 function env(key, fallback) {
@@ -60,6 +60,33 @@ export default async function prerender(request, context) {
       renderNotFound({ siteName: 'PCN Sportiva LP', url: `${SITE}${pathname}` }),
       { status: 404, headers: NOT_FOUND_HEADERS },
     );
+  }
+
+  /*
+   * /webinar is not a CMS page — resolveRoute() has no mapping for it, its
+   * data lives at /webinar (not /public/pages/webinar), and its meta is
+   * built from a different shape (extractWebinarMeta, not extractMeta).
+   * Handled as its own branch, before the generic resolveRoute() flow below,
+   * which would otherwise just fall through to the SPA for this path.
+   *
+   * Search crawlers still get the real SPA here too, same reasoning as every
+   * other page: the stub has no FAQ/speaker content, and serving it would
+   * get the thin version indexed instead of the real page.
+   */
+  if (pathname === '/webinar') {
+    if (!isSocialCrawler(userAgent)) return context.next();
+    try {
+      const res = await fetch(`${API}/webinar`, { signal: AbortSignal.timeout(2500) });
+      if (!res.ok) return context.next();
+      const webinar = (await res.json()).data;
+      const meta = extractWebinarMeta(webinar, 'PCN Sportiva LP', SITE);
+      const html = renderPreview(meta, { siteName: 'PCN Sportiva LP', url: `${SITE}${pathname}`, ogType: 'website' });
+      return new Response(html, {
+        headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, s-maxage=180, stale-while-revalidate=600' },
+      });
+    } catch {
+      return context.next();
+    }
   }
 
   const route = resolveRoute(pathname);
@@ -109,9 +136,12 @@ export default async function prerender(request, context) {
   }
 
   try {
-    const [contentRes, settingsRes] = await Promise.all([
+    // The webinar fetch only runs for '/' — every other page has nothing to
+    // do with it, so it would just be a wasted request everywhere else.
+    const [contentRes, settingsRes, webinarRes] = await Promise.all([
       fetch(`${API}${route.endpoint}`, { signal: AbortSignal.timeout(2500) }),
       fetch(`${API}/public/settings`, { signal: AbortSignal.timeout(2500) }),
+      pathname === '/' ? fetch(`${API}/webinar`, { signal: AbortSignal.timeout(2500) }) : Promise.resolve(null),
     ]);
 
     const settings = settingsRes.ok ? (await settingsRes.json()).data?.settings : null;
@@ -151,7 +181,20 @@ export default async function prerender(request, context) {
     // Falls back to the site's own default preview image (Settings > SEO)
     // when the page itself has none — otherwise every page without its own
     // photo shows no image at all in a shared link.
-    const meta = extractMeta(contentForMeta, siteName, settings?.seoDefaults?.ogImage);
+    let meta = extractMeta(contentForMeta, siteName, settings?.seoDefaults?.ogImage);
+
+    // While the webinar hero is live, the home page's share card describes
+    // the webinar instead of the firm's usual homepage copy — matches the
+    // real <Home> component, which does the exact same swap client-side
+    // (see src/pages/Home.jsx). An admin's own seo.metaTitle on the Home
+    // page still wins; extractMeta() above already applied that priority
+    // before this runs, so it is only overridden when the page had none.
+    if (pathname === '/' && webinarRes?.ok && !data?.seo?.metaTitle) {
+      const webinar = (await webinarRes.json()).data;
+      if (webinar?.isHeroActive) {
+        meta = extractWebinarMeta(webinar, siteName, SITE);
+      }
+    }
 
     // No page photo and no default set in Settings > SEO yet: fall back to
     // the site's own logo, so a shared link still shows a picture rather than

@@ -7,6 +7,10 @@ import Carousel from '../components/template/Carousel.jsx';
 import SmartLink from '../components/template/SmartLink.jsx';
 import AboutBlock from '../components/template/AboutBlock.jsx';
 import Consultation from '../components/template/Consultation.jsx';
+import WebinarHero from '../components/WebinarHero.jsx';
+import SpeakersSection from '../components/SpeakersSection.jsx';
+import { useWebinar } from '../hooks/useWebinar.js';
+import { useWebinarPreview } from '../hooks/useWebinarPreview.js';
 import {
   BlogCard, CaseCard, SectionHeading, ServiceCard, TeamCard, TestimonyCard,
 } from '../components/template/cards.jsx';
@@ -36,6 +40,15 @@ export default function Home() {
   const { data: lawyers } = useLawyers();
   const { data: testimonials } = useTestimonials();
   const { data: siteData } = useSiteSettings();
+  // isError/isLoading both resolve to "render the normal slider" — the
+  // fail-safe the brief asks for: an unreachable API must never replace the
+  // slider with nothing, or with a hero for an event that may not even be
+  // on any more.
+  const { data: webinar } = useWebinar();
+  // ?previewWebinar=1 only: shows this visitor the hero without changing the
+  // stored webinarHeroEnabled value — see useWebinarPreview.js for the gate.
+  const webinarPreview = useWebinarPreview();
+  const webinarHeroActive = Boolean(webinar?.isHeroActive || (webinar && webinarPreview));
   const common = useCommon();
   const heroRef = useParallax(0.5);
   const [wordIndex, setWordIndex] = useState(0);
@@ -100,9 +113,24 @@ export default function Home() {
       <Seo
         seo={page?.seo}
         path="/"
+        // While the webinar hero is showing, the share card should describe
+        // the webinar rather than the firm's usual homepage copy — but an
+        // admin's own seo.metaTitle/ogImage on the Home page (above) still
+        // wins, same priority Seo.jsx already applies everywhere else.
+        {...(webinarHeroActive ? {
+          title: webinar.title,
+          description: webinar.description || undefined,
+          image: webinar.shareImageUrl || `${(import.meta.env.VITE_SITE_URL || 'https://pcnsportivalp.com').replace(/\/$/, '')}/webinar-share.jpg`,
+        } : {})}
         jsonLd={siteData?.settings ? graph(organisation(siteData.settings), webSite(siteData.settings)) : null}
       />
 
+      {webinarHeroActive ? (
+        <>
+          <WebinarHero webinar={webinar} />
+          <SpeakersSection speakers={webinar.speakers} />
+        </>
+      ) : (
       <div
         ref={heroRef}
         className="hero-wrap pcn-hero"
@@ -155,6 +183,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      )}
 
       <section className="ftco-section ftco-no-pt">
         <div className="container">

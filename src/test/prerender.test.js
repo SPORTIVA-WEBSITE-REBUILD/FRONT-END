@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
-  isCrawler, isSocialCrawler, isSearchCrawler, isKnownRoute, resolveRoute, extractMeta, renderPreview,
+  isCrawler, isSocialCrawler, isSearchCrawler, isKnownRoute, resolveRoute,
+  extractMeta, extractWebinarMeta, renderPreview,
 } from '../../lib/prerender.js';
 
 describe('crawler detection', () => {
@@ -100,7 +101,7 @@ describe('route resolution', () => {
 describe('every app route is a known route', () => {
   it.each([
     '/', '/about', '/services', '/record', '/articles', '/careers', '/contact',
-    '/privacy-policy', '/lawyers', '/gallery',
+    '/privacy-policy', '/lawyers', '/gallery', '/webinar',
   ])('%s', (path) => {
     expect(isKnownRoute(path)).toBe(true);
   });
@@ -176,5 +177,104 @@ describe('preview document', () => {
   it('does not repeat the site name when the title is the site name', () => {
     const html = renderPreview({ title: 'PCN Sportiva LP' }, base);
     expect(html).toContain('<title>PCN Sportiva LP</title>');
+  });
+
+  it('emits og:image:alt when one is given, and omits it when not', () => {
+    const withAlt = renderPreview({ title: 'T', imageUrl: 'https://x/i.jpg', imageAlt: 'A description' }, base);
+    expect(withAlt).toContain('<meta property="og:image:alt" content="A description">');
+    const withoutAlt = renderPreview({ title: 'T', imageUrl: 'https://x/i.jpg' }, base);
+    expect(withoutAlt).not.toContain('og:image:alt');
+  });
+});
+
+const WEBINAR = {
+  title: 'Promoting Clean Sport: Strengthening Anti-Doping and Integrity Across the Sports Ecosystem.',
+  startsAt: '2026-11-06T15:00:00Z',
+  endsAt: '2026-11-06T17:00:00Z',
+  timezone: 'Africa/Lagos',
+  speakers: [
+    { name: 'Caroline Mwanzia', order: 1 },
+    { name: 'Martina Spreitzer-Kropiunik', order: 2 },
+    { name: 'Khayran Noor', order: 3 },
+  ],
+  hasEnded: false,
+};
+const SITE_URL = 'https://pcnsportivalp.com';
+
+describe('webinar meta extraction', () => {
+  it('builds a <title> under 60 characters from the clause before the colon', () => {
+    const meta = extractWebinarMeta(WEBINAR, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.title).toBe('Promoting Clean Sport');
+    const html = renderPreview(meta, { siteName: 'PCN Sportiva LP', url: `${SITE_URL}/webinar`, ogType: 'website' });
+    const titleTag = html.match(/<title>([^<]*)<\/title>/)[1];
+    expect(titleTag.length).toBeLessThan(60);
+  });
+
+  it('builds a description under 155 characters with the date/time (WAT) and the speakers', () => {
+    const meta = extractWebinarMeta(WEBINAR, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.description.length).toBeLessThanOrEqual(155);
+    expect(meta.description).toContain('WAT');
+    expect(meta.description).toContain('Caroline Mwanzia');
+  });
+
+  it('includes the topic/subtitle in the description when one is set', () => {
+    const meta = extractWebinarMeta({ ...WEBINAR, subtitle: 'A live discussion' }, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.description.startsWith('A live discussion')).toBe(true);
+  });
+
+  it('falls back to the generated share image when none is set on the Webinar document', () => {
+    const meta = extractWebinarMeta(WEBINAR, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.imageUrl).toBe(`${SITE_URL}/webinar-share.jpg`);
+  });
+
+  it('uses the administrator-uploaded share image when one is set', () => {
+    const meta = extractWebinarMeta({ ...WEBINAR, shareImageUrl: 'https://res.cloudinary.com/x/share.jpg' }, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.imageUrl).toBe('https://res.cloudinary.com/x/share.jpg');
+  });
+
+  it('declares exactly 1200x630', () => {
+    const meta = extractWebinarMeta(WEBINAR, 'PCN Sportiva LP', SITE_URL);
+    expect(meta.imageWidth).toBe(1200);
+    expect(meta.imageHeight).toBe(630);
+  });
+
+  it('marks a past event noIndex', () => {
+    expect(extractWebinarMeta({ ...WEBINAR, hasEnded: false }, 'PCN', SITE_URL).noIndex).toBe(false);
+    expect(extractWebinarMeta({ ...WEBINAR, hasEnded: true }, 'PCN', SITE_URL).noIndex).toBe(true);
+  });
+});
+
+describe('the full webinar crawler response', () => {
+  const meta = extractWebinarMeta(WEBINAR, 'PCN Sportiva LP', SITE_URL);
+  const html = renderPreview(meta, { siteName: 'PCN Sportiva LP', url: `${SITE_URL}/webinar`, ogType: 'website' });
+
+  it('contains every required tag, each with an absolute https URL where a URL is expected', () => {
+    const required = [
+      '<title>', 'name="description"', 'property="og:title"', 'property="og:description"',
+      'property="og:type" content="website"', 'property="og:url"', 'property="og:site_name"',
+      'property="og:image"', 'property="og:image:width" content="1200"',
+      'property="og:image:height" content="630"', 'property="og:image:alt"',
+      'name="twitter:card" content="summary_large_image"', 'name="twitter:title"',
+      'name="twitter:description"', 'name="twitter:image"',
+    ];
+    for (const tag of required) expect(html).toContain(tag);
+
+    const urlAttrs = [...html.matchAll(/(?:content|href)="(https?:\/\/[^"]*)"/g)].map((m) => m[1]);
+    expect(urlAttrs.length).toBeGreaterThan(0);
+    for (const url of urlAttrs) expect(url.startsWith('https://pcnsportivalp.com')).toBe(true);
+  });
+
+  it('never includes a Google Meet link anywhere in the response', () => {
+    expect(html).not.toContain('meet.google.com');
+  });
+});
+
+describe('a normal browser user agent never receives the crawler HTML (gate the edge function checks)', () => {
+  const REAL_BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36';
+
+  it('is not classified as any kind of crawler', () => {
+    expect(isCrawler(REAL_BROWSER_UA)).toBe(false);
+    expect(isSocialCrawler(REAL_BROWSER_UA)).toBe(false);
+    expect(isSearchCrawler(REAL_BROWSER_UA)).toBe(false);
   });
 });

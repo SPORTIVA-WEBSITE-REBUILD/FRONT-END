@@ -32,6 +32,7 @@ const STATIC_ROUTES = [
   ['/careers', 0.6, 'weekly'],
   ['/contact', 0.7, 'yearly'],
   ['/privacy-policy', 0.3, 'yearly'],
+  ['/webinar', 0.8, 'daily'],
 ];
 
 function urlEntry(loc, { lastmod, priority = 0.6, changefreq = 'monthly' } = {}) {
