@@ -15,6 +15,16 @@
   function = "prerender"
   excludedPath = ["/assets/*", "/css/*", "/fonts/*", "/favicon.png", "/robots.txt", "/sitemap.xml"]
 
+# The default *.netlify.app address stays reachable after a custom domain is
+# attached, which lets Google index a duplicate of every page. Host-specific,
+# so branch/deploy-preview hosts (webinar-preview--..., <id>--...) do not match
+# and keep working; only the bare production netlify.app host redirects.
+[[redirects]]
+  from = "https://pcnsportivalp-web.netlify.app/*"
+  to = "https://pcnsportivalp.com/:splat"
+  status = 301
+  force = true
+
 # Served live by the API so a newly published article appears in the sitemap
 # without a frontend redeploy.
 [[redirects]]
