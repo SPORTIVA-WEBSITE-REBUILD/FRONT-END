@@ -71,3 +71,17 @@
   for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+# Baseline security headers for every page. No Content-Security-Policy here on
+# purpose: the public site embeds video, loads images and fonts from several
+# hosts, and a policy written without testing every page could break them.
+# X-Frame-Options stops other sites framing ours (clickjacking); nosniff stops
+# browsers guessing a file's type; the referrer policy avoids leaking full URLs
+# to other sites; Permissions-Policy switches off features the site never uses.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
