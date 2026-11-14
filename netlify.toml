@@ -85,3 +85,16 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+# Content-Security-Policy for the public site, written from the hosts the site
+# actually uses (Google Fonts, Cloudinary images, the API, Vimeo/YouTube video
+# popups and an optional Google Maps embed on Contact). Scripts only from this
+# site: no inline script, no eval, no third-party script. Styles allow
+# 'unsafe-inline' because React and the carousel plugins set style attributes.
+# Images may come from any https host since articles reference arbitrary image
+# URLs. The preview API host is listed so branch previews keep working; it is
+# harmless in production.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://pcnsportivalp-api.netlify.app https://webinar-preview--pcnsportivalp-api.netlify.app; frame-src https://player.vimeo.com https://www.youtube.com https://www.youtube-nocookie.com https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
